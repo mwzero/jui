@@ -44,7 +44,7 @@ public static void main(String... args) {
 
 Now run it!
 
-![Example](/assets/images/little-example.jpg "JUI example")
+![Example](/assets/images/little-example.gif "JUI example")
 
 ## Get Inspired
 
