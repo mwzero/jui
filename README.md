@@ -36,7 +36,7 @@ public static void main(String... args) {
 
 Now run it!
 
-
+![Alt text](images/little-example.JPG "JUI example")
 
 
 # Get Inspired
