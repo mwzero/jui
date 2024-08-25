@@ -38,7 +38,6 @@ Now run it!
 
 ![Example](/assets/images/little-example.jpg "JUI example")
 
-
 # Get Inspired
 
 # License
