@@ -2,16 +2,7 @@ package com.jui.recipes;
 
 import static com.jui.JuiCore.jui;
 import static com.jui.JuiCore.startJuiServer;
-
-import java.io.IOException;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
-
 import com.jui.html.charts.MapBuilder;
-
-import picocli.CommandLine;
-
 
 public class MapZoomerRecipe {
 	
