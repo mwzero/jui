@@ -49,4 +49,4 @@ Now run it!
 ## Get Inspired
 
 # License
-JUI is completely free and open-source and licensed under the (Apache 2.0)[https://www.apache.org/licenses/LICENSE-2.0] license.
+JUI is completely free and open-source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
