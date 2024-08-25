@@ -7,38 +7,46 @@ JUI allows developers to create rich and dynamic user interfaces in just a few s
 
 Jui comes with a built-in HTTP server to run and serve applications.
 
-# Installation
+## Installation
 
-# Quickstart
+## Quickstart
 
-## a little example
+### a little example
+
+Write a new Java application
 
 ```java
+package com.jui.recipe;
+
+import static com.jui.JuiCore.jui;
+import static com.jui.JuiCore.startJuiServer;
+import com.jui.html.charts.MapBuilder;
+
 public static void main(String... args) {
-		
-		jui.setTemplate("simple-bootstrap-1");
-		jui.text.header("Map Chart Example", "blue");
+
+	jui.setTemplate("simple-bootstrap-1");
+	jui.text.header("Map Chart Example", "blue");
     	
     	var slider = jui.input.slider("Zoom Level", 0, 19, 13);
     	var lat = jui.input.input("lat", "40.85631", "latitude");
     	var lng = jui.input.input("lng", "14.24641" ,"longitude");
     	
     	jui.chart.map(
-    			MapBuilder.builder()
-    				.c_lat(lat)
-    				.c_lng(lng)
-    				.c_zoom(slider).build()
+		MapBuilder.builder()
+			.c_lat(lat)
+			.c_lng(lng)
+			.c_zoom(slider).build()
     	);
     	
     	startJuiServer();
-	}
+}
 ```
 
 Now run it!
 
 ![Example](/assets/images/little-example.jpg "JUI example")
 
-# Get Inspired
+## Get Inspired
 
 # License
 JUI is completely free and open-source and licensed under the (Apache 2.0)[https://www.apache.org/licenses/LICENSE-2.0] license.
