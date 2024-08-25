@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import com.jui.html.charts.MapBuilder;
 
+import picocli.CommandLine;
 
-public class MapChartExample {
+
+public class MapZoomerRecipe {
 	
-	@Test
-	void MapZoomer() throws IOException {
+	public static void main(String... args) {
 		
 		jui.setTemplate("simple-bootstrap-1");
 		jui.text.header("Map Chart Example", "blue");
@@ -30,32 +31,8 @@ public class MapChartExample {
     				.c_zoom(slider).build()
     	);
     	
-    	jui.divider();
-    	
-    	jui.chart.map(
-    			MapBuilder.builder()
-    				.lat(40.85631)
-    				.lng(14.24641)
-    				.zoom(13).build()
-    	);
-    	
-    	jui.input.submitbutton("Submit Data", null);
-
     	startJuiServer();
-    	
-    }
-	
-	@AfterAll
-	public static void tearDown() {
-	    while (true) { try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	    }
 	}
-	
 	
 
 }

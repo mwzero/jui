@@ -13,7 +13,33 @@ Jui comes with a built-in HTTP server to run and serve applications.
 
 ## a little example
 
+```java
+public static void main(String... args) {
+		
+		jui.setTemplate("simple-bootstrap-1");
+		jui.text.header("Map Chart Example", "blue");
+    	
+    	var slider = jui.input.slider("Zoom Level", 0, 19, 13);
+    	var lat = jui.input.input("lat", "40.85631", "latitude");
+    	var lng = jui.input.input("lng", "14.24641" ,"longitude");
+    	
+    	jui.chart.map(
+    			MapBuilder.builder()
+    				.c_lat(lat)
+    				.c_lng(lng)
+    				.c_zoom(slider).build()
+    	);
+    	
+    	startJuiServer();
+	}
+```
+
+Now run it!
+
+
+
+
 # Get Inspired
 
 # License
-JUI is completely free and open-source and licensed under the [https://www.apache.org/licenses/LICENSE-2.0](Apache 2.0) license.
+JUI is completely free and open-source and licensed under the (Apache 2.0)[https://www.apache.org/licenses/LICENSE-2.0] license.
