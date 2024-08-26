@@ -8,6 +8,18 @@ JUI allows developers to create rich and dynamic user interfaces in just a few s
 Jui comes with a built-in HTTP server to run and serve applications.
 
 ## Installation
+Publishing to maven central repository is on the roadmap; Now you need to clone the project and include the dependency in your pom file
+
+```xml
+<dependencies>
+	<dependency>
+		<groupId>com.jui</groupId>
+		<artifactId>jui-core</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+</dependencies>
+```
+
 
 ## Quickstart
 
