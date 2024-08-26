@@ -1,4 +1,4 @@
-package com.jui.html.charts;
+package com.jui.html.charts.map;
 
 import com.jui.html.WebComponent;
 
@@ -12,5 +12,8 @@ public class MapChart extends WebComponent {
 	private double lat;
 	private double lng;
 	private Integer zoom;
+	
+	//private int width;
+	//private int height;
 	
 }

@@ -2,7 +2,6 @@ package com.jui.recipes;
 
 import static com.jui.JuiCore.jui;
 import static com.jui.JuiCore.startJuiServer;
-import com.jui.html.charts.MapBuilder;
 
 public class MapZoomerRecipe {
 	
@@ -15,12 +14,11 @@ public class MapZoomerRecipe {
     	var lat = jui.input.input("lat", "40.85631", "latitude");
     	var lng = jui.input.input("lng", "14.24641" ,"longitude");
     	
-    	jui.chart.map(
-    			MapBuilder.builder()
-    				.c_lat(lat)
-    				.c_lng(lng)
-    				.c_zoom(slider).build()
-    	);
+    	jui.chart.map()
+					.c_lat(lat)
+					.c_lng(lng)
+					.c_zoom(slider)
+				.build();
     	
     	startJuiServer();
 	}

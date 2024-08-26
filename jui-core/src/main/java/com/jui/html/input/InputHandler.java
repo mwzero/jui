@@ -3,8 +3,6 @@ package com.jui.html.input;
 import java.util.List;
 
 import com.jui.WebContext;
-import com.jui.html.charts.MapBuilder;
-import com.jui.html.charts.MapChart;
 import com.jui.html.input.FormButton.ButtonType;
 import com.jui.st.SimpleTable;
 
