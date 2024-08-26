@@ -6,6 +6,16 @@
 	<version>0.0.1-SNAPSHOT</version>
 	
 	<properties>
+
+    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mmss Z</maven.build.timestamp.format>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		
+		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		
 	</properties>
 
 	<dependencies>
