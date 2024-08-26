@@ -56,7 +56,7 @@ public static void main(String... args) {
 
 Now run it!
 
-![Example](/assets/images/little-example.gif "JUI example")
+<img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
 
 ## Get Inspired
 
