@@ -28,29 +28,28 @@ Publishing to maven central repository is on the roadmap; Now you need to clone 
 Write a new Java application
 
 ```java
-package com.jui.recipe;
+package com.jui.recipes;
 
 import static com.jui.JuiCore.jui;
-import static com.jui.JuiCore.startJuiServer;
-import com.jui.html.charts.MapBuilder;
 
-public static void main(String... args) {
-
-	jui.setTemplate("simple-bootstrap-1");
-	jui.text.header("Map Chart Example", "blue");
+public class MapZoomerRecipe {
+	
+	public static void main(String... args) {
+		jui.setTemplate("simple-bootstrap-1");
+		jui.text.header("Map Chart Example", "blue");
     	
-	var slider = jui.input.slider("Zoom Level", 0, 19, 13);
-	var lat = jui.input.input("lat", "40.85631", "latitude");
-	var lng = jui.input.input("lng", "14.24641" ,"longitude");
-	
-	jui.chart.map(
-	MapBuilder.builder()
-		.c_lat(lat)
-		.c_lng(lng)
-		.c_zoom(slider).build()
-	);
-	
-	startJuiServer();
+	    	var slider = jui.input.slider("Zoom Level", 0, 19, 13);
+	    	var lat = jui.input.input("lat", "40.85631", "latitude");
+	    	var lng = jui.input.input("lng", "14.24641" ,"longitude");
+	    	
+	    	jui.chart.map()
+				.c_lat(lat)
+				.c_lng(lng)
+				.c_zoom(slider)
+			.build();
+	    	
+	    	jui.startJuiServer();
+	}
 }
 ```
 
