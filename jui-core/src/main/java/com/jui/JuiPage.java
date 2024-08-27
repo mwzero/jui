@@ -9,6 +9,7 @@ import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
 import com.jui.html.text.Text;
 import com.jui.html.text.TextHandler;
+import com.jui.http.SimpleHttpServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Markdown;
 
@@ -91,6 +92,15 @@ public class JuiPage {
 	
 	public void divider() {
 		this.context.add(new Divider());
+	}
+	
+	public void startJuiServer() {
+		try {
+			SimpleHttpServer.start(this);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

@@ -1,7 +1,6 @@
 package com.jui.core.annotations;
 
 import static com.jui.JuiCore.jui;
-import static com.jui.JuiCore.startJuiServer;
 
 import java.io.IOException;
 
@@ -35,7 +34,7 @@ public class JuiAnnotations {
     	jui.write(one);
     	jui.input.submitbutton("Submit Data", null);
 
-    	startJuiServer();
+    	jui.startJuiServer();
     	
     }
 	

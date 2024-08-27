@@ -1,7 +1,6 @@
 package com.jui.recipes;
 
 import static com.jui.JuiCore.jui;
-import static com.jui.JuiCore.startJuiServer;
 import static com.jui.utils.CSV.readAsList;
 
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class AllYouCanEat {
     	
     	jui.input.formButton("Click me", FormButton.ButtonType.Primary, ";");
     	
-    	startJuiServer();
+    	jui.startJuiServer();
     	
     	
     }

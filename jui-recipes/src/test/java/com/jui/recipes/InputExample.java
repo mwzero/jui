@@ -1,7 +1,6 @@
 package com.jui.recipes;
 
 import static com.jui.JuiCore.jui;
-import static com.jui.JuiCore.startJuiServer;
 import static com.jui.utils.CSV.readAsTable;
 
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class InputExample {
     	
     	jui.input.submitbutton("Submit Data", null);
 
-    	startJuiServer();
+    	jui.startJuiServer();
     	
     }
 	

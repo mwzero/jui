@@ -1,7 +1,6 @@
 package com.jui.recipes;
 
 import static com.jui.JuiCore.jui;
-import static com.jui.JuiCore.startJuiServer;
 
 public class MapZoomerRecipe {
 	
@@ -20,7 +19,7 @@ public class MapZoomerRecipe {
 					.c_zoom(slider)
 				.build();
     	
-    	startJuiServer();
+    	jui.startJuiServer();
 	}
 	
 
