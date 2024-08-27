@@ -3,24 +3,21 @@ package com.jui.recipes;
 import static com.jui.JuiCore.jui;
 import static com.jui.utils.CSV.readAsList;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
-
-import com.jui.html.input.FormButton;
+import com.jui.html.input.FormButton.ButtonType;
 
 public class AllYouCanEat {
 	
-	@Test
-    void simple() throws IOException {
-    	
+	public static void main(String... args) throws FileNotFoundException, IOException {
+		
 		jui.setTemplate("simple-bootstrap-1");
     	
 		jui.text.markdown("""
     			# JUI
-    			*JUI*, puoi trasformare rapidamente i tuoi script Java in applicazioni web complete senza dover scrivere codice HTML, CSS o JavaScript.
+    			*JUI* build web applications from Java.
     			No need to write a backend, define routes, handle HTTP requests, connect a frontend, write HTML, CSS, JavaScript, ...
     			""");
     	
@@ -28,7 +25,7 @@ public class AllYouCanEat {
     	var i1 = jui.input.slider("slider1", 0, 100, 50);
     	
     	jui.divider();
-    	jui.input.input("Eccolo", "", "");
+    	jui.input.input("City", "", "");
     	
     	jui.divider();
     	var lines = jui.chart.bars(readAsList(true, "my_data_1.csv"), 300, 300);
@@ -43,24 +40,10 @@ public class AllYouCanEat {
     	var color  = jui.input.color_picker("Pick a color");
     	var date  = jui.input.date_input("Pick a date/");
     	
-    	jui.input.formButton("Click me", FormButton.ButtonType.Primary, ";");
+    	jui.input.formButton("Click me", ButtonType.Primary, ";");
     	
     	jui.startJuiServer();
     	
     	
     }
-	
-	@AfterAll
-	public static void tearDown() {
-	    while (true) { try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	    }
-	}
-	
-	
-
 }

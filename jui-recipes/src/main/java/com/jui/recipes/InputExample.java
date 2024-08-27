@@ -3,18 +3,15 @@ package com.jui.recipes;
 import static com.jui.JuiCore.jui;
 import static com.jui.utils.CSV.readAsTable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
 
 import com.jui.html.input.InputBuilder;
 
 
 public class InputExample {
 	
-	@Test
-	void InputSelect() throws IOException {
+	public static void main(String... args) throws FileNotFoundException, IOException {
 		
 		jui.setTemplate("simple-bootstrap-1");
 		jui.text.header("Input Example", "blue");
@@ -33,18 +30,5 @@ public class InputExample {
     	jui.startJuiServer();
     	
     }
-	
-	@AfterAll
-	public static void tearDown() {
-	    while (true) { try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-	    }
-	}
-	
-	
 
 }
