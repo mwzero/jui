@@ -3,9 +3,7 @@ package com.jui.html.charts;
 import java.util.List;
 
 import com.jui.WebContext;
-import com.jui.html.charts.map.MapAttributes;
 import com.jui.html.charts.map.MapAttributes.MapAttributesBuilder;
-import com.jui.html.charts.map.MapChart;
 
 public class ChartHandler {
 	

@@ -2,9 +2,6 @@ package com.jui.html.input;
 
 import com.jui.html.WebComponent;
 
-import lombok.Getter;
-import lombok.Setter;
-
 public class Slider extends WebComponent {
 	
 	public String getLabel() {

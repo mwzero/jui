@@ -2,16 +2,13 @@ package com.jui.templates;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

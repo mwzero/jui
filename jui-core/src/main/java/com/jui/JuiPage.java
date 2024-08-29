@@ -47,6 +47,7 @@ public class JuiPage {
 			text = new TextHandler(context);
 			input = new InputHandler(context);
 			
+			//template = "templates/jui";
 			template = "templates/simple-bootstrap";
 			
 		} catch (IOException e) {
