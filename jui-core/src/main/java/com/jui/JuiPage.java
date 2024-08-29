@@ -39,7 +39,7 @@ public class JuiPage {
 		log.info("Building new PageHandler");
 	
 		try {
-			engine = new TemplateHelper(true, "templates");
+			engine = new TemplateHelper(true, ".");
 			
 			context = new WebContext(engine);
 			
@@ -47,7 +47,7 @@ public class JuiPage {
 			text = new TextHandler(context);
 			input = new InputHandler(context);
 			
-			template = "simple-bootstrap-1";
+			template = "templates/simple-bootstrap";
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

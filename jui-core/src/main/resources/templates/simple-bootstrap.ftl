@@ -11,39 +11,12 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 	
+	<script src="js/core.js"></script>
 	
-	<style>
-		.topo-pattern-wrapper {
-    		position: fixed;
-    		left: 0;
-    		top: 0;
-    		width: 100%;
-    		height: 100vh;
-		}
-		
-		.topo-pattern {
-		    position: absolute;
-		    left: 0;
-		    top: 0;
-		    width: 100%;
-		    height: 100%;
-		    z-index: -1;
-		    -o-object-fit: cover;
-		    object-fit: cover;
-		    -o-object-position: center;
-		    object-position: center;
-		    animation: zoom-in-out 30s ease-in-out infinite;
-		}
-	</style>
-		    
 	
 </head>
 <body>
 
-<div class="topo-pattern-wrapper">
-	<img class="topo-pattern" src="https://a16z.com/wp-content/themes/a16z/assets/images/home-topo-pattern.png" alt="">
-</div>
-            
 <div class="container" >
 		<form id="jui-form" method="post" action="/send_post">
 			<fieldset>
@@ -55,35 +28,39 @@
 		</form>
 		
 		<script>
-		
-    		 document.getElementById("jui-form").addEventListener("submit", function(event) {
-            
-            	event.preventDefault();
-            	
-            	submitForm();
+			document.getElementById("jui-form").addEventListener("submit", function(event) {
+				event.preventDefault();
+				submitForm();
 			});
-			 
-		    function submitForm() {
-		        //const name = document.getElementById('name').value;
-		        //const age = document.getElementById('age').value;
-		
-		        const data = { name: "nome", age: 3 };
-		
+			
+			elementMapping = ${elementMapping};
+			
+			
+			function submitForm() {
+
+		    	const data = {};
+		    
+			    <#list elementPostData?keys as key>
+			    	//data["${key}"]= eval(${elementPostData[key]}); 
+			    	data["${key}"]= ${elementPostData[key]}
+				</#list>;
+				
 		        fetch('/send_post', {
-		            method: 'POST',
-		            headers: {
-		                'Content-Type': 'application/json',
-		            },
-		            body: JSON.stringify(data),
-		        })
-		        .then(response => response.json())
-		        .then(data => {
-		            console.log('Success:', data);
-		        })
-		        .catch((error) => {
-		            console.error('Error:', error);
-		        });
-		    }
+			        method: 'POST',
+			        headers: {
+			            'Content-Type': 'application/json',
+			        },
+			        body: JSON.stringify(data),
+			    })
+			    .then(response => response.json())
+			    .then(data => {
+			        console.log('Success:', data);
+			    })
+			    .catch((error) => {
+			        console.error('Error:', error);
+			    });
+			}
+
     </script>
 	  
 </div>

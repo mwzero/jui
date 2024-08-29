@@ -6,7 +6,6 @@ public class MapZoomerRecipe {
 	
 	public static void main(String... args) {
 		
-		jui.setTemplate("simple-bootstrap-1");
 		jui.text.header("Map Chart Example", "blue");
     	
     	var slider = jui.input.slider("Zoom Level", 0, 19, 13);

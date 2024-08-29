@@ -44,7 +44,9 @@ public class TemplateHelper {
 		
 		try (StringWriter out = new StringWriter()) {
 			
-			Template template = cfg.getTemplate(templateName);
+			Template template = cfg.getTemplate(
+					templateName
+					.replace(".", "/") + ".ftl");
 			template.process(variables, out);
 			out.flush();
 			

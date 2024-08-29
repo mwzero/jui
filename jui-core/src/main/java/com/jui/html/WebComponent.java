@@ -53,7 +53,7 @@ public abstract class WebComponent {
 	}
 	
 	public String getTemplateName() { 
-		return "%s/%s.ftl".formatted(
+		return "%s/%s".formatted(
 				this.getClass().getPackage().getName()
 				,this.getClass().getSimpleName());
 	}

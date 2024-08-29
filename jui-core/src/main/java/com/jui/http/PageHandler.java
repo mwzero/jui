@@ -36,7 +36,7 @@ public class PageHandler extends BaseHandler implements HttpHandler {
 			variables.put("elementPostData", page.getContext().elementPostData);
 			variables.put("queryParams", this.queryToMap(exchange));
 			
-			response = page.getEngine().renderTemplate(page.getTemplate() + ".ftl", variables);
+			response = page.getEngine().renderTemplate(page.getTemplate() , variables);
 			
 		} catch (Exception e) {
 			
