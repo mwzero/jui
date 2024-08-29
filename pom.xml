@@ -48,14 +48,8 @@
     <module>jui-core</module>
     		
     <!-- modules not included in JUI Core library -->
-    		
     <module>jui-recipes</module>
-    		
     <module>jui-sandbox</module>
-    		
-	  
-    <module>myproject</module>
-      
   </modules>
   	
 	
