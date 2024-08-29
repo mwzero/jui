@@ -31,9 +31,16 @@ public class Slider extends WebComponent {
 		this.max = max;
 	}
 
+	//snippet
+	/*
 	public Integer getIntValue() {
 		String callingClassName = new Exception().getStackTrace()[1].getClassName();
         System.out.println("La classe chiamante è: " + callingClassName);
+		return value;
+	}
+	*/
+	
+	public Integer getIntValue() {
 		return value;
 	}
 

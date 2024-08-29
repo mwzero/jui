@@ -27,6 +27,15 @@ public abstract class BaseHandler {
 	        output.close();
 		}
 		
+		public static void RESOURCE_NOT_FOUND(HttpExchange exchange, String response) throws IOException {
+			
+	        exchange.sendResponseHeaders(404, response.length());
+	        OutputStream output = exchange.getResponseBody();
+	        output.write(response.getBytes());
+	        output.flush();
+	        output.close();
+		}
+		
         
 	}
 	
@@ -71,7 +80,7 @@ public abstract class BaseHandler {
 	
 	protected URL getFileFromClassLoader (String fileName) throws IOException {
     	
-		return FileHandler.class.getClassLoader().getResource(fileName);
+		return FileHandler.class.getResource(fileName);
 		
 	}
 

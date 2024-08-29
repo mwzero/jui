@@ -8,7 +8,8 @@ JUI allows developers to create rich and dynamic user interfaces in just a few s
 Jui comes with a built-in HTTP server to run and serve applications.
 
 ## Installation
-Publishing to maven central repository is on the roadmap; Now you need to clone the project and include the dependency in your pom file
+
+Download the latest JUI Framework release from [JUI GitHub Releases](https://github.com/mwzero/jui/releases) or if you prefer add the following dependency to your POM file:
 
 ```xml
 <dependencies>
@@ -20,12 +21,13 @@ Publishing to maven central repository is on the roadmap; Now you need to clone 
 </dependencies>
 ```
 
+Note: Publishing JUI to Maven central repository is on the roadmap; 
 
 ## Quickstart
 
 ### a little example
 
-Write a new Java application
+Write a new Java file "MapZoomer.java"
 
 ```java
 package com.jui.recipes;
@@ -53,7 +55,13 @@ public class MapZoomerRecipe {
 }
 ```
 
-Now run it!
+Download the latest JUI Framework binari directly from [JUI GitHub Releases](https://github.com/mwzero/jui/releases) and run the following command:
+
+```sh
+java -cp jui-0.0.1.jar MapZoomerRecipe.java
+```
+
+try to navigate to http://localhost:8000/jui
 
 <img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
 
