@@ -27,7 +27,7 @@ Note: Publishing JUI to Maven central repository is on the roadmap;
 
 ### a little example
 
-Write a new Java file "MapZoomer.java"
+Write a new Java file "MapZoomerRecipe.java"
 
 ```java
 package com.jui.recipes;
@@ -55,7 +55,7 @@ public class MapZoomerRecipe {
 }
 ```
 
-Download the latest JUI Framework binari directly from [JUI GitHub Releases](https://github.com/mwzero/jui/releases) and run the following command:
+Run the following command:
 
 ```sh
 java -cp jui-0.0.1.jar MapZoomerRecipe.java
