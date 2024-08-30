@@ -6,7 +6,6 @@ public class MapZoomerRecipe {
 	
 	public static void main(String... args) {
 		
-		//jui.text.header("Map Chart Example", "blue");
 		jui.markdown("## Map Chart Example");
 		jui.divider("blue");
     	
