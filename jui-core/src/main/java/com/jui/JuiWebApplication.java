@@ -1,6 +1,8 @@
 package com.jui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.jui.html.Divider;
 import com.jui.html.charts.ChartHandler;
@@ -23,9 +25,11 @@ public class JuiWebApplication {
 	String template;
 	
 	//Web Application containers
-	JuiContainer main;
-	JuiContainer sidebar;
-	JuiContainer header;
+	public List<JuiContainer> main;
+	public JuiContainer sidebar;
+	public JuiContainer header;
+	int iContainer=0;
+	
 	
 	@Builder
 	public JuiWebApplication() {
@@ -38,13 +42,15 @@ public class JuiWebApplication {
 			template = "templates/jui";
 			//template = "templates/simple-bootstrap";
 			
-			main = new JuiContainer(engine);
-			sidebar = new JuiContainer(engine);
-			header = new JuiContainer(engine);
+			main = new ArrayList<>();
+			main.add(new JuiContainer(engine, ++iContainer));
 			
-			chart = main.chart; 
-			text = main.text;
-			input = main.input;
+			sidebar = new JuiContainer(engine, ++iContainer);
+			header = new JuiContainer(engine, ++iContainer);
+			
+			chart = main.get(0).chart; 
+			text = main.get(0).text;
+			input = main.get(0).input;
 			
 			
 		} catch (IOException e) {
@@ -52,10 +58,11 @@ public class JuiWebApplication {
 		}
 	}
 	
-	public WebContext getContext() {
+	public JuiContainer getPage() {
 		
-		return main.getContext();
-		
+		JuiContainer container = new JuiContainer(this.engine, ++iContainer);
+		main.add(container);
+		return container;
 	}
 	
 	public void start() {
@@ -72,10 +79,10 @@ public class JuiWebApplication {
 	public TextHandler text;
 	public InputHandler input;
 	
-	public void write(String... args) {this.main.write(args);}
-	public void write ( Object obj ) { this.main.write(obj);}
-	public void divider() { this.main.divider();}
-	public void divider(String color) {this.main.getContext().add(new Divider(color));}
-	public Text markdown(String... args) { return this.main.text.markdown(args);}
+	public void write(String... args) {this.main.get(0).write(args);}
+	public void write ( Object obj ) { this.main.get(0).write(obj);}
+	public void divider() { this.main.get(0).divider();}
+	public void divider(String color) {this.main.get(0).getContext().add(new Divider(color));}
+	public Text markdown(String... args) { return this.main.get(0).text.markdown(args);}
 
 }

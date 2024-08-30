@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import com.jui.annotations.JUI;
 import com.jui.html.Divider;
+import com.jui.html.UnorderedList;
 import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
 import com.jui.html.text.Text;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JuiContainer {
 	
+	private String cliendId;
 	private WebContext context;
 	
 	//handlers
@@ -27,9 +29,12 @@ public class JuiContainer {
 	public TextHandler text;
 	public InputHandler input;
 	
-	public JuiContainer(TemplateHelper engine) {
+	
+	
+	public JuiContainer(TemplateHelper engine, int counter) {
 		
 		log.info("Building new PageHandler");
+		cliendId = "div_" + counter;
 	
 		context = new WebContext(engine);
 		
@@ -78,5 +83,16 @@ public class JuiContainer {
 	public void divider() {
 		this.context.add(new Divider());
 	}
+	
+	public UnorderedList ul(String label) {
+		UnorderedList ul = new UnorderedList();
+		ul.setLabel(label);
+		this.context.add(ul);
+		return ul;
+		
+	}
+	
+	public void divider(String color) {this.context.add(new Divider(color));}
+	public Text markdown(String... args) { return this.text.markdown(args);}
 	
 }

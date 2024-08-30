@@ -1,3 +1,11 @@
+(function () {
+  'use strict'
+
+  feather.replace({ 'aria-hidden': 'true' })
+
+  
+})()
+
 var elementMapping = [];
     
 document.addEventListener("DOMContentLoaded", function listener() {
@@ -36,3 +44,13 @@ function handleEvent(sourceElement) {
 	});
 
 }
+
+function switchNavBar(divId) {
+			        let div1 = document.getElementById(divId);
+			        let activeElement = document.getElementsByClassName("div_main_active");
+			        if ( activeElement.length > 0 )
+			        	activeElement[0].classList.remove("div_main_active");
+			        div1.classList.add("div_main_active");
+			        
+			        c6.invalidateSize()
+			    }

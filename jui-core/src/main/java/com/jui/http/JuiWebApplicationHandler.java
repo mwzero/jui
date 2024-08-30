@@ -3,6 +3,7 @@ package com.jui.http;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.jui.JuiWebApplication;
@@ -32,12 +33,17 @@ public class JuiWebApplicationHandler extends BaseHandler implements HttpHandler
 			
 			Map<String, Object> variables = new HashMap<String, Object>();
 			
-			variables.put("main_context", application.getMain().getContext().getLinkedMapContext());
+			variables.put("main_contexts", application.getMain());
 			variables.put("sidebar_context", application.getSidebar().getContext().getLinkedMapContext());
 			variables.put("header_context", application.getHeader().getContext().getLinkedMapContext());
 			
-			variables.put("elementMapping", application.getContext().elementMapping());
-			variables.put("elementPostData", application.getContext().elementPostData);
+			//
+			//variables.put("elementMapping", application.getContext().elementMapping());
+			variables.put("elementMapping", "");
+			//variables.put("elementPostData", application.getContext().elementPostData);
+			variables.put("elementPostData",  new LinkedHashMap<String, String>());
+			
+			
 			variables.put("queryParams", this.queryToMap(exchange));
 			
 			response = application.getEngine().renderTemplate(application.getTemplate() , variables);
