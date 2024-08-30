@@ -1,6 +1,5 @@
 package com.jui;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 import com.jui.annotations.JUI;
@@ -9,11 +8,9 @@ import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
 import com.jui.html.text.Text;
 import com.jui.html.text.TextHandler;
-import com.jui.http.SimpleHttpServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Markdown;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
-public class JuiPage {
+public class JuiContainer {
 	
-	private TemplateHelper engine;
 	private WebContext context;
 	
 	//handlers
@@ -31,29 +27,16 @@ public class JuiPage {
 	public TextHandler text;
 	public InputHandler input;
 	
-	String template;
-	
-	@Builder
-	public JuiPage() {
+	public JuiContainer(TemplateHelper engine) {
 		
 		log.info("Building new PageHandler");
 	
-		try {
-			engine = new TemplateHelper(true, ".");
+		context = new WebContext(engine);
+		
+		chart = new ChartHandler(context);
+		text = new TextHandler(context);
+		input = new InputHandler(context);
 			
-			context = new WebContext(engine);
-			
-			chart = new ChartHandler(context);
-			text = new TextHandler(context);
-			input = new InputHandler(context);
-			
-			//template = "templates/jui";
-			template = "templates/simple-bootstrap";
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	//TODO: questo potrebbe essere più complesso
@@ -65,6 +48,7 @@ public class JuiPage {
 	}
 	
 	public void write ( Object obj ) {
+		
 		for ( Field field : obj.getClass().getDeclaredFields()) {
 			
 			if (  field.isAnnotationPresent(JUI.class) ) {
@@ -93,15 +77,6 @@ public class JuiPage {
 	
 	public void divider() {
 		this.context.add(new Divider());
-	}
-	
-	public void startJuiServer() {
-		try {
-			SimpleHttpServer.start(this);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 }

@@ -5,21 +5,21 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jui.JuiPage;
+import com.jui.JuiWebApplication;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class PageHandler extends BaseHandler implements HttpHandler {
+public class JuiWebApplicationHandler extends BaseHandler implements HttpHandler {
 	
-	JuiPage page;
+	JuiWebApplication application;
 	
-	public PageHandler(JuiPage page) {
+	public JuiWebApplicationHandler(JuiWebApplication application) {
 		
 		log.debug("Initializing PageHandler");
-		this.page = page;
+		this.application = application;
 	}
 	
 	public void handle(HttpExchange exchange) throws IOException {
@@ -31,12 +31,16 @@ public class PageHandler extends BaseHandler implements HttpHandler {
 		try {
 			
 			Map<String, Object> variables = new HashMap<String, Object>();
-			variables.put("context", page.getContext().getContext());
-			variables.put("elementMapping", page.getContext().elementMapping());
-			variables.put("elementPostData", page.getContext().elementPostData);
+			
+			variables.put("main_context", application.getMain().getContext().getLinkedMapContext());
+			variables.put("sidebar_context", application.getSidebar().getContext().getLinkedMapContext());
+			variables.put("header_context", application.getHeader().getContext().getLinkedMapContext());
+			
+			variables.put("elementMapping", application.getContext().elementMapping());
+			variables.put("elementPostData", application.getContext().elementPostData);
 			variables.put("queryParams", this.queryToMap(exchange));
 			
-			response = page.getEngine().renderTemplate(page.getTemplate() , variables);
+			response = application.getEngine().renderTemplate(application.getTemplate() , variables);
 			
 		} catch (Exception e) {
 			

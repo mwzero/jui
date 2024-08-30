@@ -1,6 +1,6 @@
 package com.jui.recipes;
 
-import static com.jui.JuiCore.jui;
+import static com.jui.JuiApp.jui;
 import static com.jui.utils.CSV.readAsTable;
 
 import java.io.FileNotFoundException;
@@ -13,7 +13,6 @@ public class InputExample {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException {
 		
-		jui.setTemplate("simple-bootstrap-1");
 		jui.text.header("Input Example", "blue");
     	
     	var select = jui.input.select("city", readAsTable(true, "cities.csv", ","));
@@ -27,7 +26,7 @@ public class InputExample {
     	
     	jui.input.submitbutton("Submit Data", null);
 
-    	jui.startJuiServer();
+    	jui.start();
     	
     }
 

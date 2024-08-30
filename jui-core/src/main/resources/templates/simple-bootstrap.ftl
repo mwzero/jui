@@ -20,8 +20,8 @@
 <div class="container" >
 		<form id="jui-form" method="post" action="/send_post">
 			<fieldset>
-				<#list context?keys as prop>
-					<#assign component=context[prop]>
+				<#list main_context?keys as prop>
+					<#assign component=main_context[prop]>
 					${component.render()}
 				</#list>
 			</fieldset>

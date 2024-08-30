@@ -1,6 +1,6 @@
 package com.jui.recipes;
 
-import static com.jui.JuiCore.jui;
+import static com.jui.JuiApp.jui;
 import static com.jui.utils.CSV.readAsList;
 
 import java.io.FileNotFoundException;
@@ -13,8 +13,6 @@ public class AllYouCanEat {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException {
 		
-		jui.setTemplate("simple-bootstrap-1");
-    	
 		jui.text.markdown("""
     			# JUI
     			*JUI* build web applications from Java.
@@ -42,8 +40,7 @@ public class AllYouCanEat {
     	
     	jui.input.formButton("Click me", ButtonType.Primary, ";");
     	
-    	jui.startJuiServer();
-    	
+    	jui.start();
     	
     }
 }

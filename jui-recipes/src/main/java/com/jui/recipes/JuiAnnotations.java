@@ -1,6 +1,7 @@
 package com.jui.recipes;
 
-import static com.jui.JuiCore.jui;
+import static com.jui.JuiApp.jui;
+
 import com.jui.annotations.JUI;
 
 public class JuiAnnotations {
@@ -31,13 +32,11 @@ public class JuiAnnotations {
 		
 		JuiAnnotations testAnnotations = new JuiAnnotations();
 		
-		jui.setTemplate("simple-bootstrap-1");
 		jui.text.header("POJO Example", "blue");
-    	
     	jui.write(testAnnotations.buildTestOne(10, 5));
     	jui.input.submitbutton("Submit Data", null);
 
-    	jui.startJuiServer();
+    	jui.start();
     	
     }
 	
