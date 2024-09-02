@@ -17,12 +17,17 @@
 </head>
 <body>
 
+
+   	
 <div class="container" >
 		<form id="jui-form" method="post" action="/send_post">
 			<fieldset>
+				<#list main_contexts as div_context>
+				<#assign main_context=div_context.getContext().getLinkedMapContext()>
 				<#list main_context?keys as prop>
 					<#assign component=main_context[prop]>
 					${component.render()}
+				</#list>
 				</#list>
 			</fieldset>
 		</form>
