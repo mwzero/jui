@@ -3,9 +3,9 @@ package com.jui.html.input;
 import java.util.List;
 
 import com.jui.html.WebComponent;
-import com.jui.st.SimpleColumn;
-import com.jui.st.SimpleRow;
-import com.jui.st.SimpleTable;
+import com.st.SimpleColumn;
+import com.st.SimpleRow;
+import com.st.SimpleTable;
 
 public class Select extends WebComponent {
 	

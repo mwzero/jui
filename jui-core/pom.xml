@@ -42,9 +42,22 @@
 			<scope>test</scope>
 		</dependency>
 
+
+		<dependency>
+			<groupId>tech.tablesaw</groupId>
+			<artifactId>tablesaw-core</artifactId>
+			<version>0.43.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.collections</groupId>
+			<artifactId>eclipse-collections</artifactId>
+			<version>11.0.0</version>
+		</dependency>
+
 	</dependencies>
-	
-	
+
+
 	<build>
 		<resources>
 			<resource>
@@ -87,7 +100,7 @@
 					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>

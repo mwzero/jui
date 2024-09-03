@@ -43,7 +43,7 @@ public class JuiWebApplication {
 			engine = new TemplateHelper(true, ".");
 			
 			//template = "templates/jui";
-			template = "templates/simple-bootstrap";
+			template = "templates/bootstrap-simple";
 			
 			main = new ArrayList<>();
 			main.add(new JuiContainer(engine, ++iContainer));

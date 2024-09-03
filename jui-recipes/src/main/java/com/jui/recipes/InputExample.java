@@ -1,12 +1,12 @@
 package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
-import static com.jui.utils.CSV.readAsTable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.jui.html.input.InputBuilder;
+import com.st.ST;
 
 
 public class InputExample {
@@ -15,7 +15,7 @@ public class InputExample {
 		
 		jui.text.header("Input Example", "blue");
     	
-    	var select = jui.input.select("city", readAsTable(true, "cities.csv", ","));
+    	var select = jui.input.select("city", ST.builder().option("classLoading", "true").build().readAsTable("cities.csv", ","));
     	jui.input.input( InputBuilder.builder()
     			.label("city")
     			.placeholder("select a city")

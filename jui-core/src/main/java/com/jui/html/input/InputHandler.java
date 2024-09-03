@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.jui.WebContext;
 import com.jui.html.input.FormButton.ButtonType;
-import com.jui.st.SimpleTable;
+import com.st.SimpleTable;
 
 public class InputHandler {
 	

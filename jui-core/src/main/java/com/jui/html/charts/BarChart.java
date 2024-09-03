@@ -7,12 +7,14 @@ import com.jui.html.WebComponent;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import tech.tablesaw.api.Table;
 
 @Slf4j
 @Builder
 public class BarChart extends WebComponent {
 	
 	List<List<String>> data = new ArrayList<>();
+	
 	int max_height;
 	int max_width;
 	

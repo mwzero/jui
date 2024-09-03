@@ -37,8 +37,18 @@ public class JuiWebApplicationHandler extends BaseHandler implements HttpHandler
 			variables.put("sidebar_context", application.getSidebar().getContext().getLinkedMapContext());
 			variables.put("header_context", application.getHeader().getContext().getLinkedMapContext());
 			
-			variables.put("elementMapping", application.getMain().get(1).getContext().elementMapping());
-			variables.put("elementPostData", application.getMain().get(1).getContext().elementPostData);
+			
+			//TODO: please fix this
+			if ( application.getMain().size() == 1) {
+			
+				variables.put("elementMapping", application.getMain().get(0).getContext().elementMapping());
+				variables.put("elementPostData", application.getMain().get(0).getContext().elementPostData);
+				
+			} else {
+				variables.put("elementMapping", application.getMain().get(1).getContext().elementMapping());
+				variables.put("elementPostData", application.getMain().get(1).getContext().elementPostData);
+			}
+			
 			variables.put("queryParams", this.queryToMap(exchange));
 			
 			response = application.getEngine().renderTemplate(application.getTemplate() , variables);

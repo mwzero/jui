@@ -1,13 +1,13 @@
 package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
-import static com.jui.utils.CSV.readAsList;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
 import com.jui.html.input.FormButton.ButtonType;
+import com.st.ST;
 
 public class AllYouCanEat {
 	
@@ -26,8 +26,8 @@ public class AllYouCanEat {
     	jui.input.input("City", "", "");
     	
     	jui.divider();
-    	var lines = jui.chart.bars(readAsList(true, "my_data_1.csv"), 300, 300);
-    	var bars= jui.chart.lines(readAsList(true, "my_data_2.csv"), 300, 300);
+    	var lines = jui.chart.bars(ST.builder().option("classLoading", "true").build().csv("/my_data_1.csv", ","), 300, 300);
+    	var bars= jui.chart.lines(ST.builder().option("classLoading", "true").build().csv("/my_data_2.csv", ","), 300, 300);
     	//var map= page.chart.map(readCSV(true, "my_data_2.csv"));
     	
     	jui.divider();

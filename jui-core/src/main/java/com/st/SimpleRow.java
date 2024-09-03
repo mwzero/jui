@@ -1,4 +1,6 @@
-package com.jui.st;
+package com.st;
+
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class SimpleColumn {
+public class SimpleRow {
 	
-	String name;
-	String type;
+	List<Object> values;
 
 }

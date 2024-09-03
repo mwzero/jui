@@ -1,4 +1,4 @@
-package com.jui.st;
+package com.st;
 
 import java.util.List;
 
