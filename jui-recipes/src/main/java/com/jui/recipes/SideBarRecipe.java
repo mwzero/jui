@@ -8,12 +8,11 @@ public class SideBarRecipe {
 	
 	public static void main(String... args) {
 		
-		//jui.sidebar.markdown("# Esempio");
+		jui.setTemplate("templates/bootstrap-sidebar");
     	jui.sidebar
     		.ul("JUI Example")
-	    		.add("MapZoomer", "compass", mapZoomer(), true)
-	    		.add("MarkDown", "file-text", markdownTrials(), false)
-	    		.add("Empty", "users", null, false);
+	    		.add("MapZoomer", "compass", null, mapZoomer(), true)
+	    		.add("MarkDown", "file-text", null, markdownTrials(), false);
     	
     	jui.start();
 	}

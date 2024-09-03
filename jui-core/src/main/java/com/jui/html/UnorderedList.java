@@ -20,10 +20,10 @@ public class UnorderedList extends WebComponent {
     	items = new ArrayList<>();
     }
     
-    public  UnorderedList add(String label, String icon, JuiContainer link, boolean active) {
+    public  UnorderedList add(String label, String icon, JuiContainer link, JuiContainer content, boolean active) {
     	
     	ListItem item = new ListItem(label, icon, 
-    			link != null ? "switchNavBar('%s')".formatted(link.getCliendId()) :"#");
+    			link != null ? link.getCliendId() : null, content != null ? content.getCliendId() : null);
     	items.add(item);
     	
 		return this;
