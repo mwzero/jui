@@ -42,7 +42,7 @@
 			<scope>test</scope>
 		</dependency>
 
-
+		<!--
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
 			<artifactId>tablesaw-core</artifactId>
@@ -53,6 +53,13 @@
 			<groupId>org.eclipse.collections</groupId>
 			<artifactId>eclipse-collections</artifactId>
 			<version>11.0.0</version>
+		</dependency>
+		-->
+		
+		<dependency>
+  			<groupId>io.github.vmzakharov</groupId>
+  			<artifactId>dataframe-ec</artifactId>
+  			<version>0.20.0</version>
 		</dependency>
 
 	</dependencies>
