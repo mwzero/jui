@@ -15,6 +15,7 @@ public class InputExample {
 		
 		jui.text.header("Input Example", "blue");
     	
+		/*
     	var select = jui.input.select("city", ST.builder().option("classLoading", "true").build().readAsTable("cities.csv", ","));
     	jui.input.input( InputBuilder.builder()
     			.label("city")
@@ -25,7 +26,7 @@ public class InputExample {
     			.build());
     	
     	jui.input.submitbutton("Submit Data", null);
-
+		*/
     	jui.start();
     	
     }

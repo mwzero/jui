@@ -1,16 +1,19 @@
 package com.st;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
+
+import io.github.vmzakharov.ecdataframe.dataframe.DataFrame;
+import io.github.vmzakharov.ecdataframe.dataset.CsvDataSet;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -25,45 +28,23 @@ public class ST {
 	@Singular
 	Map<String, String> options;
 	
-	public List<List<String>> csv(String csvFile, String commaDelimiter) throws IOException {
+	public DataFrame csv(String csvFile, String commaDelimiter) throws IOException {
 
-		List<List<String>> records = new ArrayList<>();
-		try (BufferedReader br = new BufferedReader(getFileStreamReader(csvFile))) {
-		    String line;
-		    while ((line = br.readLine()) != null) {
-		        String[] values = line.split(commaDelimiter);
-		        records.add(Arrays.asList(values));
-		    }
+		try {
+			DataFrame df  = 
+					new CsvDataSet(getFileabsolutePath(csvFile), "Orders").loadAsDataFrame();
+			
+			return df;
+			
+		} catch (FileNotFoundException | URISyntaxException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		return records;
+    	
+		return null;
 	}
 	
-	
-	public SimpleTable readAsTable(String csvFile, String commaDelimiter) throws FileNotFoundException, IOException {
-		
-		List<SimpleColumn> cols = new ArrayList<>();
-		List<SimpleRow> rows = new ArrayList<>();
-		
-		boolean headers = true;
-		try (BufferedReader br = new BufferedReader(getFileStreamReader(csvFile))) {
-		    String line;
-		    while ((line = br.readLine()) != null) {
-		    	String[] values = line.split(commaDelimiter);
-		    	if ( headers ) {
-		    		
-		    		for ( String column : values) 
-		    			cols.add(SimpleColumn.builder().name(column).build());
-		    		
-		    		headers=false;
-		    	} else {
-		    		rows.add(SimpleRow.builder().values(Arrays.asList(values)).build());
-		    	}
-		    }
-		}
-		
-		return SimpleTable.builder().columns(cols).rows(rows).build();
-	}
 	
 	private boolean isClassLoading() {
 		
@@ -73,6 +54,18 @@ public class ST {
 		return false;
 	}
 	
+	private String getFileabsolutePath(String fileName) throws FileNotFoundException, URISyntaxException {
+		
+		if ( isClassLoading()) {
+			URI uri = ClassLoader.getSystemResource("").toURI();
+			String mainPath = Paths.get(uri).toString();
+	    	Path path = Paths.get(mainPath ,fileName);
+	    	return path.toFile().getAbsolutePath();
+		} else {
+			return fileName;
+		}
+	}
+
 	private InputStreamReader getFileStreamReader(String fileName) throws FileNotFoundException {
 		
 		InputStream is = null;
@@ -84,6 +77,4 @@ public class ST {
 		}
 		return new InputStreamReader(is);
 	} 
-	
-
 }

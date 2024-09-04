@@ -21,22 +21,22 @@ public class ChartHandler {
 		this.context = context;
 	}
 
-	public LinesChart lines(List<List<String>> data, int max_width, int max_height) {
+	public LinesChart lines(DataFrame df, int max_width, int max_height) {
+
+		List<List<String>> data = new ArrayList<>();
+		
+		df.forEach(row -> {
+			
+			List<String> newRow = new ArrayList<>();
+			for ( DfColumn col : df.getColumns()) {
+				
+				newRow.add("" + row.getObject(col.getName()));
+			}
+			
+			data.add(newRow);
+        });
 
 		LinesChart lines = LinesChart.builder()
-				.data(data)
-				.max_height(max_height)
-				.max_width(max_width)
-				.build();
-		context.add(lines);
-		
-		return lines;
-		
-	}
-	
-	public BarChart bars(List<List<String>> data, int max_width, int max_height) {
-
-		BarChart lines = BarChart.builder()
 				.data(data)
 				.max_height(max_height)
 				.max_width(max_width)
@@ -68,34 +68,6 @@ public class ChartHandler {
 		
 		return lines;
 	}
-	
-	/*
-	public BarChart bars(Table table, int max_width, int max_height) {
-
-		List<List<String>> data = new ArrayList<>();
-		
-		for (Row row : table) {
-			
-            String col1Value = row.getString(0);
-            int col2Value = row.getInt(1);
-
-            data.add(
-            		Arrays.asList(col1Value,col2Value + ""));
-        }
-		
-		BarChart lines = BarChart.builder()
-				.data(data)
-				.max_height(max_height)
-				.max_width(max_width)
-				.build();
-		context.add(lines);
-		
-		return lines;
-		
-	}
-	*/
-
-	
 	
 	public MapAttributesBuilder map() {
 		
