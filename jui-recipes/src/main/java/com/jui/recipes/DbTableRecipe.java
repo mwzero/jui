@@ -26,6 +26,11 @@ public class DbTableRecipe {
     			""");
     	jui.divider();
     	
+    	jui.text.caption("Simple Table");
+    	var table1 = jui.table(ST.loadDB("org.h2.Driver", "jdbc:h2:~/testdb", null, null));
+    	
+    	jui.start();
+    	
     	
     	
     	
