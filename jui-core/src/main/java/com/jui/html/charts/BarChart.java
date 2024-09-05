@@ -1,9 +1,7 @@
 package com.jui.html.charts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.jui.html.WebComponent;
+import com.st.JuiDataFrame;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 public class BarChart extends WebComponent {
 	
-	List<List<String>> data = new ArrayList<>();
+	JuiDataFrame data;
 	
 	int max_height;
 	int max_width;
@@ -30,16 +28,18 @@ public class BarChart extends WebComponent {
 		String series = "";
 		String xasis = "";
 		
-		for ( var item : data ) {
+		//data.getDf().getColumns().get(0).getName()
+		for ( int irow=0; irow < data.getDf().rowCount(); irow++ ) {
 			
 			if ( xasis != "" ) {
 				xasis+=",";
 				series+=",";
 			} 
-			
-			xasis += "\"" + item.get(0)  + "\"";
-			series += item.get(1);
-		}
+
+			xasis += "\"" + data.getDf().getObject(irow,0)  + "\"";
+			series += data.getDf().getObject(irow,1);
+
+        }
 		
 		String js = """ 
 				<script>

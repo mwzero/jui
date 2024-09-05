@@ -1,9 +1,7 @@
 package com.jui.html.charts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.jui.html.WebComponent;
+import com.st.JuiDataFrame;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 public class LinesChart extends WebComponent {
 	
-	List<List<String>> data = new ArrayList<>();
+	JuiDataFrame data;
 	int max_height;
 	int max_width;
 	
@@ -30,7 +28,7 @@ public class LinesChart extends WebComponent {
 		String seriesB = "";
 		String xasis = "";
 		
-		for ( var item : data ) {
+		for ( int irow=0; irow < data.getDf().rowCount(); irow++ ) {
 			
 			if ( xasis != "" ) {
 				xasis+=",";
@@ -38,10 +36,12 @@ public class LinesChart extends WebComponent {
 				seriesB+=",";
 			} 
 			
-			xasis += "\"" + item.get(0)  + "\"";
-			seriesA += item.get(1);
-			seriesB += item.get(2);
-		}
+			xasis += "\"" +data.getDf().getObject(irow,0)  + "\"";
+			seriesA += data.getDf().getObject(irow,1);
+			seriesB += data.getDf().getObject(irow,2);
+
+        }
+		
 		
 		String js = """ 
 				<script>

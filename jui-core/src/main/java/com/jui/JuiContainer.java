@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import com.jui.annotations.JUI;
 import com.jui.html.Divider;
+import com.jui.html.Table;
 import com.jui.html.UnorderedList;
 import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
@@ -11,6 +12,7 @@ import com.jui.html.text.Text;
 import com.jui.html.text.TextHandler;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Markdown;
+import com.st.JuiDataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -89,6 +91,17 @@ public class JuiContainer {
 		ul.setLabel(label);
 		this.context.add(ul);
 		return ul;
+		
+	}
+	
+	public Table table(JuiDataFrame df, String...args) {
+		Table table = new Table();
+		table.setSt(df);
+		for (String arg : args) {
+			table.getStyles().add(arg);
+		}
+		this.context.add(table);
+		return table;
 		
 	}
 	

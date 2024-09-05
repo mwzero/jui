@@ -9,6 +9,7 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 import com.jui.WebContext;
 import com.jui.html.charts.map.MapAttributes.MapAttributesBuilder;
+import com.st.JuiDataFrame;
 
 import io.github.vmzakharov.ecdataframe.dataframe.DataFrame;
 import io.github.vmzakharov.ecdataframe.dataframe.DfColumn;
@@ -21,23 +22,10 @@ public class ChartHandler {
 		this.context = context;
 	}
 
-	public LinesChart lines(DataFrame df, int max_width, int max_height) {
-
-		List<List<String>> data = new ArrayList<>();
-		
-		df.forEach(row -> {
-			
-			List<String> newRow = new ArrayList<>();
-			for ( DfColumn col : df.getColumns()) {
-				
-				newRow.add("" + row.getObject(col.getName()));
-			}
-			
-			data.add(newRow);
-        });
+	public LinesChart lines(JuiDataFrame df, int max_width, int max_height) {
 
 		LinesChart lines = LinesChart.builder()
-				.data(data)
+				.data(df)
 				.max_height(max_height)
 				.max_width(max_width)
 				.build();
@@ -47,20 +35,10 @@ public class ChartHandler {
 		
 	}
 	
-	public BarChart bars(DataFrame df, int max_width, int max_height) {
-		
-		List<List<String>> data = new ArrayList<>();
-		
-		var cols = df.getColumns();
-		
-		df.forEach(row -> {
-            data.add(
-            		Arrays.asList(row.getString(cols.get(0).getName()),"" + row.getLong(cols.get(1).getName())));
-            
-        });
+	public BarChart bars(JuiDataFrame df, int max_width, int max_height) {
 		
 		BarChart lines = BarChart.builder()
-				.data(data)
+				.data(df)
 				.max_height(max_height)
 				.max_width(max_width)
 				.build();

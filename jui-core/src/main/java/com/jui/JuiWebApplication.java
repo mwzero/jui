@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jui.html.Divider;
+import com.jui.html.Table;
 import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
 import com.jui.html.text.Text;
 import com.jui.html.text.TextHandler;
 import com.jui.http.SimpleHttpServer;
 import com.jui.templates.TemplateHelper;
+import com.st.JuiDataFrame;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -87,5 +89,7 @@ public class JuiWebApplication {
 	public void divider() { this.main.get(0).divider();}
 	public void divider(String color) {this.main.get(0).getContext().add(new Divider(color));}
 	public Text markdown(String... args) { return this.main.get(0).text.markdown(args);}
+	
+	public Table table(JuiDataFrame df, String...args) { return this.main.get(0).table(df, args);}
 
 }

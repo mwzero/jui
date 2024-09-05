@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.jui.WebContext;
 import com.jui.html.input.FormButton.ButtonType;
-import com.st.SimpleTable;
 
 public class InputHandler {
 	
@@ -62,7 +61,7 @@ public class InputHandler {
 	
 	//select
 	public Select select(String label, List<String> values ) { return (Select) this.context.add(new Select(label, values));}
-	public Select select(String label, SimpleTable st) { return (Select) this.context.add(new Select(label, st));}
+	//public Select select(String label, SimpleTable st) { return (Select) this.context.add(new Select(label, st));}
 	
 	public FileInput file_uploader(String label) { return (FileInput) this.context.add(new FileInput(label));}
 	public ColorPicker color_picker(String label) { return (ColorPicker) this.context.add(new ColorPicker(label));}

@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import io.github.vmzakharov.ecdataframe.dataframe.DataFrame;
 import io.github.vmzakharov.ecdataframe.dataset.CsvDataSet;
 
 import lombok.Builder;
@@ -28,13 +27,18 @@ public class ST {
 	@Singular
 	Map<String, String> options;
 	
-	public DataFrame csv(String csvFile, String commaDelimiter) throws IOException {
+	public static JuiDataFrame read_csv(String csvFile) throws IOException {
+		
+		return ST.builder()
+				.option("classLoading",  "true")
+				.build()
+				.csv(csvFile, ",");
+	}
+	
+	public  JuiDataFrame csv(String csvFile, String commaDelimiter) throws IOException {
 
 		try {
-			DataFrame df  = 
-					new CsvDataSet(getFileabsolutePath(csvFile), "Orders").loadAsDataFrame();
-			
-			return df;
+			return new JuiDataFrame(new CsvDataSet(getFileabsolutePath(csvFile), "Orders").loadAsDataFrame());
 			
 		} catch (FileNotFoundException | URISyntaxException e) {
 			

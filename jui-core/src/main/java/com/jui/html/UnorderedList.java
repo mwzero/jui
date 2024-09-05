@@ -16,6 +16,7 @@ public class UnorderedList extends WebComponent {
 	List<ListItem> items;
 	
     public UnorderedList() {
+    	
     	this.setId("UL");
     	items = new ArrayList<>();
     }
