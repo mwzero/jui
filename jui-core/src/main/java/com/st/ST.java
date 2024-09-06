@@ -16,6 +16,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Map;
 
+import com.st.attributes.DataBaseAttributes;
+import com.st.attributes.DataBaseAttributes.DataBaseAttributesBuilder;
+
 import io.github.vmzakharov.ecdataframe.dataframe.DataFrame;
 import io.github.vmzakharov.ecdataframe.dataset.CsvDataSet;
 import io.github.vmzakharov.ecdataframe.dsl.value.ValueType;
@@ -32,46 +35,17 @@ public class ST {
 	@Singular
 	Map<String, String> options;
 	
+	
+	public static DataBaseAttributesBuilder DB() {
+		return DataBaseAttributes.builder();
+	}
+	
 	public static JuiDataFrame read_csv(String csvFile) throws IOException {
 		
 		return ST.builder()
 				.option("classLoading",  "true")
 				.build()
 				.csv(csvFile, ",");
-	}
-	
-	public static JuiDataFrame loadDB (String driver, String url, String username, String password) throws ClassNotFoundException {
-		
-		Class.forName("org.h2.Driver");
-        try (Connection conn = DriverManager.getConnection(url, username, password)) {
-        	
-            String query = "SELECT * FROM test";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-
-            // Creare un DataFrame
-            DataFrame df = new DataFrame("table");
-
-            // Aggiungere colonne
-            df.addColumn("id", ValueType.INT);
-            df.addColumn("name", ValueType.STRING);
-
-            // Riempire il DataFrame con i dati del ResultSet
-            while (rs.next()) {
-                df.addRow(new Object[]{
-                    rs.getInt("id"),
-                    rs.getString("name")
-                });
-            }
-            
-            JuiDataFrame juidf = new JuiDataFrame(df);
-            return juidf;
-            
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		return null;
 	}
 	
 	public  JuiDataFrame csv(String csvFile, String commaDelimiter) throws IOException {

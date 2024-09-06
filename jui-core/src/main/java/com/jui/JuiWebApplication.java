@@ -90,6 +90,6 @@ public class JuiWebApplication {
 	public void divider(String color) {this.main.get(0).getContext().add(new Divider(color));}
 	public Text markdown(String... args) { return this.main.get(0).text.markdown(args);}
 	
-	public Table table(JuiDataFrame df, String...args) { return this.main.get(0).table(df, args);}
+	public Table table(String caption, JuiDataFrame df, String...args) { return this.main.get(0).table(caption, df);}
 
 }

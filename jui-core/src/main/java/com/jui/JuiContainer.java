@@ -94,15 +94,14 @@ public class JuiContainer {
 		
 	}
 	
-	public Table table(JuiDataFrame df, String...args) {
+	public Table table(String caption, JuiDataFrame df) {
+		
 		Table table = new Table();
 		table.setSt(df);
-		for (String arg : args) {
-			table.getStyles().add(arg);
-		}
+		table.setCaption(caption);
+		
 		this.context.add(table);
 		return table;
-		
 	}
 	
 	public void divider(String color) {this.context.add(new Divider(color));}

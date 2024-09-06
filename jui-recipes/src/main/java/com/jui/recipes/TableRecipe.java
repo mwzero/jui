@@ -18,17 +18,15 @@ public class TableRecipe {
     			""");
     	jui.divider();
     	
+    	jui.table("Simple Table", 
+    			ST.read_csv("table_1.csv"));
     	
-    	jui.text.caption("Simple Table");
-    	var table1 = jui.table(ST.read_csv("table_1.csv"));
-    	
-    	
-    	jui.text.caption("Striped Table");
-    	var table2 = jui.table(ST.read_csv("table_1.csv"), "table-striped");
+    	jui.table("Striped Table", 
+    			ST.read_csv("table_1.csv")).setStyles("table-striped");
     	
     	
-    	jui.text.caption("Striped and Dark Table");
-    	var table3 = jui.table(ST.read_csv("table_1.csv"), "table-striped", "table-dark");
+    	jui.table("Striped and Dark Table", 
+    			ST.read_csv("table_1.csv")).setStyles("table-striped", "table-dark");
     	
     	jui.start();
     	

@@ -2,17 +2,19 @@ package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
+import com.st.LinkedMap;
 import com.st.ST;
+
+import io.github.vmzakharov.ecdataframe.dsl.value.ValueType;
 
 
 public class DbTableRecipe {
@@ -26,13 +28,18 @@ public class DbTableRecipe {
     			""");
     	jui.divider();
     	
-    	jui.text.caption("Simple Table");
-    	var table1 = jui.table(ST.loadDB("org.h2.Driver", "jdbc:h2:~/testdb", null, null));
+    	var table1 = jui.table("Simple Table", 
+    			ST.DB()
+    				.driver("org.h2.Driver")
+    				.url("jdbc:h2:~/testdb")
+    				.build()
+    				.select("test", Map.of(
+    					    "id", ValueType.INT,
+    					    "first_name", ValueType.STRING,
+    					    "second_name", ValueType.STRING)));
+    	
     	
     	jui.start();
-    	
-    	
-    	
     	
     }
 	
@@ -49,12 +56,13 @@ public class DbTableRecipe {
 
         //stat.execute("create table test(id int primary key, name varchar(255))");
         //stat.execute("insert into test values(1, 'Hello')");
-        
+        /*
         ResultSet rs;
         rs = stat.executeQuery("select * from test");
         while (rs.next()) {
             System.out.println(rs.getString("name"));
         }
+        */
         stat.close();
         conn.close();
     }

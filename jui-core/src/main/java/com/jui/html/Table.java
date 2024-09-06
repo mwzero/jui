@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class Table extends WebComponent {
 	
-	String label;
+	String caption;
 	JuiDataFrame st;
 	
 	List<String> styles;
@@ -23,6 +23,10 @@ public class Table extends WebComponent {
     	styles = new ArrayList<>();
     }
     
-    
-
+    public void setStyles(String...args) {
+    	
+    	for (String arg : args) {
+			this.styles.add(arg);
+		}
+    }
 }

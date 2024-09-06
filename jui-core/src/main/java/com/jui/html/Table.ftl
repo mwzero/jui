@@ -1,3 +1,6 @@
+<#if caption??>
+<p>${caption}</p>
+</#if>
 <table class="table <#list styles as style>${style} </#list>">
   <thead>
     <tr>
