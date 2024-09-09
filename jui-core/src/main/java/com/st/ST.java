@@ -8,8 +8,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -40,26 +43,40 @@ public class ST {
 		return DataBaseAttributes.builder();
 	}
 	
-	public static JuiDataFrame read_csv(String csvFile) throws IOException {
+	
+	public static JuiDataFrame read_csv(String endpoint) throws IOException, URISyntaxException {
 		
-		return ST.builder()
+		ST st = ST.builder()
 				.option("classLoading",  "true")
-				.build()
-				.csv(csvFile, ",");
+				.build();
+			
+		
+		File filePath;
+		
+		if ( endpoint.startsWith("http") )  {
+			
+			URL url = new URL(endpoint);
+			String endpointPath = url.getPath();
+			String fileName = endpointPath.substring(endpointPath.lastIndexOf("/") + 1);
+			Path tempDir = Files.createTempDirectory("csv_temp");
+			Path tempFile = tempDir.resolve(fileName);
+			
+	        try (InputStream in = url.openStream()) {
+	        	Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
+	        }
+	        filePath = tempFile.toFile();
+			
+		} else {
+			filePath = st.getFileabsolutePath(endpoint);
+				
+		}
+		return st.csv(filePath, ",", null);
 	}
 	
-	public  JuiDataFrame csv(String csvFile, String commaDelimiter) throws IOException {
+	private JuiDataFrame csv(File csvFile, String delimiter, String csvName) throws IOException {
 
-		try {
-			return new JuiDataFrame(new CsvDataSet(getFileabsolutePath(csvFile), "Orders").loadAsDataFrame());
-			
-		} catch (FileNotFoundException | URISyntaxException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-		return null;
+		CsvDataSet ds = new CsvDataSet(csvFile.toString(), csvName);
+		return new JuiDataFrame(ds.loadAsDataFrame());
 	}
 	
 	
@@ -71,15 +88,15 @@ public class ST {
 		return false;
 	}
 	
-	private String getFileabsolutePath(String fileName) throws FileNotFoundException, URISyntaxException {
+	private File getFileabsolutePath(String fileName) throws FileNotFoundException, URISyntaxException {
 		
 		if ( isClassLoading()) {
 			URI uri = ClassLoader.getSystemResource("").toURI();
 			String mainPath = Paths.get(uri).toString();
 	    	Path path = Paths.get(mainPath ,fileName);
-	    	return path.toFile().getAbsolutePath();
+	    	return path.toFile();
 		} else {
-			return fileName;
+			return new File(fileName);
 		}
 	}
 

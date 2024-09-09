@@ -4,6 +4,7 @@ import static com.jui.JuiApp.jui;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import com.jui.html.input.FormButton.ButtonType;
@@ -11,7 +12,7 @@ import com.st.ST;
 
 public class AllYouCanEat {
 	
-	public static void main(String... args) throws FileNotFoundException, IOException {
+	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
 		
 		jui.text.markdown("""
     			# JUI
@@ -26,8 +27,8 @@ public class AllYouCanEat {
     	jui.input.input("City", "", "");
     	
     	jui.divider();
-    	var lines = jui.chart.bars(ST.builder().option("classLoading", "true").build().csv("/my_data_1.csv", ","), 300, 300);
-    	var bars= jui.chart.lines(ST.builder().option("classLoading", "true").build().csv("/my_data_2.csv", ","), 300, 300);
+    	var lines = jui.chart.bars(ST.read_csv("/my_data_1.csv"), 300, 300);
+    	var bars= jui.chart.lines(ST.read_csv("/my_data_2.csv"), 300, 300);
     	//var map= page.chart.map(readCSV(true, "my_data_2.csv"));
     	
     	jui.divider();

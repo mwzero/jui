@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import com.st.JuiDataFrame;
 import com.st.ST;
 
 
@@ -22,19 +23,19 @@ public class CsvRecipe {
     	jui.divider();
     	
     	
-    	var bars = jui.chart.bars(
-    			ST.builder()
-    				.option("classLoading",  "true")
-    				.build()
-    				.csv("my_data_1.csv", ","), 300, 300);
+    	jui.chart.bars(
+    			ST.read_csv("my_data_1.csv"), 300, 300);
     	
     	
-    	var lines= jui.chart.lines(
-    			ST.builder()
-    				.option("classLoading", "true")
-    				.build()
-    				.csv("my_data_2.csv", ","), 300, 300);
-		
+    	jui.chart.lines(
+    			ST.read_csv("my_data_2.csv"), 300, 300);
+    	
+    	JuiDataFrame df = ST.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv");
+		df.getHtmlCols().forEach(col -> System.out.println(col));
+		df.getHtmlRows().forEach(row -> 
+			row.forEach( cell ->  {
+				System.out.println(cell);
+		}));
     	jui.start();
     	
     }
