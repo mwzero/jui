@@ -6,38 +6,56 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.eclipse.collections.api.factory.Lists;
+
 import com.st.JuiDataFrame;
 import com.st.ST;
 
+import io.github.vmzakharov.ecdataframe.dataframe.AggregateFunction;
 
 public class CsvRecipe {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
 		
-		ConfifurationEnvironment.settingProxy();
-		
 		jui.text.markdown("""
-    			# JUI
-    			*JUI* build web applications from Java.
-    			No need to write a backend, define routes, handle HTTP requests, connect a frontend, write HTML, CSS, JavaScript, ...
+    			# JUI - CSV Recipes - Life Expetation
     			""");
 		
     	jui.divider();
     	
     	
-    	jui.chart.bars(
-    			ST.read_csv("my_data_1.csv"), 300, 300);
-    	
+    	//country,continent,year,lifeExp,pop,gdpPercap
+    	JuiDataFrame df = ST.read_csv("csv/gapminder_unfiltered.csv");
     	
     	jui.chart.lines(
-    			ST.read_csv("my_data_2.csv"), 300, 300);
+    			new JuiDataFrame(
+    					df.getDf()
+    						.selectBy("year == 2007")
+    						.selectBy("continent=='Europe'")
+    						.dropColumn("continent")
+    						.dropColumn("pop")
+    						.dropColumn("gdpPercap")
+    						.dropColumn("year")), 0, 300);
     	
-    	JuiDataFrame df = ST.read_csv("https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv");
-		df.getHtmlCols().forEach(col -> System.out.println(col));
-		df.getHtmlRows().forEach(row -> 
-			row.forEach( cell ->  {
-				System.out.println(cell);
-		}));
+    	
+    	jui.table("Italy", 
+    			new JuiDataFrame(
+    					df.getDf()
+    						.selectBy("country=='Italy'")
+    						.selectBy("year > 1990")
+    						.dropColumn("continent")
+    						.dropColumn("pop")
+    						.dropColumn("gdpPercap")
+    						));
+    	
+    	jui.table("gdpPercap", 
+    			new JuiDataFrame(
+    					df.getDf()
+    						.selectBy("continent=='Europe'")
+    						.aggregateBy(
+    							Lists.immutable.of(AggregateFunction.avg("gdpPercap")), Lists.immutable.of("country"))
+    					));
+    	
     	jui.start();
     	
     }

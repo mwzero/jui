@@ -17,8 +17,8 @@ public class ChartHandler {
 
 		LinesChart lines = LinesChart.builder()
 				.data(df)
-				.max_height(max_height)
-				.max_width(max_width)
+				.height(max_height)
+				.width(max_width)
 				.build();
 		context.add(lines);
 		

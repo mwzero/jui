@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LinesChart extends WebComponent {
 	
 	JuiDataFrame data;
-	int max_height;
-	int max_width;
+	int height;
+	int width;
 	
 	@Override
 	public String render() {
@@ -21,9 +21,9 @@ public class LinesChart extends WebComponent {
 		log.debug("Rendering lines chart graph");
 		
 		String html = """
-				<div id="%s" style="max-width: %s; max_height=%s; display: inline-block">
+				<div id="%s" style="width: %s; height=%s; display: inline-block">
 				</div>		
-				""".formatted(this.getKey(), max_width == 0 ? "100%" : max_width + "px", max_height + "px");
+				""".formatted(this.getKey(), width == 0 ? "100%" : width + "px", height + "px");
 		
 		Object [] xasis = new Object [data.getDf().rowCount()];
 		Object  series[][] = new Object [data.getDf().columnCount() - 1][data.getDf().rowCount()];
@@ -44,10 +44,10 @@ public class LinesChart extends WebComponent {
 
 			jsSeries += """
 					{
-						name: 'serie%d',
+						name: '%s',
 						data: [%s]
 					}
-				""".formatted(icol, Utils.buildString (series[icol-1]));
+				""".formatted(data.getDf().getColumnAt(icol).getName(), Utils.buildString (series[icol-1]));
 		}
 		
 		String js = """ 
