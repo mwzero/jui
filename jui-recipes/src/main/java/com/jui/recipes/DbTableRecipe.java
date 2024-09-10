@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
-import com.st.ST;
+import com.st.DbDataSet;
 
 import io.github.vmzakharov.ecdataframe.dsl.value.ValueType;
 
@@ -20,21 +20,34 @@ public class DbTableRecipe {
 		
 		populateH2();
 		
+		DbDataSet dbSet = DbDataSet.builder()
+			.driver("org.h2.Driver")
+			.url("jdbc:h2:~/testdb")
+		.build();
+		
 		jui.text.markdown("""
     			# Table Examples
     			""");
     	jui.divider();
     	
     	jui.table("Simple Table", 
-    			ST.DB()
-    				.driver("org.h2.Driver")
-    				.url("jdbc:h2:~/testdb")
-    				.build()
-    				.select("test", Map.of(
+    			dbSet.select("test", Map.of(
     					    "id", ValueType.INT,
     					    "first_name", ValueType.STRING,
     					    "second_name", ValueType.STRING)));
     	
+    	jui.table("Very Simple Table", 
+    			dbSet.execute("select first_name from test"));
+    	
+    	
+    	jui.table("CSV from Table",
+    			dbSet.import_csv("city", "cities.csv", "select * from city"));
+    	
+    	jui.table("CSV from Table",
+    			dbSet.import_csv(
+    					"countries", 
+    					"https://raw.githubusercontent.com/mwzero/jui/main/datasets/gapminder_unfiltered.csv", 
+    					"select * from countries"));
     	
     	jui.start();
     	

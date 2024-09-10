@@ -23,7 +23,6 @@ public class CsvRecipe {
 		
     	jui.divider();
     	
-    	
     	//country,continent,year,lifeExp,pop,gdpPercap
     	JuiDataFrame df = ST.read_csv("csv/gapminder_unfiltered.csv");
     	
