@@ -1,0 +1,84 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "AllYouCanEat",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.AllYouCanEat",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "CsvRecipe",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.CsvRecipe",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "DbTableRecipe",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.DbTableRecipe",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "InputExample",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.InputExample",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "JuiAnnotations",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.JuiAnnotations",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "MapZoomerRecipe",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.MapZoomerRecipe",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "SideBarRecipe",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.SideBarRecipe",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "TableRecipe",
+            "request": "launch",
+            "mainClass": "com.jui.recipes.TableRecipe",
+            "projectName": "jui-recipes"
+        },
+        {
+            "type": "java",
+            "name": "CheckSum",
+            "request": "launch",
+            "mainClass": "com.jui.labs.CheckSum",
+            "projectName": "jui-sandbox"
+        },
+        {
+            "type": "java",
+            "name": "ScriptEngineLabs",
+            "request": "launch",
+            "mainClass": "com.jui.labs.ScriptEngineLabs",
+            "projectName": "jui-sandbox"
+        }
+    ]
+}
