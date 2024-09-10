@@ -51,7 +51,10 @@ public class WebContext {
 		return component;
 	}
 	
-	public LinkedHashMap<String, WebComponent> getContext() { return context;}
+	public LinkedHashMap<String, WebComponent> getLinkedMapContext() { 
+		if ( i>0 ) return context;
+		else return null;
+	}
 	
 	public void addRelations (String source, List<String> commands) {
 		

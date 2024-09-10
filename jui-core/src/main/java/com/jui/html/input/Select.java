@@ -3,15 +3,13 @@ package com.jui.html.input;
 import java.util.List;
 
 import com.jui.html.WebComponent;
-import com.jui.st.SimpleColumn;
-import com.jui.st.SimpleRow;
-import com.jui.st.SimpleTable;
+import com.st.JuiDataFrame;
 
 public class Select extends WebComponent {
 	
     private String label;
     List<String> values;
-    SimpleTable st;
+    JuiDataFrame df;
 
 	public Select(String label, List<String> values) {
 		
@@ -19,10 +17,10 @@ public class Select extends WebComponent {
         this.values = values;
 	}
 	
-	public Select(String label, SimpleTable st) {
+	public Select(String label, JuiDataFrame df) {
 		
         this.label = label;
-        this.st = st;
+        this.df = df;
 	}
 
 	@Override
@@ -44,6 +42,7 @@ public class Select extends WebComponent {
 			
 		} else {
 			
+			/*
 			for ( SimpleRow row: st.getRows()) {
 				
 				String optionValue = "";
@@ -58,6 +57,7 @@ public class Select extends WebComponent {
 				html+=oneCheck;
 					
 			}
+			*/
 			
 		}
 		

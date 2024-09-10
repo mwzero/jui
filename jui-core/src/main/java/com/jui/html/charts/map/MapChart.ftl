@@ -1,5 +1,5 @@
 <div class="mb-3">
-<div id="${clientId}" style="height: 300px;">
+<div id="${clientId}" style="height: 300px; width: 600px">
 </div>
 </div>
 

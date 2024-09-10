@@ -11,6 +11,13 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     
+    
+    <!--leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+	
+	
+    
     <style>
         /* Main layout */
         body {
@@ -140,37 +147,34 @@
                 margin-left: 60px; /* Align content with the collapsed sidebar */
             }
         }
+        
+        
+        .div_main_not_active{
+	        display: none;
+	    }
+	
+	
+	    .div_main_active {
+	        display: block;
+	    }
+	    
     </style>
 </head>
 <body>
 
     <!-- Sidebar -->
+    <#if sidebar_context??>
     <nav id="sidebar" class="collapsed">
         <button type="button" id="sidebarToggle" class="btn">
             <span class="bi bi-list"></span>
         </button>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-url="/home.html">
-                    <i class="bi bi-house-door-fill"></i> <span>Home</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-url="/about.html">
-                    <i class="bi bi-info-circle-fill"></i> <span>About Us</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-url="/services.html">
-                    <i class="bi bi-briefcase-fill"></i> <span>Services</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" data-url="/contact.html">
-                    <i class="bi bi-envelope-fill"></i> <span>Contact</span>
-                </a>
-            </li>
-        </ul>
+        
+        <#list sidebar_context?keys as prop>
+			<#assign component=sidebar_context[prop]>
+			${component.render()}
+		</#list>
+		
+		<!--	 
         <div class="dropdown p-3">
             <a class="nav-link dropdown-toggle text-white" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-gear-fill"></i> <span>Settings</span>
@@ -181,7 +185,9 @@
                 <li><a class="dropdown-item" href="#">Logout</a></li>
             </ul>
         </div>
+        -->
     </nav>
+    </#if>
 
     <!-- Top-right context menu -->
     <div id="topRightMenu" class="dropdown" style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
@@ -213,15 +219,28 @@
         </div>
     </div>
 
-    <!-- Main content 
     <div id="content" class="collapsed">
         <div id="page-content">
-            <h1>Welcome!</h1>
-            <p>Select an item from the menu to display the content.</p>
+    		<#list main_contexts as div_context>
+				<#if div_context.getContext().getLinkedMapContext()??>
+				<#assign main_context=div_context.getContext().getLinkedMapContext()>
+		
+				<div id="${div_context['cliendId']}" class="div_main_not_active">
+			      	<form id="jui-form" method="post" action="/send_post">
+						<fieldset>
+							<#list main_context?keys as prop>
+								<#assign component=main_context[prop]>
+								${component.render()}
+							</#list>
+						</fieldset>
+					</form>
+				</div>
+				</#if>
+			</#list>    
         </div>
     </div>
     
-        <!-- Bootstrap JS and dependencies -->
+	<!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Custom script -->
@@ -253,18 +272,35 @@
             document.querySelectorAll('#sidebar .nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
+                    
                     const url = this.getAttribute('data-url');
-                    fetch(url)
-                        .then(response => response.text())
-                        .then(html => {
-                            pageContent.innerHTML = html;
-                        })
-                        .catch(error => {
-                            console.error('Error loading content:', error);
-                            pageContent.innerHTML = '<p>There was an error loading the content.</p>';
-                        });
+                    const divContent = this.getAttribute('data-content');
+                    if ( url === null ) {
+                    
+                    	let div1 = document.getElementById(divContent);
+    					let activeElement = document.getElementsByClassName("div_main_active");
+    					if ( activeElement.length > 0 )
+    						activeElement[0].classList.remove("div_main_active");
+    					div1.classList.add("div_main_active");
+    
+    					c6.invalidateSize();
+    					
+                    } else {
+	                    fetch(url)
+	                        .then(response => response.text())
+	                        .then(html => {
+	                            pageContent.innerHTML = html;
+	                        })
+	                        .catch(error => {
+	                            console.error('Error loading content:', error);
+	                            pageContent.innerHTML = '<p>There was an error loading the content.</p>';
+	                        });
+					}
                 });
-            });
+			});
+                
+    
+           
 
             // Event listener to toggle light/dark mode
             toggleThemeButton.addEventListener('click', function() {
@@ -274,8 +310,44 @@
 
             // Initialize theme label on first load
             updateThemeLabel();
+            
+            document.getElementById("jui-form").addEventListener("submit", function(event) {
+					event.preventDefault();
+					submitForm();
+				});
+				
+				elementMapping = ${elementMapping};
+				
+				
+				function submitForm() {
+	
+			    	const data = {};
+			    
+				    <#list elementPostData?keys as key>
+				    	//data["${key}"]= eval(${elementPostData[key]}); 
+				    	data["${key}"]= ${elementPostData[key]}
+					</#list>;
+					
+			        fetch('/send_post', {
+				        method: 'POST',
+				        headers: {
+				            'Content-Type': 'application/json',
+				        },
+				        body: JSON.stringify(data),
+				    })
+				    .then(response => response.json())
+				    .then(data => {
+				        console.log('Success:', data);
+				    })
+				    .catch((error) => {
+				        console.error('Error:', error);
+				    });
+				}
+				
         });
     </script>
-
+    
+	<script src="/js/core.js"></script>
+	
 </body>
 </html>

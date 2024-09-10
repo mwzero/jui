@@ -1,9 +1,8 @@
 package com.jui.html.charts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.jui.html.WebComponent;
+import com.jui.utils.Utils;
+import com.st.JuiDataFrame;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -12,35 +11,43 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 public class LinesChart extends WebComponent {
 	
-	List<List<String>> data = new ArrayList<>();
+	JuiDataFrame data;
 	int max_height;
 	int max_width;
 	
 	@Override
 	public String render() {
 		
-		log.debug("Rendering chart lines");
+		log.debug("Rendering lines chart graph");
 		
 		String html = """
 				<div id="%s" style="max-width: %s; max_height=%s; display: inline-block">
 				</div>		
 				""".formatted(this.getKey(), max_width == 0 ? "100%" : max_width + "px", max_height + "px");
 		
-		String seriesA = "";
-		String seriesB = "";
-		String xasis = "";
+		Object [] xasis = new Object [data.getDf().rowCount()];
+		Object  series[][] = new Object [data.getDf().columnCount() - 1][data.getDf().rowCount()];
 		
-		for ( var item : data ) {
+		for ( int irow=0; irow < data.getDf().rowCount(); irow++ ) {
 			
-			if ( xasis != "" ) {
-				xasis+=",";
-				seriesA+=",";
-				seriesB+=",";
-			} 
-			
-			xasis += "\"" + item.get(0)  + "\"";
-			seriesA += item.get(1);
-			seriesB += item.get(2);
+			xasis[irow] = data.getDf().getObject(irow,0);
+
+			for ( int icol =1; icol <data.getDf().columnCount(); icol ++) {
+				series[icol-1][irow] = data.getDf().getObject(irow,icol);
+			}
+        }
+		
+		String jsSeries = "";
+		for ( int icol =1; icol <data.getDf().columnCount(); icol ++) {
+
+			if ( jsSeries.length() > 0 ) jsSeries +=",";
+
+			jsSeries += """
+					{
+						name: 'serie%d',
+						data: [%s]
+					}
+				""".formatted(icol, Utils.buildString (series[icol-1]));
 		}
 		
 		String js = """ 
@@ -54,14 +61,7 @@ public class LinesChart extends WebComponent {
 				    	enabled: false
 				  	  },
 					  series: [
-						  {
-						    name: 'serieA',
-						    data: [%s]
-						  },
-						  {
-						    name: 'serieB',
-						    data: [%s]
-						  }
+						  %s
 					  ],
 					  stroke: {
 				    	width: [4, 4]
@@ -80,7 +80,7 @@ public class LinesChart extends WebComponent {
 
 					chart.render();
 				</script>
-				""".formatted(seriesA, seriesB, xasis, this.getKey());
+				""".formatted(jsSeries, Utils.buildString (xasis), this.getKey());
 		
 		
 		return html + js;

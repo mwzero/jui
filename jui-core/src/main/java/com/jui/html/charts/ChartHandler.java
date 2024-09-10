@@ -1,9 +1,9 @@
 package com.jui.html.charts;
 
-import java.util.List;
-
 import com.jui.WebContext;
 import com.jui.html.charts.map.MapAttributes.MapAttributesBuilder;
+import com.st.JuiDataFrame;
+
 
 public class ChartHandler {
 	
@@ -13,10 +13,10 @@ public class ChartHandler {
 		this.context = context;
 	}
 
-	public LinesChart lines(List<List<String>> data, int max_width, int max_height) {
+	public LinesChart lines(JuiDataFrame df, int max_width, int max_height) {
 
 		LinesChart lines = LinesChart.builder()
-				.data(data)
+				.data(df)
 				.max_height(max_height)
 				.max_width(max_width)
 				.build();
@@ -26,23 +26,24 @@ public class ChartHandler {
 		
 	}
 	
-	public BarChart bars(List<List<String>> data, int max_width, int max_height) {
-
+	public BarChart bars(JuiDataFrame df, int max_width, int max_height) {
+		
 		BarChart lines = BarChart.builder()
-				.data(data)
+				.data(df)
 				.max_height(max_height)
 				.max_width(max_width)
 				.build();
 		context.add(lines);
 		
 		return lines;
-		
 	}
 	
 	public MapAttributesBuilder map() {
 		
 		return com.jui.html.charts.map.MapAttributes.builder().context(context);
 	}
+
+	
 
 
 }

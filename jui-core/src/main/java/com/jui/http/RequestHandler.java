@@ -14,10 +14,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class RequestHandler extends BaseHandler implements HttpHandler {
 
-    WebContext context;
-	
-    public RequestHandler(WebContext context) {
-    	this.context = context;
+    public RequestHandler() {
 	}
 
 	@Override

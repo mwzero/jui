@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class WebComponent {
 	
+	String Id;
 	String key;
 	String data;
 	TemplateHelper engine;
@@ -31,7 +32,7 @@ public abstract class WebComponent {
 	
 	public String render() {	
 		
-		log.debug("Rendering {}", this.getKey());
+		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
 
 		Map<String, Object> variables = this.getVariables();
 
