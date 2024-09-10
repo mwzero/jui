@@ -5,10 +5,6 @@ import static com.jui.JuiApp.jui;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.jui.html.input.InputBuilder;
-import com.st.ST;
-
-
 public class InputExample {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException {

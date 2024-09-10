@@ -1,18 +1,9 @@
 package com.jui.html.charts;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.collections.api.RichIterable;
-import org.eclipse.collections.api.list.ImmutableList;
-
 import com.jui.WebContext;
 import com.jui.html.charts.map.MapAttributes.MapAttributesBuilder;
 import com.st.JuiDataFrame;
 
-import io.github.vmzakharov.ecdataframe.dataframe.DataFrame;
-import io.github.vmzakharov.ecdataframe.dataframe.DfColumn;
 
 public class ChartHandler {
 	

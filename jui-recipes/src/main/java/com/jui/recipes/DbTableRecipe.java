@@ -4,14 +4,11 @@ import static com.jui.JuiApp.jui;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
-import com.st.LinkedMap;
 import com.st.ST;
 
 import io.github.vmzakharov.ecdataframe.dsl.value.ValueType;
@@ -28,7 +25,7 @@ public class DbTableRecipe {
     			""");
     	jui.divider();
     	
-    	var table1 = jui.table("Simple Table", 
+    	jui.table("Simple Table", 
     			ST.DB()
     				.driver("org.h2.Driver")
     				.url("jdbc:h2:~/testdb")

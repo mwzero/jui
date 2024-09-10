@@ -1,11 +1,9 @@
 package com.st;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -13,18 +11,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Map;
 
 import com.st.attributes.DataBaseAttributes;
 import com.st.attributes.DataBaseAttributes.DataBaseAttributesBuilder;
 
-import io.github.vmzakharov.ecdataframe.dataframe.DataFrame;
 import io.github.vmzakharov.ecdataframe.dataset.CsvDataSet;
-import io.github.vmzakharov.ecdataframe.dsl.value.ValueType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -100,15 +92,4 @@ public class ST {
 		}
 	}
 
-	private InputStreamReader getFileStreamReader(String fileName) throws FileNotFoundException {
-		
-		InputStream is = null;
-		if ( isClassLoading()) {
-			is = getClass().getResourceAsStream(fileName);
-		} else {
-			
-			is = new FileInputStream(new File(fileName));
-		}
-		return new InputStreamReader(is);
-	} 
 }

@@ -13,4 +13,16 @@ public class Utils {
 		return sw.toString();
 	}
 
+	public static String buildString(Object[] array) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            result.append("\"").append(array[i].toString()).append("\"");
+            if (i < array.length - 1) {
+                result.append(", ");  // Aggiungo la virgola tra gli elementi
+            }
+        }
+
+        return result.toString();
+    }
+
 }
