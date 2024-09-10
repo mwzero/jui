@@ -14,6 +14,8 @@ public class CsvRecipe {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
 		
+		ConfifurationEnvironment.settingProxy();
+		
 		jui.text.markdown("""
     			# JUI
     			*JUI* build web applications from Java.
