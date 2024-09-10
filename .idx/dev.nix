@@ -11,6 +11,8 @@
     # pkgs.python311Packages.pip
     # pkgs.nodejs_20
     # pkgs.nodePackages.nodemon
+    pkgs.jdk17
+    pkgs.maven
   ];
 
   # Sets environment variables in the workspace
@@ -19,6 +21,15 @@
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
       # "vscodevim.vim"
+      "vscjava.vscode-java-debug"
+      "vscjava.vscode-java-dependency"
+      "vscjava.vscode-java-pack"
+      "vscjava.vscode-java-test"
+      "vscjava.vscode-maven"
+      "Pivotal.vscode-boot-dev-pack"
+      "vmware.vscode-spring-boot"
+      "vscjava.vscode-spring-boot-dashboard"
+      "vscjava.vscode-spring-initializr"
     ];
 
     # Enable previews

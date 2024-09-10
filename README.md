@@ -65,7 +65,17 @@ try to navigate to http://localhost:8000/jui
 
 <img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
 
-## Get Inspired
+## 👨‍💻‍ Contributors
 
-# License
+<a href="https://github.com/mwzero/jui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mwzero/jui" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+## License
 JUI is completely free and open-source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
+
+## 📬 Contact
+
+If you have any questions, feedback, or would like to get in touch, please feel free to reach out to us via email at [maurizio.farina@gmail.com](mailto:mauirizio.farina@gmail.com)
