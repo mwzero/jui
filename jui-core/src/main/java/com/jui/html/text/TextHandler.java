@@ -3,7 +3,7 @@ package com.jui.html.text;
 import com.jui.WebContext;
 
 import com.jui.html.Divider;
-import com.jui.utils.Markdown;
+import com.jui.processors.MarkdownProcessor;
 
 public class TextHandler {
 
@@ -56,7 +56,7 @@ public class TextHandler {
 
 		StringBuilder sb = new StringBuilder();
 		for (String arg : args) {
-			sb.append(Markdown.builder().build().render(arg));
+			sb.append(MarkdownProcessor.builder().build().render(arg));
 		}
 		return sb.toString();
 	}

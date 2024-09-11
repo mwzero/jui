@@ -10,8 +10,8 @@ import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
 import com.jui.html.text.Text;
 import com.jui.html.text.TextHandler;
+import com.jui.processors.MarkdownProcessor;
 import com.jui.templates.TemplateHelper;
-import com.jui.utils.Markdown;
 import com.st.JuiDataFrame;
 
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class JuiContainer {
 	//TODO: questo potrebbe essere più complesso
 	public void write(String... args) {
 		 for (String arg : args) {
-			 String text = Markdown.builder().build().render(arg);
+			 String text = MarkdownProcessor.builder().build().render(arg);
 			 this.context.add(new Text(text, false, true));
 		 }
 	}

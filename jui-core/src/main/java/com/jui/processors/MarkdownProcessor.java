@@ -1,9 +1,9 @@
-package com.jui.utils;
+package com.jui.processors;
 
 import lombok.Builder;
 
 @Builder
-public class Markdown {
+public class MarkdownProcessor {
 
     public String render(String markdown) {
         if (markdown == null || markdown.isEmpty()) {
