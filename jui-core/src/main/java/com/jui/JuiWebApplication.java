@@ -10,7 +10,6 @@ import com.jui.html.charts.ChartHandler;
 import com.jui.html.input.InputHandler;
 import com.jui.html.text.Text;
 import com.jui.html.text.TextHandler;
-import com.jui.http.SimpleHttpServer;
 import com.jui.templates.TemplateHelper;
 import com.st.JuiDataFrame;
 
@@ -68,15 +67,6 @@ public class JuiWebApplication {
 		JuiContainer container = new JuiContainer(this.engine, ++iContainer);
 		main.add(container);
 		return container;
-	}
-	
-	public void start() {
-		try {
-			SimpleHttpServer.start(this);
-			
-		} catch (IOException e) {
-			log.error("Impossible to start HTTP Server [{}]", e.getLocalizedMessage());
-		}
 	}
 	
 	//only to work over main container as default

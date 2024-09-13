@@ -3,6 +3,7 @@ package com.jui;
 import java.util.UUID;
 
 public class Button extends UIComponent {
+	
     private String label;
     private Runnable onClick;
     private String id;

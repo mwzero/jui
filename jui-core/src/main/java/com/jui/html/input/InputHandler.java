@@ -48,7 +48,7 @@ public class InputHandler {
 	public FormButton submitbutton(String label, String onClick) { 
 		return (FormButton) this.context.add(new FormButton(label, ButtonType.Primary, onClick));}
 	
-	public Button button(String label, String type, String onClick) { return (Button) this.context.add(new Button(label, type, onClick));}
+	public Button button(String label, String type, String onClick, Runnable onServerSide) { return (Button) this.context.add(new Button(label, type, onClick, onServerSide));}
 	public Slider slider(String text, int min, int max, int value) {
 		
 		Slider slider = new Slider(text, min, max, value);

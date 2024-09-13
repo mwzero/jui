@@ -20,7 +20,7 @@ public class AllYouCanEat {
     			No need to write a backend, define routes, handle HTTP requests, connect a frontend, write HTML, CSS, JavaScript, ...
     			""");
     	
-		jui.input.button("Click me", "primary", "alert('Button clicked!')");
+		//jui.input.button("Click me", "primary", "alert('Button clicked!')");
     	jui.input.slider("slider1", 0, 100, 50);
     	
     	jui.divider();

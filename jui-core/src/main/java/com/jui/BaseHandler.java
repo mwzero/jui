@@ -1,4 +1,4 @@
-package com.jui.http;
+package com.jui;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -80,7 +80,7 @@ public abstract class BaseHandler {
 	
 	protected URL getFileFromClassLoader (String fileName) throws IOException {
     	
-		return FileHandler.class.getResource(fileName);
+		return BaseHandler.class.getResource(fileName);
 		
 	}
 

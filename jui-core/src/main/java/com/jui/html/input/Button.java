@@ -8,15 +8,23 @@ public class Button extends WebComponent {
     private final String type;
     private final String onClick;
 
-    public Button(String label, String type, String onClick) {
+    public Button(String label, String type, String onClick, Runnable onServerSide) {
         this.label = label;
         this.onClick = onClick;
         this.type = type;
+        this.onServerSide = onServerSide;
     }
 
 	@Override
 	public String render() {
-		return "<button onclick=\"" + onClick + "; return false;\" class=\"btn btn-" + type + "\">" + label + "</button>";
+		
+		String js = onClick;
+		
+		if ( this.onServerSide != null ) {
+			js= "%s;sendClick('%s');return false;".formatted(this.onClick, this.getKey());
+		}
+		
+		return "<button onclick=\"" + js + "\" class=\"btn btn-" + type + "\">" + label + "</button>";
 	}
 
 	@Override

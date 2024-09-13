@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyApp</title>
+    
+    <div id="JUI"></div> 
+    
+    
+    <script>
+        var ws = new WebSocket("ws://localhost:8025/ws/echo");
+
+        ws.onmessage = function(event) {
+            // Aggiorna l'interfaccia utente con il contenuto ricevuto
+            document.getElementById("JUI").innerHTML = event.data;
+        };
+
+        function sendClick(id) {
+            ws.send(JSON.stringify({action: "click", id: id}));
+        }
+
+        ws.onopen = function() {
+        
+            // Richiede il rendering iniziale al server
+            ws.send(JSON.stringify({action: "init"}));
+            
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>

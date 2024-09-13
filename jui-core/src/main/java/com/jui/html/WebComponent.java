@@ -22,6 +22,12 @@ public abstract class WebComponent {
 	String data;
 	TemplateHelper engine;
 	
+	protected Runnable onServerSide;
+	
+	public void executeServerAction() {
+		onServerSide.run();	
+	}
+	
 	public String getValue() {
 		return null;
 	}
