@@ -50,6 +50,10 @@
     <!-- modules not included in JUI Core library -->
     <module>jui-recipes</module>
     <module>jui-sandbox</module>
+    
+    <!-- apps -->
+    <module>jui-apps</module>
+    
   </modules>
   	
 	
