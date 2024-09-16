@@ -10,10 +10,6 @@ import javax.mail.search.FlagTerm;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import com.ui.apps.mail.PrintMailMessageSinker;
-import com.ui.apps.mail.ReadEmail;
-import com.ui.apps.mail.ReadEmailMicrosoft;
-
 public class MailTests {
 	
 	@Test

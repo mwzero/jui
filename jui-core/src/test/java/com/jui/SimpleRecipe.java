@@ -10,6 +10,16 @@ public class SimpleRecipe {
         		System.out.println("Bottone cliccato! Esegui codice Server-side");
         	});
         
+        
+        
+        jui.divider();
+        
+        jui.text.markdown("""
+        		# Esempio
+        		
+        		piccolo esempio *buttone*
+        		""");
+        
 		jui.start();
 
 	}
