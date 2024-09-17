@@ -1,4 +1,4 @@
-package com.ui.apps.mail;
+package com.ui.apps.mail.client;
 
 import java.io.IOException;
 
