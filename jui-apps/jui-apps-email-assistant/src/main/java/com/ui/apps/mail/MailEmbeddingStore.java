@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -24,9 +23,9 @@ import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.pinecone.PineconeEmbeddingStore;
-import dev.langchain4j.store.embedding.pinecone.PineconeServerlessIndexConfig;
+import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 import lombok.extern.slf4j.Slf4j;
+import opennlp.tools.dictionary.Index;
 
 @Slf4j
 public class MailEmbeddingStore implements IMailMessageSinker{
@@ -36,28 +35,53 @@ public class MailEmbeddingStore implements IMailMessageSinker{
 	EmbeddingStore<TextSegment> embeddingStore;
 	EmbeddingModel embeddingModel;
 	
-	public void createIndex(EmbeddingModel embeddingModel, String apiKey, String index) throws Exception {
+	Index pcIndex;
+	
+	public void createIndex(EmbeddingModel embeddingModel, String index, String namespace) throws Exception {
 		
 		this.embeddingModel = embeddingModel;
 
+		/*
 		embeddingStore = PineconeEmbeddingStore.builder()
 		        .apiKey(System.getenv("PINECONE_API_KEY"))
 		        .index(index)
-		        .nameSpace(UUID.randomUUID().toString())
+		        .nameSpace(namespace)
 		        .createIndex(PineconeServerlessIndexConfig.builder()
 		                .cloud("AWS")
 		                .region("us-east-1")
 		                .dimension(embeddingModel.dimension())
 		                .build())
 		        .build();
+		
+		*/
+		
+		/*
+    	Pinecone pc = new Pinecone.Builder(apiKey).build();
+    	pc.createServerlessIndex(index, "cosine", 2, "aws", "us-east-1", DeletionProtection.DISABLED);
+    	pcIndex = pc.getIndexConnection(index);
+    	*/
+		embeddingStore = PgVectorEmbeddingStore.builder()
+                .host(System.getenv("DB_PG_HOST"))
+                .port(Integer.parseInt(System.getenv("DB_PG_PORT")))
+                .user(System.getenv("DB_PG_USER"))
+                .password(System.getenv("DB_PG_PWD"))
+                .database("postgres")
+                .table(index)
+                .dimension(384)
+                //.dropTableFirst(true)
+                .build();
+    	
 	}
 	
 	public void add(String content, Map<String, ?> metadata) {
 		
+		
 		TextSegment segment = TextSegment.from(content, Metadata.from(metadata));
 		TextSegment segment2 = TextSegment.from("test", Metadata.from(metadata));
 		Embedding embedding = embeddingModel.embed(segment).content();
-		embeddingStore.add(embedding, segment2);
+		embeddingStore.add(embedding, segment);
+		
+		//UpsertResponse response = pcIndex.upsert(content, embedding.vectorAsList(),"ns1");
 		
 	}
 	
