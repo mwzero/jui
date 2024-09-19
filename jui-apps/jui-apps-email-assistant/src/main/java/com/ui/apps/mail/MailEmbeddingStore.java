@@ -1,7 +1,10 @@
 package com.ui.apps.mail;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,17 +16,23 @@ import javax.mail.Part;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
+
+import com.ui.apps.mail.classifiers.BasicClassifier;
 import com.ui.apps.mail.client.IMailMessageSinker;
 
 import dev.langchain4j.data.document.Metadata;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
+import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
 import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
 import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
+
 import lombok.extern.slf4j.Slf4j;
 import opennlp.tools.dictionary.Index;
 
@@ -34,12 +43,14 @@ public class MailEmbeddingStore implements IMailMessageSinker{
 	
 	EmbeddingStore<TextSegment> embeddingStore;
 	EmbeddingModel embeddingModel;
+	ChatLanguageModel chatModel;
 	
 	Index pcIndex;
 	
-	public void createIndex(EmbeddingModel embeddingModel, String index, String namespace) throws Exception {
+	public void createIndex(ChatLanguageModel chatModel, EmbeddingModel embeddingModel, String index, String namespace) throws Exception {
 		
 		this.embeddingModel = embeddingModel;
+		this.chatModel = chatModel;
 
 		/*
 		embeddingStore = PineconeEmbeddingStore.builder()
@@ -133,10 +144,18 @@ public class MailEmbeddingStore implements IMailMessageSinker{
 			if (attachFiles.length() > 1) {
 				attachFiles = attachFiles.substring(0, attachFiles.length() - 2);
 			}
-		} else if (contentType.contains("text/plain") || contentType.contains("text/html")) {
+		} else if (contentType.contains("text/plain") ) {
+			
 			Object content = message.getContent();
 			if (content != null) {
 				messageContent = content.toString();
+			}
+			
+		} else if (contentType.contains("text/html")) {
+			Object content = message.getContent();
+			if (content != null) {
+				messageContent = tika_autoParser(content.toString());
+				
 			}
 		}
 
@@ -149,6 +168,26 @@ public class MailEmbeddingStore implements IMailMessageSinker{
     	metadata.put("Subject", subject);
     	metadata.put("Sent Date", sentDate);
     	add(messageContent, metadata);
+    	
+    	String label = BasicClassifier.process(chatModel, messageContent);
+    	log.info("Etichetta: [{}]", label);
+		System.out.println("Etichetta: " + label);
+	}
+	
+	public String tika_autoParser(String htmlContent) {
 		
+		Tika tika = new Tika();
+
+    	InputStream stream = new ByteArrayInputStream(htmlContent.getBytes(StandardCharsets.UTF_8));
+        String content = null;
+		try {
+			content = tika.parseToString(stream);
+		} catch (IOException | TikaException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return content;
+            
+		 
 	}
 }
