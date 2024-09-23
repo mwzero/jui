@@ -31,8 +31,6 @@ public class JuiContainer {
 	public TextHandler text;
 	public InputHandler input;
 	
-	
-	
 	public JuiContainer(TemplateHelper engine, int counter) {
 		
 		log.info("Building new PageHandler");

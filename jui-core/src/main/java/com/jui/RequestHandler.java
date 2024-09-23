@@ -8,18 +8,22 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import org.glassfish.grizzly.http.server.HttpHandler;
+import org.glassfish.grizzly.http.server.Request;
+import org.glassfish.grizzly.http.server.Response;
 
-public class RequestHandler extends BaseHandler implements HttpHandler {
+
+public class RequestHandler extends HttpHandler {
 
     public RequestHandler() {
 	}
 
+
 	@Override
-    public void handle(HttpExchange exchange) throws IOException {
-        
-        if ("POST".equals(exchange.getRequestMethod())) {
+	public void service(Request request, Response response) throws Exception {
+		
+		/*
+		if ("POST".equals(exchange.getRequestMethod())) {
         	
             BufferedReader reader = new BufferedReader(
                 new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8)
@@ -63,5 +67,7 @@ public class RequestHandler extends BaseHandler implements HttpHandler {
             // Risposta per metodi diversi da POST
             exchange.sendResponseHeaders(405, -1); // 405 Method Not Allowed
         }
-    }
+        */
+		
+	}
 }

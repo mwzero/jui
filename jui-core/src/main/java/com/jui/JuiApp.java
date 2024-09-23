@@ -6,6 +6,7 @@ import java.util.*;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.tyrus.server.Server;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jui.html.Divider;
 import com.jui.html.Table;
 import com.jui.html.WebComponent;
@@ -29,9 +30,16 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class JuiApp {
 	
+	//template Engine
+	TemplateHelper engine;
+	
+	@Setter
+	String template;
+	
 	public static JuiApp jui = JuiApp.getInstance();
 
 	public static JuiApp getInstance() {
+		
 		if (jui == null) {
 			jui = new JuiApp();
 		}
@@ -42,12 +50,6 @@ public class JuiApp {
 
 		return this.main.get(0).getContext().getLinkedMapContext().get(id);
 	}
-
-	// template Engine
-	TemplateHelper engine;
-
-	@Setter
-	String template;
 
 	// Web Application containers
 	public List<JuiContainer> main;
@@ -125,21 +127,72 @@ public class JuiApp {
 		StringBuilder html = new StringBuilder();
 
 		for (WebComponent component : this.main.get(0).getContext().getLinkedMapContext().values()) {
+			
 			html.append(component.render());
+			
 		}
+		
+		if ( getMain().size() == 1) {
+			try {
+				html.append("""
+						<script>
+							elementMapping=%s;
+							//elementPostData=s;
+						</script>
+						""".formatted(
+								getMain().get(0).getContext().elementMapping()
+								//, getMain().get(0).getContext().elementPostData
+								));
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
 
 		// Invia l'HTML al client tramite WebSocket
 		try {
 			session.getAsyncRemote().sendText(html.toString());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		/*
+		String response = null;
+		try {
+			
+			Map<String, Object> variables = new HashMap<String, Object>();
+			
+			variables.put("main_contexts", getMain());
+			variables.put("sidebar_context", getSidebar().getContext().getLinkedMapContext());
+			variables.put("header_context", getHeader().getContext().getLinkedMapContext());
+			
+			if ( getMain().size() == 1) {
+			
+				variables.put("elementMapping", getMain().get(0).getContext().elementMapping());
+				variables.put("elementPostData", getMain().get(0).getContext().elementPostData);
+				
+			} else {
+				variables.put("elementMapping", getMain().get(1).getContext().elementMapping());
+				variables.put("elementPostData", getMain().get(1).getContext().elementPostData);
+			}
+			
+			response = getEngine().renderTemplate(getTemplate() , variables);
+			
+		} catch (Exception e) {
+			
+			pageStatus = 500;
+			log.error("Request handling Err[{}]", e.getLocalizedMessage());
+			response = getErrorPage(e);
+		}
+		*/
 	}
 
 	public void start() {
 
 		HttpServer httpserver = HttpServer.createSimpleServer("src/main/resources/html", 8080);
-		// httpserver.getServerConfiguration().addHttpHandler(new FileHandler(), "/js");
+		//httpserver.getServerConfiguration().addHttpHandler(new RequestHandler(), "/js");
 		try {
 
 			httpserver.start();

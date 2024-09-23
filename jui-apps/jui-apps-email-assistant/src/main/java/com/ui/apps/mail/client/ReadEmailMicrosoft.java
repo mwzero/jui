@@ -29,7 +29,6 @@ import microsoft.exchange.webservices.data.search.ItemView;
 //https://github.com/OfficeDev/ews-java-api/wiki/Getting-Started-Guide
 	
 @Slf4j
-
 public class ReadEmailMicrosoft {
 	
 	ExchangeService service;
@@ -147,7 +146,7 @@ public class ReadEmailMicrosoft {
         EmailMessage msg= new EmailMessage(service);
         msg.setSubject("Test Maurizio");
         msg.setBody(MessageBody.getMessageBodyFromText("Sent using the EWS Java API."));
-        msg.getToRecipients().add("m.farina@crif.com");
+        msg.getToRecipients().add("murizio.farina@gmail.com");
         msg.send();
     }
     	
