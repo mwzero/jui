@@ -13,11 +13,11 @@
 	
     <script>
     
-        var ws = new WebSocket("ws://localhost:8025/ws/echo");
+		var ws = new WebSocket("ws://localhost:8025/ws/echo");
 
         ws.onmessage = function(event) {
             //document.getElementById("JUI").innerHTML = event.data;
-            setInnerHTML(document.getElementById("JUI"), event.data);
+            setInnerHTML(document.getElementById("jui-form"), event.data);
         };
 
         function sendClick(id) {
@@ -35,41 +35,41 @@
         
         function setInnerHTML(elm, html) {
         
- 			  elm.innerHTML = html;
-  
-			  Array.from(elm.querySelectorAll("script"))
-			    .forEach( oldScriptEl => {
-			      const newScriptEl = document.createElement("script");
-			      
-			      Array.from(oldScriptEl.attributes).forEach( attr => {
-			        newScriptEl.setAttribute(attr.name, attr.value) 
-			      });
-			      
-			      const scriptText = document.createTextNode(oldScriptEl.innerHTML);
-			      newScriptEl.appendChild(scriptText);
-			      
-			      oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+		  elm.innerHTML = html;
+
+		  Array.from(elm.querySelectorAll("script"))
+			.forEach( oldScriptEl => {
+			  const newScriptEl = document.createElement("script");
+			  
+			  Array.from(oldScriptEl.attributes).forEach( attr => {
+				newScriptEl.setAttribute(attr.name, attr.value) 
 			  });
+			  
+			  const scriptText = document.createTextNode(oldScriptEl.innerHTML);
+			  newScriptEl.appendChild(scriptText);
+			  
+			  oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+		  });
+		  
+			const formElements = document.querySelectorAll("form input, form select, form textarea");
+		
+			
+			formElements.forEach(function(element) {
+				element.addEventListener("change", handleChange);
+				element.addEventListener("input", handleChange); 
+			});
 		}
+		
+		function handleChange(event) {
+		
+			const sourceElement = event.target;
+			
+			handleEvent(sourceElement);
+		}
+	
 		var elementMapping = [];
     
-		document.addEventListener("DOMContentLoaded", function listener() {
-		    const formElements = document.querySelectorAll("form input, form select, form textarea");
 		
-		    function handleChange(event) {
-		    
-		        const sourceElement = event.target;
-		        
-		        handleEvent(sourceElement);
-			}
-		
-		    formElements.forEach(function(element) {
-		        element.addEventListener("change", handleChange);
-		        element.addEventListener("input", handleChange); 
-		    });
-		    
-		   
-		});
 
 		/*
 		* used to manage events fired by web components.
@@ -92,6 +92,9 @@
     </script>
 </head>
 <body>
-    <div class="container" id="JUI"></div> 
+    <div class="container">
+    	<form id="jui-form" method="post" action="/send_post">
+		</form>
+	</div>
 </body>
 </html>

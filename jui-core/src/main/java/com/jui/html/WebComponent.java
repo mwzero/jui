@@ -109,7 +109,8 @@ public abstract class WebComponent {
 	}
 
 	public String getPostData() {
-		return "postData%s();".formatted(this.getKey());
+		return null;
+		//return "postData%s();".formatted(this.getKey());
 	}
 	
 }

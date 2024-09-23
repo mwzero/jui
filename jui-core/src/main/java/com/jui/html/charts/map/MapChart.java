@@ -16,4 +16,11 @@ public class MapChart extends WebComponent {
 	//private int width;
 	//private int height;
 	
+	
+	@Override
+	public String getPostData() {
+		
+		return "postData%s();".formatted(this.getKey());
+	}
+	
 }

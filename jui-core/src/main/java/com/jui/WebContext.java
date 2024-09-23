@@ -89,6 +89,27 @@ public class WebContext {
 		
 		return sb.toString();
 	}
+	
+	public String elementPostData( ) throws JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+	    
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		boolean notFirst = false;
+		for ( String source : elementPostData.keySet() ) {
+			if ( notFirst) sb.append(",");
+			sb.append("""
+					{
+						"source" :"%s", "commands": [%s]
+					}
+					""".formatted(source, objectMapper.writeValueAsString(elementPostData.get(source))));
+			notFirst = true;
+		}
+		sb.append("]");
+		
+		return sb.toString();
+	}
 
 
 

@@ -19,7 +19,7 @@
 
 
    	
-<div class="container" >
+	<div class="container" >
 		<form id="jui-form" method="post" action="/send_post">
 			<fieldset>
 				<#list main_contexts as div_context>
@@ -39,7 +39,6 @@
 			});
 			
 			elementMapping = ${elementMapping};
-			
 			
 			function submitForm() {
 

@@ -137,11 +137,11 @@ public class JuiApp {
 				html.append("""
 						<script>
 							elementMapping=%s;
-							//elementPostData=s;
+							elementPostData=%s;
 						</script>
 						""".formatted(
 								getMain().get(0).getContext().elementMapping()
-								//, getMain().get(0).getContext().elementPostData
+								, getMain().get(0).getContext().elementPostData()
 								));
 			} catch (JsonProcessingException e) {
 				// TODO Auto-generated catch block
