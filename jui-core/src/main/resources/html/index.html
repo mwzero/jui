@@ -1,93 +1,92 @@
 <!DOCTYPE html>
 <html>
-<head>
+	<head>
 
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script src="js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script src="js/bootstrap.bundle.min.js"></script>
+		
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+		
+		<!--leaflet -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 	
-	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-	
-	<!--leaflet -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-	
-    <script>
     
-		var ws = new WebSocket("ws://localhost:8025/ws/echo");
-
-        ws.onmessage = function(event) {
-            //document.getElementById("JUI").innerHTML = event.data;
-            setInnerHTML(document.getElementById("jui-form"), event.data);
-        };
-
-        function sendClick(id) {
-            ws.send(JSON.stringify({action: "click", id: id}));
-        }
-
-        ws.onopen = function() {
-        
-            // Richiede il rendering iniziale al server
-            ws.send(JSON.stringify({action: "init"}));
-            
-        };
-        
-        //elementMapping = ${elementMapping};
-        
-        function setInnerHTML(elm, html) {
-        
-		  elm.innerHTML = html;
-
-		  Array.from(elm.querySelectorAll("script"))
-			.forEach( oldScriptEl => {
-			  const newScriptEl = document.createElement("script");
-			  
-			  Array.from(oldScriptEl.attributes).forEach( attr => {
-				newScriptEl.setAttribute(attr.name, attr.value) 
-			  });
-			  
-			  const scriptText = document.createTextNode(oldScriptEl.innerHTML);
-			  newScriptEl.appendChild(scriptText);
-			  
-			  oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
-		  });
-		  
-			const formElements = document.querySelectorAll("form input, form select, form textarea");
-		
+    	<!-- web socket events -->
+		<script>
+    	
+			var ws = new WebSocket("ws://localhost:8025/ws/jui");
 			
-			formElements.forEach(function(element) {
-				element.addEventListener("change", handleChange);
-				element.addEventListener("input", handleChange); 
-			});
-		}
-		
-		function handleChange(event) {
-		
-			const sourceElement = event.target;
-			
-			handleEvent(sourceElement);
-		}
+			ws.onopen = function() {
+				ws.send(JSON.stringify({action: "init"}));
+	            
+	        };
+
+	        ws.onmessage = function(event) {
+	            setInnerHTML(document.getElementById("jui-form"), event.data);
+	        };
 	
-		var elementMapping = [];
+			function sendClick(id) {
+	            ws.send(JSON.stringify({action: "click", id: id}));
+	        }
+	        
+		</script>
+	
+		<script>
+		
+			var elementMapping = [];
+			
+        	/*
+        	* 1. Set JUI element with HTML from JU backend
+        	* 2. Create script element 
+        	*/
+			function setInnerHTML(elm, html) {
+	        
+				elm.innerHTML = html;
+	
+				Array.from(elm.querySelectorAll("script"))
+					.forEach( oldScriptEl => {
+						const newScriptEl = document.createElement("script");
+	  
+						Array.from(oldScriptEl.attributes).forEach( attr => {
+							newScriptEl.setAttribute(attr.name, attr.value) 
+						});
+	  
+	  					const scriptText = document.createTextNode(oldScriptEl.innerHTML);
+	  					newScriptEl.appendChild(scriptText);
+	  
+	  					oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+  				});
+			  
+				const formElements = document.querySelectorAll("form input, form select, form textarea");
+			
+				formElements.forEach(function(element) {
+					element.addEventListener("change", handleEvent);
+					element.addEventListener("input", handleEvent); 
+				});
+			}
+		
     
-		
-
-		/*
-		* used to manage events fired by web components.
-		* for example in MapChart: handleEvent({"name": "${clientId}", "value": {"lat": center.lat, "lng": center.lng, "zoom": zoom}});
-		*/
-		function handleEvent(sourceElement) {
-		
-			elementMapping.forEach((element) => {
-				if ( element.source === sourceElement.name ) {
-					element.commands.forEach((command) => {
-						console.log(`Elemento modificato: ${sourceElement.name}, Nuovo valore: ${sourceElement.value}, Aggiornato: ${command}`);
-						
-						let dynamicFunction = new Function('value' , command);
-						dynamicFunction(sourceElement.value);
-					});
-				}	
-			});
-		}
+			/*
+			* used to manage events fired by web components.
+			* for example in MapChart: handleEvent({"name": "${clientId}", "value": {"lat": center.lat, "lng": center.lng, "zoom": zoom}});
+			*/
+			function handleEvent(event) {
+			
+				const sourceElement = event.target;
+			
+				elementMapping.forEach((element) => {
+				
+					if ( element.source === sourceElement.name ) {
+						element.commands.forEach((command) => {
+							console.log(`Elemento modificato: ${sourceElement.name}, Nuovo valore: ${sourceElement.value}, Aggiornato: ${command}`);
+							
+							let dynamicFunction = new Function('value' , command);
+							dynamicFunction(sourceElement.value);
+						});
+					}	
+				});
+			}
         
     </script>
 </head>

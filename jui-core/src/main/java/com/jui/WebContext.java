@@ -18,7 +18,10 @@ public class WebContext {
 	
 	TemplateHelper engine;
 	
+	//contains webcomponent 
 	LinkedHashMap<String, WebComponent> context;
+	
+	
 	LinkedHashMap<String, ArrayList<String>> relations;
 	public LinkedHashMap<String, String> elementPostData;
 	int i; 
@@ -26,10 +29,10 @@ public class WebContext {
 	@Builder
 	public WebContext(TemplateHelper engine) {
 	
-		this.engine = engine;
-		
 		log.debug("Initializing new context");
-		i=0;
+		
+		this.i=0;
+		this.engine = engine;
 		this.context = new LinkedHashMap<>();
 		this.relations = new LinkedHashMap<>();
 		this.elementPostData = new LinkedHashMap<>();
@@ -68,49 +71,6 @@ public class WebContext {
 		else 
 			relations.put(key, new ArrayList<String>(Arrays.asList(command)));
 	}
-	
-	public String elementMapping( ) throws JsonProcessingException {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-	    
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		boolean notFirst = false;
-		for ( String source : relations.keySet() ) {
-			if ( notFirst) sb.append(",");
-			sb.append("""
-					{
-						"source" :"%s", "commands": [%s]
-					}
-					""".formatted(source, objectMapper.writeValueAsString(relations.get(source))));
-			notFirst = true;
-		}
-		sb.append("]");
-		
-		return sb.toString();
-	}
-	
-	public String elementPostData( ) throws JsonProcessingException {
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-	    
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		boolean notFirst = false;
-		for ( String source : elementPostData.keySet() ) {
-			if ( notFirst) sb.append(",");
-			sb.append("""
-					{
-						"source" :"%s", "commands": [%s]
-					}
-					""".formatted(source, objectMapper.writeValueAsString(elementPostData.get(source))));
-			notFirst = true;
-		}
-		sb.append("]");
-		
-		return sb.toString();
-	}
-
 
 
 }

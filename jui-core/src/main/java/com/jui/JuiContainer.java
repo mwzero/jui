@@ -4,12 +4,11 @@ import java.lang.reflect.Field;
 
 import com.jui.annotations.JUI;
 import com.jui.html.Divider;
+import com.jui.html.InputHandler;
 import com.jui.html.Table;
+import com.jui.html.Text;
 import com.jui.html.UnorderedList;
 import com.jui.html.charts.ChartHandler;
-import com.jui.html.input.InputHandler;
-import com.jui.html.text.Text;
-import com.jui.html.text.TextHandler;
 import com.jui.processors.MarkdownProcessor;
 import com.jui.templates.TemplateHelper;
 import com.st.JuiDataFrame;
@@ -28,7 +27,6 @@ public class JuiContainer {
 	
 	//handlers
 	public ChartHandler chart; 
-	public TextHandler text;
 	public InputHandler input;
 	
 	public JuiContainer(TemplateHelper engine, int counter) {
@@ -39,7 +37,6 @@ public class JuiContainer {
 		context = new WebContext(engine);
 		
 		chart = new ChartHandler(context);
-		text = new TextHandler(context);
 		input = new InputHandler(context);
 			
 	}
@@ -103,6 +100,6 @@ public class JuiContainer {
 	}
 	
 	public void divider(String color) {this.context.add(new Divider(color));}
-	public Text markdown(String... args) { return this.text.markdown(args);}
+	public Text markdown(String... args) { return this.input.markdown(args);}
 	
 }

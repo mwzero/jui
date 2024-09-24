@@ -2,6 +2,10 @@ package com.jui.utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.LinkedHashMap;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Utils {
 
@@ -24,5 +28,26 @@ public class Utils {
 
         return result.toString();
     }
+	
+	public static String buildJsonString( LinkedHashMap<String, ?> map, String keyLabel, String valueLabel ) throws JsonProcessingException {
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+	    
+		StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		boolean notFirst = false;
+		for ( String key : map.keySet() ) {
+			if ( notFirst) sb.append(",");
+			sb.append("""
+					{
+						"%s" :"%s", "%s": [%s]
+					}
+					""".formatted(keyLabel, key, valueLabel, objectMapper.writeValueAsString(map.get(key))));
+			notFirst = true;
+		}
+		sb.append("]");
+		
+		return sb.toString();
+	}
 
 }

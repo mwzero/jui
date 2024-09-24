@@ -1,15 +1,15 @@
-package com.jui.html.input;
+package com.jui.html;
 
 import java.util.List;
 
 import com.jui.html.WebComponent;
 
-public class CheckBox extends WebComponent {
+public class Radio extends WebComponent {
 	
     private String label;
     List<String> values;
 
-	public CheckBox(String label, List<String> values) {
+	public Radio(String label, List<String> values) {
 		
         this.label = label;
         this.values = values;
@@ -25,7 +25,7 @@ public class CheckBox extends WebComponent {
 			i++;
 			String oneCheck = """ 
 			<div class="form-check">
-			  <input class="form-check-input" type="checkbox" name="%s" id="%s">
+			  <input class="form-check-input" type="radio" name="%s" id="%s">
 			  <label class="form-check-label" for="%s">
 			    %s
 			  </label>
@@ -44,8 +44,6 @@ public class CheckBox extends WebComponent {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
 		
 	
 }

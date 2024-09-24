@@ -13,7 +13,7 @@ import lombok.Setter;
 public class UnorderedList extends WebComponent {
 	
 	String label;
-	List<ListItem> items;
+	List<UnorderedListItem> items;
 	
     public UnorderedList() {
     	
@@ -23,7 +23,7 @@ public class UnorderedList extends WebComponent {
     
     public  UnorderedList add(String label, String icon, JuiContainer link, JuiContainer content, boolean active) {
     	
-    	ListItem item = new ListItem(label, icon, 
+    	UnorderedListItem item = new UnorderedListItem(label, icon, 
     			link != null ? link.getCliendId() : null, content != null ? content.getCliendId() : null);
     	items.add(item);
     	

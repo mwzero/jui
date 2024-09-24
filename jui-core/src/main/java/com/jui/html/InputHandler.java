@@ -1,9 +1,10 @@
-package com.jui.html.input;
+package com.jui.html;
 
 import java.util.List;
 
 import com.jui.WebContext;
-import com.jui.html.input.FormButton.ButtonType;
+import com.jui.html.FormButton.ButtonType;
+import com.jui.processors.MarkdownProcessor;
 
 public class InputHandler {
 	
@@ -66,5 +67,53 @@ public class InputHandler {
 	public FileInput file_uploader(String label) { return (FileInput) this.context.add(new FileInput(label));}
 	public ColorPicker color_picker(String label) { return (ColorPicker) this.context.add(new ColorPicker(label));}
 	public DatePicker date_input(String label) { return (DatePicker) this.context.add(new DatePicker(label));}
+	
+	public Text title(String text) {
+		return (Text) context.add(new Text(getMarkdown(text), true, true));
+	}
+
+	public Text header(String text, boolean divider) {
+		Text web = new Text(getMarkdown(text), false, true);
+		context.add(web);
+		context.add(this.context.add(new Divider()));
+		return web;
+	}
+	
+	public Text header(String text, String dividerColor) {
+		
+		Text web = (Text) context.add(new Text(text, false, true));
+		context.add(new Divider(dividerColor));
+		return web;
+	}
+
+	public Text subHeader(String text) {
+		return (Text) context.add(new Text(getMarkdown(text), false, true));
+	}
+
+	public Text caption(String text) {
+		return (Text) context.add(new Text(getMarkdown(text), false, true));
+	}
+
+	public Text markdown(String... args) {
+		return (Text) this.context.add(new Text(getMarkdown(args), false, true));
+	}
+
+	public String code(String text, String language, boolean line_numbers) {
+		
+		return """
+				<pre><code>
+				%s
+				</code></pre>
+		""".formatted(text);
+	}
+
+	protected String getMarkdown(String... args) {
+
+		StringBuilder sb = new StringBuilder();
+		for (String arg : args) {
+			sb.append(MarkdownProcessor.builder().build().render(arg));
+		}
+		return sb.toString();
+	}
 	
 }

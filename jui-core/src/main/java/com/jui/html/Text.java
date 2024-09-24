@@ -1,6 +1,4 @@
-package com.jui.html.text;
-
-import com.jui.html.WebComponent;
+package com.jui.html;
 
 public class Text extends WebComponent {
 	

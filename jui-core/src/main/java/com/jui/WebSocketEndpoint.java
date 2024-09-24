@@ -10,20 +10,22 @@ import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.extern.slf4j.Slf4j;
 
-@ServerEndpoint("/echo")
+@ServerEndpoint("/jui")
+@Slf4j
 public class WebSocketEndpoint {
 	
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("Connessione WebSocket aperta: " + session.getId());
+        log.info("WebSocket connection ready[{}]",session.getId());
     }
 
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
     	
     	Gson gson = new Gson();
-    	Messaggio msg = gson.fromJson(message, Messaggio.class);
+    	JuiMessagge msg = gson.fromJson(message, JuiMessagge.class);
     	
         if ("click".equals(msg.action)) {
         	
@@ -40,10 +42,10 @@ public class WebSocketEndpoint {
 
     @OnClose
     public void onClose(Session session) {
-        System.out.println("Connessione WebSocket chiusa: " + session.getId());
+    	log.info("WebSocket connection closed[{}]",session.getId());
     }
     
-    private class Messaggio {
+    private class JuiMessagge {
         String action;
         String id;
     }

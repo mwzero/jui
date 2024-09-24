@@ -1,4 +1,4 @@
-package com.jui.html.input;
+package com.jui.html;
 
 import com.jui.html.WebComponent;
 

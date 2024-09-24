@@ -1,4 +1,4 @@
-package com.jui.html.charts.map;
+package com.jui.html.charts;
 
 import com.jui.WebContext;
 import com.jui.html.WebComponent;

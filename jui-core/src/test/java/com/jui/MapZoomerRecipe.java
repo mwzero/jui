@@ -15,10 +15,10 @@ public class MapZoomerRecipe {
     	var lng = jui.input.input("lng", "14.24641" ,"longitude");
     	
     	jui.chart.map()
-					.c_lat(lat)
-					.c_lng(lng)
-					.c_zoom(slider)
-				.build();
+				.c_lat(lat)
+				.c_lng(lng)
+				.c_zoom(slider)
+			.build();
     	
     	jui.start();
 	}

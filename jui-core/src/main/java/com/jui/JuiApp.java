@@ -7,15 +7,15 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.tyrus.server.Server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.jui.html.Button;
 import com.jui.html.Divider;
+import com.jui.html.InputHandler;
 import com.jui.html.Table;
+import com.jui.html.Text;
 import com.jui.html.WebComponent;
 import com.jui.html.charts.ChartHandler;
-import com.jui.html.input.Button;
-import com.jui.html.input.InputHandler;
-import com.jui.html.text.Text;
-import com.jui.html.text.TextHandler;
 import com.jui.templates.TemplateHelper;
+import com.jui.utils.Utils;
 import com.st.JuiDataFrame;
 
 import jakarta.websocket.DeploymentException;
@@ -30,14 +30,13 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class JuiApp {
 	
-	//template Engine
+	public static JuiApp jui = JuiApp.getInstance();
+	
 	TemplateHelper engine;
 	
 	@Setter
 	String template;
 	
-	public static JuiApp jui = JuiApp.getInstance();
-
 	public static JuiApp getInstance() {
 		
 		if (jui == null) {
@@ -75,7 +74,6 @@ public class JuiApp {
 			header = new JuiContainer(engine, ++iContainer);
 
 			chart = main.get(0).chart;
-			text = main.get(0).text;
 			input = main.get(0).input;
 
 		} catch (IOException e) {
@@ -92,7 +90,6 @@ public class JuiApp {
 
 	// only to work over main container as default
 	public ChartHandler chart;
-	public TextHandler text;
 	public InputHandler input;
 	
 	public Button button(String label, String type, String onClick, Runnable onServerSide) { 
@@ -115,7 +112,7 @@ public class JuiApp {
 	}
 
 	public Text markdown(String... args) {
-		return this.main.get(0).text.markdown(args);
+		return this.main.get(0).markdown(args);
 	}
 
 	public Table table(String caption, JuiDataFrame df, String... args) {
@@ -123,7 +120,7 @@ public class JuiApp {
 	}
 
 	public void render(Session session) {
-
+		
 		StringBuilder html = new StringBuilder();
 
 		for (WebComponent component : this.main.get(0).getContext().getLinkedMapContext().values()) {
@@ -140,53 +137,22 @@ public class JuiApp {
 							elementPostData=%s;
 						</script>
 						""".formatted(
-								getMain().get(0).getContext().elementMapping()
-								, getMain().get(0).getContext().elementPostData()
+								Utils.buildJsonString(getMain().get(0).getContext().relations, "source", "commands"),
+								Utils.buildJsonString(getMain().get(0).getContext().elementPostData, "source", "commands")
 								));
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				log.error("Error Processing relations for components. [{}]", e.getLocalizedMessage());
 			}
 		}
 			
-
-		// Invia l'HTML al client tramite WebSocket
 		try {
+			
 			session.getAsyncRemote().sendText(html.toString());
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error over ws channel. [{}]", e.getLocalizedMessage());
 		}
-		
-		/*
-		String response = null;
-		try {
-			
-			Map<String, Object> variables = new HashMap<String, Object>();
-			
-			variables.put("main_contexts", getMain());
-			variables.put("sidebar_context", getSidebar().getContext().getLinkedMapContext());
-			variables.put("header_context", getHeader().getContext().getLinkedMapContext());
-			
-			if ( getMain().size() == 1) {
-			
-				variables.put("elementMapping", getMain().get(0).getContext().elementMapping());
-				variables.put("elementPostData", getMain().get(0).getContext().elementPostData);
-				
-			} else {
-				variables.put("elementMapping", getMain().get(1).getContext().elementMapping());
-				variables.put("elementPostData", getMain().get(1).getContext().elementPostData);
-			}
-			
-			response = getEngine().renderTemplate(getTemplate() , variables);
-			
-		} catch (Exception e) {
-			
-			pageStatus = 500;
-			log.error("Request handling Err[{}]", e.getLocalizedMessage());
-			response = getErrorPage(e);
-		}
-		*/
 	}
 
 	public void start() {

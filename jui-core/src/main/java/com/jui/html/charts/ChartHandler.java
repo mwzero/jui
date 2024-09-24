@@ -1,7 +1,7 @@
 package com.jui.html.charts;
 
 import com.jui.WebContext;
-import com.jui.html.charts.map.MapAttributes.MapAttributesBuilder;
+import com.jui.html.charts.MapAttributes.MapAttributesBuilder;
 import com.st.JuiDataFrame;
 
 
@@ -40,7 +40,7 @@ public class ChartHandler {
 	
 	public MapAttributesBuilder map() {
 		
-		return com.jui.html.charts.map.MapAttributes.builder().context(context);
+		return com.jui.html.charts.MapAttributes.builder().context(context);
 	}
 
 	

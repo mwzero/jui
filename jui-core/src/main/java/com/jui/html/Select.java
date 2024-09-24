@@ -1,4 +1,4 @@
-package com.jui.html.input;
+package com.jui.html;
 
 import java.util.List;
 

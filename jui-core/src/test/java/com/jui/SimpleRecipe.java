@@ -6,13 +6,12 @@ public class SimpleRecipe {
 
 	public static void main(String[] args)  {
 
-        jui.text.markdown("""
+        jui.markdown("""
         		# Esempio
         		piccolo esempio *buttone*
         		""");
 
         jui.divider();
-        
         
         jui.button("Cliccami", "primary", "alert('Button clicked!')", () -> {
     		System.out.println("Bottone cliccato! Esegui codice Server-side");
