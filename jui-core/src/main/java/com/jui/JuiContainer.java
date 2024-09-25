@@ -92,7 +92,7 @@ public class JuiContainer {
 	public Table table(String caption, JuiDataFrame df) {
 		
 		Table table = new Table();
-		table.setSt(df);
+		table.setDf(df);
 		table.setCaption(caption);
 		
 		this.context.add(table);
