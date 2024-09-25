@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.util.Map;
 
 import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
@@ -17,8 +18,12 @@ public class TemplateHelper {
 	private Configuration cfg;
 	
 	public TemplateHelper(boolean templateClassLoading, String templateFolder) throws IOException {
-		
 		cfg = new Configuration(Configuration.VERSION_2_3_22);
+		
+		//support for iterable in FreeMarker
+		DefaultObjectWrapperBuilder owb = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_22);
+		owb.setIterableSupport(true);
+		cfg.setObjectWrapper(owb.build());
         try {
         	if ( templateClassLoading ) cfg.setClassForTemplateLoading(this.getClass(), "/" + templateFolder);
         	else

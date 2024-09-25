@@ -70,6 +70,7 @@ public abstract class WebComponent {
 		Map<String, Object> variables = new HashMap<>();
 		variables.put("clientId", this.getKey());
 		variables.put("key", this.getKey());
+		variables.put("juiComponent", this);
 		
 		for ( Field field : this.getClass().getDeclaredFields()) {
 			

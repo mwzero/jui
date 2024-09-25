@@ -14,8 +14,7 @@
     </tr>
   </thead>
   <tbody>
-  	<#assign rows=st.getHtmlRows()>
-  	<#list df as row>
+  	<#list juiComponent.iterator() as row>
     <tr>
       <#list row as col>
       <td>${col}</td>
