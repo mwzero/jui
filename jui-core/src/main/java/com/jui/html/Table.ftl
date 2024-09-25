@@ -4,10 +4,10 @@
 <table class="table <#list styles as style>${style} </#list>">
   <thead>
     <tr>
-    	<#assign cols=st.getHtmlCols()>
+    	<#assign cols=df.getDf().getColumns()>
     	<#if cols??>
     	<#list cols as col>
-      		<th scope="col">${col}</th>
+      		<th scope="col">${col.getName()}</th>
       	</#list>
       	</#if>
       	
@@ -15,7 +15,7 @@
   </thead>
   <tbody>
   	<#assign rows=st.getHtmlRows()>
-  	<#list rows as row>
+  	<#list df as row>
     <tr>
       <#list row as col>
       <td>${col}</td>
