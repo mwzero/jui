@@ -3,7 +3,6 @@ package com.jui;
 import java.io.IOException;
 
 import com.google.gson.Gson;
-import com.jui.html.WebComponent;
 
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -28,15 +27,12 @@ public class WebSocketEndpoint {
     	JuiMessagge msg = gson.fromJson(message, JuiMessagge.class);
     	
         if ("click".equals(msg.action)) {
+        	JuiApp.jui.executeServerAction(msg.id);
         	
-        	WebComponent component = JuiApp.getInstance().getWebComponentById(msg.id);
-            if (component != null) {
-            	component.executeServerAction();
-            }
-            
         } else if ("init".equals(msg.action)) {
-            // Invia il rendering iniziale al client
-        	JuiApp.getInstance().render(session);
+        	
+        	session.getAsyncRemote().sendText(JuiApp.jui.render());
+            
         }
     }
 

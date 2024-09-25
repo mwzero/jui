@@ -1,4 +1,4 @@
-package com.jui.recipes;
+package com.jui;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,17 +11,16 @@ public class JuiDataFrameRecipe {
 	public static void main(String args) throws IOException, URISyntaxException {
 		
 		
-		ConfifurationEnvironment.settingProxy();
-	
 		JuiDataFrame df = ST.read_csv("https://raw.githubusercontent.com/mwzero/jui/main/datasets/gapminder_unfiltered.csv");
-		df.getHtmlCols().forEach(col -> System.out.println(col));
-		df.getHtmlRows().forEach(row -> 
-			row.forEach( cell ->  {
-				System.out.println(cell);
-		}));
-		
+		df.getDf().getColumns().forEach(col -> System.out.println(col.getName()));
+		for ( int irow=0; irow < df.getDf().rowCount(); irow++ ) {
+				
+			for ( int icol=0; icol< df.getDf().getColumns().size(); icol++ ) {
+					System.out.println(df.getDf().getObject(irow,icol));
+			
+			}
+		}
 	}
-	
 	
 
 }
