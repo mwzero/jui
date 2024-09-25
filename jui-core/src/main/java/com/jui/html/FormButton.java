@@ -1,7 +1,5 @@
 package com.jui.html;
 
-import com.jui.html.WebComponent;
-
 public class FormButton extends WebComponent {
 	
     private final String label;

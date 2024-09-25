@@ -17,7 +17,7 @@ public class CsvRecipe {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
 		
-		jui.text.markdown("""
+		jui.markdown("""
     			# JUI - CSV Recipes - Life Expetation
     			""");
 		

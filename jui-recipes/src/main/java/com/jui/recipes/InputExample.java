@@ -9,7 +9,7 @@ public class InputExample {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException {
 		
-		jui.text.header("Input Example", "blue");
+		jui.input.header("Input Example", "blue");
     	
 		/*
     	var select = jui.input.select("city", ST.builder().option("classLoading", "true").build().readAsTable("cities.csv", ","));

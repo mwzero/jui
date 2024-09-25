@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-import com.jui.html.input.FormButton.ButtonType;
+import com.jui.html.FormButton.ButtonType;
 import com.st.ST;
 
 public class AllYouCanEat {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
 		
-		jui.text.markdown("""
+		jui.markdown("""
     			# JUI
     			*JUI* build web applications from Java.
     			No need to write a backend, define routes, handle HTTP requests, connect a frontend, write HTML, CSS, JavaScript, ...

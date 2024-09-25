@@ -13,7 +13,7 @@ public class TableRecipe {
 	
 	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
 		
-		jui.text.markdown("""
+		jui.markdown("""
     			# Table Examples
     			""");
     	jui.divider();

@@ -25,7 +25,7 @@ public class DbTableRecipe {
 			.url("jdbc:h2:~/testdb")
 		.build();
 		
-		jui.text.markdown("""
+		jui.markdown("""
     			# Table Examples
     			""");
     	jui.divider();

@@ -32,7 +32,7 @@ public class JuiAnnotations {
 		
 		JuiAnnotations testAnnotations = new JuiAnnotations();
 		
-		jui.text.header("POJO Example", "blue");
+		jui.input.header("POJO Example", "blue");
     	jui.write(testAnnotations.buildTestOne(10, 5));
     	jui.input.submitbutton("Submit Data", null);
 
