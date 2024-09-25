@@ -1,12 +1,8 @@
 package com.jui;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.Request;
@@ -18,9 +14,14 @@ public class RequestHandler extends HttpHandler {
     public RequestHandler() {
 	}
 
-
 	@Override
 	public void service(Request request, Response response) throws Exception {
+		
+		final SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
+        final String date = format.format(new Date(System.currentTimeMillis()));
+        response.setContentType("text/plain");
+        response.setContentLength(date.length());
+        response.getWriter().write(date);
 		
 		/*
 		if ("POST".equals(exchange.getRequestMethod())) {

@@ -1,9 +1,14 @@
 package com.jui;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.glassfish.grizzly.PortRange;
+import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.NetworkListener;
+import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.tyrus.server.Server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,10 +25,8 @@ import com.st.JuiDataFrame;
 
 import jakarta.websocket.DeploymentException;
 import jakarta.websocket.Session;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,7 +40,16 @@ public class JuiApp {
 	@Setter
 	String template;
 	
-	public static JuiApp getInstance() {
+	// Web Application containers
+	public List<JuiContainer> main;
+	public JuiContainer sidebar;
+	int iContainer = 0;
+	
+	// only to work over main container as default
+	public ChartHandler chart;
+	public InputHandler input;
+	
+	private static synchronized JuiApp getInstance() {
 		
 		if (jui == null) {
 			jui = new JuiApp();
@@ -45,19 +57,7 @@ public class JuiApp {
 		return jui;
 	}
 
-	public WebComponent getWebComponentById(String id) {
-
-		return this.main.get(0).getContext().getLinkedMapContext().get(id);
-	}
-
-	// Web Application containers
-	public List<JuiContainer> main;
-	public JuiContainer sidebar;
-	public JuiContainer header;
-	int iContainer = 0;
-
-	@Builder
-	public JuiApp() {
+	protected JuiApp() {
 
 		log.info("Building new PageHandler");
 		try {
@@ -71,7 +71,6 @@ public class JuiApp {
 			main.add(new JuiContainer(engine, ++iContainer));
 
 			sidebar = new JuiContainer(engine, ++iContainer);
-			header = new JuiContainer(engine, ++iContainer);
 
 			chart = main.get(0).chart;
 			input = main.get(0).input;
@@ -80,7 +79,7 @@ public class JuiApp {
 			log.error("Impossible to use TemplateEngine [{}]", e.getLocalizedMessage());
 		}
 	}
-
+	
 	public JuiContainer getPage() {
 
 		JuiContainer container = new JuiContainer(this.engine, ++iContainer);
@@ -88,10 +87,6 @@ public class JuiApp {
 		return container;
 	}
 
-	// only to work over main container as default
-	public ChartHandler chart;
-	public InputHandler input;
-	
 	public Button button(String label, String type, String onClick, Runnable onServerSide) { 
 		return (Button) JuiApp.getInstance().input.button(label, type, onClick, onServerSide);}
 
@@ -119,7 +114,7 @@ public class JuiApp {
 		return this.main.get(0).table(caption, df);
 	}
 
-	public void render(Session session) {
+	public String render() {
 		
 		StringBuilder html = new StringBuilder();
 
@@ -145,27 +140,39 @@ public class JuiApp {
 				log.error("Error Processing relations for components. [{}]", e.getLocalizedMessage());
 			}
 		}
+		
+		return html.toString();
 			
-		try {
-			
-			session.getAsyncRemote().sendText(html.toString());
-			
-		} catch (Exception e) {
-			log.error("Error over ws channel. [{}]", e.getLocalizedMessage());
-		}
 	}
 
+	
 	public void start() {
-
-		HttpServer httpserver = HttpServer.createSimpleServer("src/main/resources/html", 8080);
+		
+		this.start("html/", true, "0.0.0.0", 8080, 8025);
+	}
+	
+	public void start(String docRoot, boolean classLoading, String host, int port, int wsPort) {
+		
+		HttpServer webServer;
+		webServer = HttpServer.createSimpleServer();
+        webServer.getServerConfiguration().setName("JUI");
+        
+        if ( classLoading ) {
+        	webServer.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(JuiApp.class.getClassLoader(), docRoot), "/");
+        } else {
+        	webServer.getServerConfiguration().addHttpHandler(new StaticHttpHandler(docRoot), "/");
+        }
+        final NetworkListener listener = new NetworkListener("grizzly", host, new PortRange(port));
+        webServer.addListener(listener);
+        
 		//httpserver.getServerConfiguration().addHttpHandler(new RequestHandler(), "/js");
 		try {
 
-			httpserver.start();
+			webServer.start();
 			System.out.println("--- httpserver is running");
 
 			Server server;
-			server = new Server("localhost", 8025, "/ws", null, WebSocketEndpoint.class);
+			server = new Server(host, wsPort, "/ws", null, WebSocketEndpoint.class);
 			server.start();
 			System.out.println("--- websocket server is running");
 
@@ -178,6 +185,15 @@ public class JuiApp {
 		} catch (DeploymentException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public WebComponent executeServerAction(String id) {
+		
+		WebComponent  component = this.main.get(0).getContext().getLinkedMapContext().get(id);
+		if ( component != null )
+			component.executeServerAction();
+		return component;
+		
 	}
 
 }
