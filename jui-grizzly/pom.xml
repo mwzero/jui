@@ -7,16 +7,40 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jui-core</artifactId>
+	<artifactId>jui-grizzly</artifactId>
 
 	<properties></properties>
 
 	<dependencies>
 	
 		<dependency>
+			<groupId>com.jui</groupId>
+			<artifactId>jui-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-server</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-container-grizzly-server</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.tyrus.bundles</groupId>
+			<artifactId>tyrus-standalone-client</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
+
 
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
@@ -24,22 +48,24 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-		</dependency>
-		
-		<dependency>
-  			<groupId>io.github.vmzakharov</groupId>
-  			<artifactId>dataframe-ec</artifactId>
-  			<version>0.20.0</version>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -47,7 +73,12 @@
 			<scope>test</scope>
 		</dependency>
 
-		
+		<dependency>
+  			<groupId>io.github.vmzakharov</groupId>
+  			<artifactId>dataframe-ec</artifactId>
+  			<version>0.20.0</version>
+		</dependency>
+
 	</dependencies>
 
 

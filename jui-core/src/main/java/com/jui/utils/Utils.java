@@ -4,8 +4,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.LinkedHashMap;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class Utils {
 
@@ -29,25 +30,18 @@ public class Utils {
         return result.toString();
     }
 	
-	public static String buildJsonString( LinkedHashMap<String, ?> map, String keyLabel, String valueLabel ) throws JsonProcessingException {
+	public static String buildJsonString( LinkedHashMap<String, ?> map, String keyLabel, String valueLabel ) {
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-	    
-		StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		boolean notFirst = false;
+		JsonArray jobj = new JsonArray();
 		for ( String key : map.keySet() ) {
-			if ( notFirst) sb.append(",");
-			sb.append("""
-					{
-						"%s" :"%s", "%s": [%s]
-					}
-					""".formatted(keyLabel, key, valueLabel, objectMapper.writeValueAsString(map.get(key))));
-			notFirst = true;
+			
+			JsonObject item = new JsonObject();
+			item.addProperty(keyLabel,key);
+			item.add(valueLabel, new Gson().toJsonTree(map.get(key)));
+			jobj.add(item);
 		}
-		sb.append("]");
 		
-		return sb.toString();
+		return jobj.toString();
 	}
-
+		
 }

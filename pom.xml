@@ -46,6 +46,8 @@
     	
 		
     <module>jui-core</module>
+    
+    <module>jui-grizzly</module>
     		
     <!-- modules not included in JUI Core library -->
     <module>jui-recipes</module>

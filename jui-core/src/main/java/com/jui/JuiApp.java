@@ -1,17 +1,12 @@
 package com.jui;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.glassfish.grizzly.PortRange;
-import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.server.NetworkListener;
-import org.glassfish.grizzly.http.server.StaticHttpHandler;
-import org.glassfish.tyrus.server.Server;
+import com.sun.net.httpserver.HttpServer;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jui.html.Button;
 import com.jui.html.Divider;
 import com.jui.html.InputHandler;
@@ -23,8 +18,6 @@ import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
 import com.st.JuiDataFrame;
 
-import jakarta.websocket.DeploymentException;
-import jakarta.websocket.Session;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -125,20 +118,15 @@ public class JuiApp {
 		}
 		
 		if ( getMain().size() == 1) {
-			try {
-				html.append("""
-						<script>
-							elementMapping=%s;
-							elementPostData=%s;
-						</script>
-						""".formatted(
-								Utils.buildJsonString(getMain().get(0).getContext().relations, "source", "commands"),
-								Utils.buildJsonString(getMain().get(0).getContext().elementPostData, "source", "commands")
-								));
-			} catch (JsonProcessingException e) {
-				
-				log.error("Error Processing relations for components. [{}]", e.getLocalizedMessage());
-			}
+			html.append("""
+					<script>
+						elementMapping=%s;
+						elementPostData=%s;
+					</script>
+					""".formatted(
+							Utils.buildJsonString(getMain().get(0).getContext().relations, "source", "commands"),
+							Utils.buildJsonString(getMain().get(0).getContext().elementPostData, "source", "commands")
+							));
 		}
 		
 		return html.toString();
@@ -148,43 +136,36 @@ public class JuiApp {
 	
 	public void start() {
 		
-		this.start("html/", true, "0.0.0.0", 8080, 8025);
+		this.start("html/", true, "0.0.0.0", 8080);
 	}
 	
-	public void start(String docRoot, boolean classLoading, String host, int port, int wsPort) {
+	public void start(String docRoot, boolean classLoading, String host, int port) {
 		
-		HttpServer webServer;
-		webServer = HttpServer.createSimpleServer();
-        webServer.getServerConfiguration().setName("JUI");
-        
-        if ( classLoading ) {
-        	webServer.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(JuiApp.class.getClassLoader(), docRoot), "/");
-        } else {
-        	webServer.getServerConfiguration().addHttpHandler(new StaticHttpHandler(docRoot), "/");
-        }
-        final NetworkListener listener = new NetworkListener("grizzly", host, new PortRange(port));
-        webServer.addListener(listener);
-        
-		//httpserver.getServerConfiguration().addHttpHandler(new RequestHandler(), "/js");
+		HttpServer server;
 		try {
+			server = HttpServer.create(new InetSocketAddress(port), 0);
+			server.createContext("/jui", new JuiRequestHandler());
+	        
+			server.createContext("/css", new FileHandler());
+	        server.createContext("/js", new FileHandler());
+	        server.createContext("/html", new FileHandler());
+	        server.createContext("/send_get", new RequestHandler());
+	        server.createContext("/send_post", new RequestHandler());
+	        
+	        
+	        server.createContext("/favicon.ico", new FileHandler());
 
-			webServer.start();
-			System.out.println("--- httpserver is running");
-
-			Server server;
-			server = new Server(host, wsPort, "/ws", null, WebSocketEndpoint.class);
-			server.start();
-			System.out.println("--- websocket server is running");
-
-			System.out.println("Press any key to stop the server...");
-			System.in.read();
-
+	        server.setExecutor(null); // creates a default executor
+	        server.start();
+	        
+	        log.info("Server is running on port [{}]", port);
+	        
 		} catch (IOException e) {
-			e.printStackTrace();
-
-		} catch (DeploymentException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
+		
 	}
 
 	public WebComponent executeServerAction(String id) {

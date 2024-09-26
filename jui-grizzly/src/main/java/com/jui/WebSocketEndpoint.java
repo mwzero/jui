@@ -2,11 +2,9 @@ package com.jui;
 
 import java.io.IOException;
 
-import com.google.gson.Gson;
-
-import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
+import jakarta.websocket.OnClose;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +21,10 @@ public class WebSocketEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
     	
-    	Gson gson = new Gson();
-    	JuiMessagge msg = gson.fromJson(message, JuiMessagge.class);
+    	JuiMessage msg = JuiMessage.parseOf(message);
     	
-        if ("click".equals(msg.action)) {
+        if ("click".compareTo(msg.action) == 0 ) {
+        	
         	JuiApp.jui.executeServerAction(msg.id);
         	
         } else if ("init".equals(msg.action)) {
@@ -39,11 +37,6 @@ public class WebSocketEndpoint {
     @OnClose
     public void onClose(Session session) {
     	log.info("WebSocket connection closed[{}]",session.getId());
-    }
-    
-    private class JuiMessagge {
-        String action;
-        String id;
     }
 }
 
