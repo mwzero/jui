@@ -1,17 +1,16 @@
-package com.jui.html;
+package com.jui.builders;
 
 import java.util.List;
 
 import com.jui.WebContext;
+import com.jui.html.*;
 import com.jui.html.FormButton.ButtonType;
 import com.jui.processors.MarkdownProcessor;
 
-public class InputHandler {
+public class InputBuilder extends BaseBuilder {
 	
-	WebContext context;
-	
-	public InputHandler(WebContext context) {
-		this.context = context;
+	public InputBuilder(WebContext context) {
+		super(context);
 	}
 
 	public Input input(String text, String value, String placeholder) { 
@@ -20,28 +19,28 @@ public class InputHandler {
 		return input;
 	}
 	
-	public Input input(InputBuilder builder) {
+	public Input input(InputAttributes attributes) {
 
 		Input input = new Input();
 		context.add(input);
 		
-		if ( builder.c_label != null ) {
-			input.setLabel(builder.c_label.getValue());
+		if ( attributes.c_label != null ) {
+			input.setLabel(attributes.c_label.getValue());
 			//context.addRelations(mapChart.getKey(), "document.getElementById('%s').value=value.lat".formatted(builder.c_lat.getKey()));
-			context.addRelations(input.getKey(), "document.getElementById('%s').value=value".formatted(builder.c_label.getKey()));
+			context.addRelations(input.getKey(), "document.getElementById('%s').value=value".formatted(attributes.c_label.getKey()));
 		} else 
-			input.setLabel(builder.label);
+			input.setLabel(attributes.label);
 		
 		
-		if ( builder.c_value != null ) {
-			input.setValue(builder.c_value.getValue());
+		if ( attributes.c_value != null ) {
+			input.setValue(attributes.c_value.getValue());
 			//context.addRelations(mapChart.getKey(), "document.getElementById('%s').value=value.lat".formatted(builder.c_lat.getKey()));
-			context.addRelations(builder.c_value.getKey(), "document.getElementById('%s').value=value".formatted(input.getKey()));
+			context.addRelations(attributes.c_value.getKey(), "document.getElementById('%s').value=value".formatted(input.getKey()));
 		} else 
-			input.setValue(builder.value);
+			input.setValue(attributes.value);
 		
-		input.setInput(builder.input);
-		input.setReadonly(builder.readonly);
+		input.setInput(attributes.input);
+		input.setReadonly(attributes.readonly);
 		return input;
 	}
 	

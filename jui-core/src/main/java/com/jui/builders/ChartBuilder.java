@@ -1,16 +1,15 @@
-package com.jui.html.charts;
+package com.jui.builders;
 
 import com.jui.WebContext;
-import com.jui.html.charts.MapAttributes.MapAttributesBuilder;
+import com.jui.builders.ChartMapAttributes.ChartMapAttributesBuilder;
+import com.jui.html.charts.BarChart;
+import com.jui.html.charts.LinesChart;
 import com.st.JuiDataFrame;
 
-
-public class ChartHandler {
+public class ChartBuilder extends BaseBuilder {
 	
-	WebContext context;
-	
-	public ChartHandler(WebContext context) {
-		this.context = context;
+	public ChartBuilder(WebContext context) {
+		super(context);
 	}
 
 	public LinesChart lines(JuiDataFrame df, int max_width, int max_height) {
@@ -38,12 +37,9 @@ public class ChartHandler {
 		return lines;
 	}
 	
-	public MapAttributesBuilder map() {
+	public ChartMapAttributesBuilder map() {
 		
-		return com.jui.html.charts.MapAttributes.builder().context(context);
+		return com.jui.builders.ChartMapAttributes.builder().context(context);
 	}
-
-	
-
 
 }

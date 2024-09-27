@@ -1,12 +1,13 @@
-package com.jui.html.charts;
+package com.jui.builders;
 
 import com.jui.WebContext;
 import com.jui.html.WebComponent;
+import com.jui.html.charts.MapChart;
 
 import lombok.Builder;
 
 @Builder
-public class MapAttributes {
+public class ChartMapAttributes {
 	
 	WebContext context;
 	MapChart mapChart;
@@ -34,14 +35,14 @@ public class MapAttributes {
 	
 	
 	
-    public static MapAttributesBuilder builder() {
+    public static ChartMapAttributesBuilder builder() {
         return new CustomMapAttributesBuilder();
     }
 
-    private static class CustomMapAttributesBuilder extends MapAttributesBuilder {
+    private static class CustomMapAttributesBuilder extends ChartMapAttributesBuilder {
     	
         @Override
-        public MapAttributes build() {
+        public ChartMapAttributes build() {
         	
     		super.mapChart = new MapChart();
     		super.context.add(super.mapChart);

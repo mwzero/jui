@@ -3,12 +3,12 @@ package com.jui;
 import java.lang.reflect.Field;
 
 import com.jui.annotations.JUI;
+import com.jui.builders.ChartBuilder;
+import com.jui.builders.InputBuilder;
 import com.jui.html.Divider;
-import com.jui.html.InputHandler;
 import com.jui.html.Table;
 import com.jui.html.Text;
 import com.jui.html.UnorderedList;
-import com.jui.html.charts.ChartHandler;
 import com.jui.processors.MarkdownProcessor;
 import com.jui.templates.TemplateHelper;
 import com.st.JuiDataFrame;
@@ -26,8 +26,8 @@ public class JuiContainer {
 	private WebContext context;
 	
 	//handlers
-	public ChartHandler chart; 
-	public InputHandler input;
+	public ChartBuilder chart; 
+	public InputBuilder input;
 	
 	public JuiContainer(TemplateHelper engine, int counter) {
 		
@@ -36,8 +36,8 @@ public class JuiContainer {
 	
 		context = new WebContext(engine);
 		
-		chart = new ChartHandler(context);
-		input = new InputHandler(context);
+		chart = new ChartBuilder(context);
+		input = new InputBuilder(context);
 			
 	}
 	

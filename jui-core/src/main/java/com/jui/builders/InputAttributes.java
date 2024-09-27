@@ -1,11 +1,11 @@
-package com.jui.html;
+package com.jui.builders;
 
 import com.jui.html.WebComponent;
 
 import lombok.Builder;
 
 @Builder
-public class InputBuilder {
+public class InputAttributes {
 	
 	String label;
 	String value;

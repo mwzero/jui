@@ -1,19 +1,18 @@
 package com.jui;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.net.httpserver.HttpServer;
+import com.jui.builders.ChartBuilder;
+import com.jui.builders.InputBuilder;
 
 import com.jui.html.Button;
 import com.jui.html.Divider;
-import com.jui.html.InputHandler;
 import com.jui.html.Table;
 import com.jui.html.Text;
 import com.jui.html.WebComponent;
-import com.jui.html.charts.ChartHandler;
+
 import com.jui.net.JuiServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
@@ -27,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class JuiApp {
 	
-	public static JuiApp jui = JuiApp.getInstance();
+	public static final JuiApp jui = new JuiApp();
 	
 	TemplateHelper engine;
 	
@@ -40,17 +39,9 @@ public class JuiApp {
 	int iContainer = 0;
 	
 	// only to work over main container as default
-	public ChartHandler chart;
-	public InputHandler input;
+	public ChartBuilder chart;
+	public InputBuilder input;
 	
-	private static synchronized JuiApp getInstance() {
-		
-		if (jui == null) {
-			jui = new JuiApp();
-		}
-		return jui;
-	}
-
 	protected JuiApp() {
 
 		log.info("Building new PageHandler");
@@ -82,7 +73,7 @@ public class JuiApp {
 	}
 
 	public Button button(String label, String type, String onClick, Runnable onServerSide) { 
-		return (Button) JuiApp.getInstance().input.button(label, type, onClick, onServerSide);}
+		return (Button) this.input.button(label, type, onClick, onServerSide);}
 
 	public void write(String... args) {
 		this.main.get(0).write(args);
