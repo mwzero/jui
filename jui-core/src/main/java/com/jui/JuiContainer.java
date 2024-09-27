@@ -31,17 +31,17 @@ public class JuiContainer {
 	
 	public JuiContainer(TemplateHelper engine, int counter) {
 		
-		log.info("Building new PageHandler");
+		log.debug("New JuiContainer[{}]", counter);
 		cliendId = "div_" + counter;
 	
 		context = new WebContext(engine);
 		
+		//initialzing Builder
 		chart = new ChartBuilder(context);
 		input = new InputBuilder(context);
 			
 	}
 	
-	//TODO: questo potrebbe essere più complesso
 	public void write(String... args) {
 		 for (String arg : args) {
 			 String text = MarkdownProcessor.builder().build().render(arg);
@@ -100,6 +100,7 @@ public class JuiContainer {
 	}
 	
 	public void divider(String color) {this.context.add(new Divider(color));}
+	
 	public Text markdown(String... args) { return this.input.markdown(args);}
 	
 }

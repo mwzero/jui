@@ -27,12 +27,9 @@ public class ST {
 				.option("classLoading",  "true")
 				.build();
 			
-		return st.csv(FS.getFile(endpoint, st.options), ",", null);
-	}
-	
-	private JuiDataFrame csv(File csvFile, String delimiter, String csvName) throws IOException {
+		File csvFile = FS.getFile(endpoint, st.options);
 
-		CsvDataSet ds = new CsvDataSet(csvFile.toString(), csvName);
+		CsvDataSet ds = new CsvDataSet(csvFile.toString(), null);
 		return new JuiDataFrame(ds.loadAsDataFrame());
 	}
 	

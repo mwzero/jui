@@ -8,7 +8,6 @@ public class SideBarRecipe {
 	
 	public static void main(String... args) {
 		
-		jui.setTemplate("templates/bootstrap-sidebar");
     	jui.sidebar
     		.ul("JUI Example")
 	    		.add("MapZoomer", "compass", null, mapZoomer(), true)
@@ -19,7 +18,7 @@ public class SideBarRecipe {
 	
 	static JuiContainer mapZoomer() {
 		
-		JuiContainer page = jui.getPage();
+		JuiContainer page = jui.addContainer();
 		
 		page.markdown("## Map Chart Example");
 		page.divider("blue");
@@ -40,7 +39,7 @@ public class SideBarRecipe {
 	
 	static JuiContainer markdownTrials() {
 		
-		JuiContainer page = jui.getPage();
+		JuiContainer page = jui.addContainer();
 		
 		page.markdown("# Header 1");
 		page.markdown("## Header 2");

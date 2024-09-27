@@ -30,9 +30,6 @@ public class JuiApp {
 	
 	TemplateHelper engine;
 	
-	@Setter
-	String template;
-	
 	// Web Application containers
 	public List<JuiContainer> main;
 	public JuiContainer sidebar;
@@ -44,13 +41,10 @@ public class JuiApp {
 	
 	protected JuiApp() {
 
-		log.info("Building new PageHandler");
+		log.info("JUI App: Start Initialization");
 		try {
 
 			engine = new TemplateHelper(true, ".");
-
-			// template = "templates/jui";
-			template = "templates/bootstrap-simple";
 
 			main = new ArrayList<>();
 			main.add(new JuiContainer(engine, ++iContainer));
@@ -65,7 +59,7 @@ public class JuiApp {
 		}
 	}
 	
-	public JuiContainer getPage() {
+	public JuiContainer addContainer() {
 
 		JuiContainer container = new JuiContainer(this.engine, ++iContainer);
 		main.add(container);

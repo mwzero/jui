@@ -5,7 +5,7 @@
 		<artifactId>jui-apps</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>jui-apps-email-assistant</artifactId>
+	<artifactId>jui-apps-dashboard</artifactId>
 	<dependencies>
 		
 		<!-- JavaMail API -->

@@ -27,8 +27,6 @@ public class WebContext {
 	@Builder
 	public WebContext(TemplateHelper engine) {
 	
-		log.debug("Initializing new context");
-		
 		this.i=0;
 		this.engine = engine;
 		this.context = new LinkedHashMap<>();
