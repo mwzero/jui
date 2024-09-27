@@ -1,4 +1,4 @@
-package com.jui;
+package com.jui.net;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,9 +9,9 @@ import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 
 
-public class RequestHandler extends HttpHandler {
+public class RequestGrizzlyHandler extends HttpHandler {
 
-    public RequestHandler() {
+    public RequestGrizzlyHandler() {
 	}
 
 	@Override

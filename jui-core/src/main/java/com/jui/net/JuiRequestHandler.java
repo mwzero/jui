@@ -1,8 +1,9 @@
-package com.jui;
+package com.jui.net;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
+import com.jui.JuiApp;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 

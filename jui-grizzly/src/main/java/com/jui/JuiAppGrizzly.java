@@ -10,6 +10,8 @@ import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.tyrus.server.Server;
 
 import com.jui.html.WebComponent;
+import com.jui.net.JuiGrizzlyRequestHandler;
+import com.jui.net.WebSocketEndpoint;
 
 import jakarta.websocket.DeploymentException;
 import lombok.Getter;
@@ -51,7 +53,7 @@ public class JuiAppGrizzly extends JuiApp {
         final NetworkListener listener = new NetworkListener("grizzly", host, new PortRange(port));
         webServer.addListener(listener);
         
-        webServer.getServerConfiguration().addHttpHandler(new JuiRequestHandler(), "/jui");
+        webServer.getServerConfiguration().addHttpHandler(new JuiGrizzlyRequestHandler(), "/jui");
 		try {
 
 			webServer.start();

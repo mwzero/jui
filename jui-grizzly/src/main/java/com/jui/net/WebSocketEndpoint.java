@@ -1,6 +1,9 @@
-package com.jui;
+package com.jui.net;
 
 import java.io.IOException;
+
+import com.jui.JuiApp;
+import com.jui.JuiMessage;
 
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
@@ -23,11 +26,11 @@ public class WebSocketEndpoint {
     	
     	JuiMessage msg = JuiMessage.parseOf(message);
     	
-        if ("click".compareTo(msg.action) == 0 ) {
+        if ("click".compareTo(msg.getAction()) == 0 ) {
         	
-        	JuiApp.jui.executeServerAction(msg.id);
+        	JuiApp.jui.executeServerAction(msg.getId());
         	
-        } else if ("init".equals(msg.action)) {
+        } else if ("init".equals(msg.getAction())) {
         	
         	session.getAsyncRemote().sendText(JuiApp.jui.render());
             

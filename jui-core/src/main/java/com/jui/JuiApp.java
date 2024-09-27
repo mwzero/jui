@@ -14,6 +14,7 @@ import com.jui.html.Table;
 import com.jui.html.Text;
 import com.jui.html.WebComponent;
 import com.jui.html.charts.ChartHandler;
+import com.jui.net.JuiServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
 import com.st.JuiDataFrame;
@@ -140,32 +141,8 @@ public class JuiApp {
 	}
 	
 	public void start(String docRoot, boolean classLoading, String host, int port) {
-		
-		HttpServer server;
-		try {
-			server = HttpServer.create(new InetSocketAddress(port), 0);
-			server.createContext("/jui", new JuiRequestHandler());
-	        
-			server.createContext("/css", new FileHandler());
-	        server.createContext("/js", new FileHandler());
-	        server.createContext("/html", new FileHandler());
-	        server.createContext("/send_get", new RequestHandler());
-	        server.createContext("/send_post", new RequestHandler());
-	        
-	        
-	        server.createContext("/favicon.ico", new FileHandler());
-
-	        server.setExecutor(null); // creates a default executor
-	        server.start();
-	        
-	        log.info("Server is running on port [{}]", port);
-	        
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-		
+	
+		JuiServer.start(docRoot, classLoading, host, port);
 	}
 
 	public WebComponent executeServerAction(String id) {

@@ -1,4 +1,4 @@
-package com.jui;
+package com.jui.net;
 
 import java.io.BufferedReader;
 import java.io.IOException;
