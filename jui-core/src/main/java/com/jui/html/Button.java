@@ -1,5 +1,8 @@
 package com.jui.html;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Button extends WebComponent {
 	
     private final String label;
@@ -15,6 +18,8 @@ public class Button extends WebComponent {
 
 	@Override
 	public String render() {
+		
+		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
 		
 		String js = onClick;
 		

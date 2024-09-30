@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.jui.html.WebComponent;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class CheckBox extends WebComponent {
 	
     private String label;
@@ -17,6 +20,8 @@ public class CheckBox extends WebComponent {
 
 	@Override
 	public String render() {
+		
+		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
 		
 		String html = "";
 		

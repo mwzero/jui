@@ -1,5 +1,8 @@
 package com.jui.html;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Text extends WebComponent {
 	
     private String text;
@@ -8,6 +11,8 @@ public class Text extends WebComponent {
 
 	public Text(String text, boolean input, boolean readonly) {
 		
+		this.setId("Text");
+		
         this.text = text;
         this.readonly = readonly;
         this.input = input;
@@ -15,6 +20,8 @@ public class Text extends WebComponent {
 
 	@Override
 	public String render() {
+		
+		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
 		
 		if ( input ) {
 			
