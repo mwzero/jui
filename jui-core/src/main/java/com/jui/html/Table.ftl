@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-  	<#list juiComponent.iterator() as row>
+  	<#list juiComponent as row>
     <tr>
       <#list row as col>
       <td>${col}</td>

@@ -1,6 +1,9 @@
 package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
+import static com.st.ST.st;
+import com.st.DB;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,7 +12,6 @@ import java.net.URISyntaxException;
 import org.eclipse.collections.api.factory.Lists;
 
 import com.st.JuiDataFrame;
-import com.st.ST;
 
 import io.github.vmzakharov.ecdataframe.dataframe.AggregateFunction;
 
@@ -24,7 +26,7 @@ public class CsvRecipe {
     	jui.divider();
     	
     	//country,continent,year,lifeExp,pop,gdpPercap
-    	JuiDataFrame df = ST.read_csv("csv/gapminder_unfiltered.csv");
+    	JuiDataFrame df = st.read_csv("csv/gapminder_unfiltered.csv");
     	
     	jui.chart.lines(
     			new JuiDataFrame(
