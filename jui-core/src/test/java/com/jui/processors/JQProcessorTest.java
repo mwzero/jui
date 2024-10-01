@@ -31,8 +31,7 @@ public class JQProcessorTest {
         
         jq.processJsonString(jsonInput, jqFilter, outputFilePath1);
         
-        jq.processJsonFile(
-        		FS.getFile("json/persons.json", Map.of("classLoading", "true")).getAbsolutePath(), jqFilter, outputFilePath2);
+        jq.processJsonFile("json/persons.json", jqFilter, outputFilePath2);
     }
 
 }

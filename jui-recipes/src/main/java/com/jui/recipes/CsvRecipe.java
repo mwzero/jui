@@ -3,17 +3,11 @@ package com.jui.recipes;
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
 import com.st.DB;
-
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import com.st.DataFrame;
 
 public class CsvRecipe {
 	
-	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
+	public static void main(String... args) throws Exception {
 		
 		jui.markdown("""
     			# JUI - CSV Recipes - Life Expetation

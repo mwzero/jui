@@ -89,10 +89,10 @@ public class JuiContainer {
 		
 	}
 	
-	public Table table(String caption, DataFrame df) {
+	public Table table(String caption, DataFrame df, int limit) {
 		
 		Table table = new Table();
-		table.setDf(df);
+		table.setDf(df.limit(limit));
 		table.setCaption(caption);
 		
 		this.context.add(table);

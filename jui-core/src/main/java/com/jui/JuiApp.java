@@ -89,8 +89,12 @@ public class JuiApp {
 		return this.main.get(0).markdown(args);
 	}
 
-	public Table table(String caption, DataFrame df, String... args) {
-		return this.main.get(0).table(caption, df);
+	public Table table(String caption, DataFrame df) {
+		return this.main.get(0).table(caption, df, 0);
+	}
+	
+	public Table table(String caption, DataFrame df, int i) {
+		return this.main.get(0).table(caption, df, i);
 	}
 
 	public String render() {

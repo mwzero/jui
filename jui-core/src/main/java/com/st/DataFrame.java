@@ -21,22 +21,18 @@ public class DataFrame {
     	ds.load();
     }
 
-    public void show() {
-    	ds.show();
+    public void show(int limit) {
+    	ds.show(limit);
     }
 
-    public DataFrame filter(int columnIndex, String value) {
-    	
-        DataFrame filtered = new DataFrame(ds);
-        List<String[]> filteredData = new ArrayList<>();
+	public DataFrame select(List<String> of) {
+		
+		return new DataFrame(ds.select(of));
+		
+	}
 
-        for (String[] row : ds.getData()) {
-            if (row[columnIndex].equals(value)) {
-                filteredData.add(row);
-            }
-        }
-
-        filtered.ds.data = filteredData;  // Aggiorna i dati filtrati
-        return filtered;
-    }
+	public DataFrame limit(int limit) {
+		
+		return new DataFrame(ds.limit(limit));
+	}
 }

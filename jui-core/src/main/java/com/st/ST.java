@@ -1,23 +1,23 @@
 package com.st;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Map;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import com.jui.utils.FS;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 
 @Getter
 @Setter
@@ -25,22 +25,23 @@ public class ST {
 	
 	public static final ST st = new ST();
 	
+	@Singular
 	Map<String, String> options;
 	
     public ST() {
     	
-		options = Map.of("classLoading",  "true");
-    					
     }
     
-	public DataFrame read_csv(String endpoint) throws IOException, URISyntaxException {
+	public DataFrame read_csv(String endpoint) throws Exception {
 		
-		File csvFile = FS.getFile(endpoint, options);
-		DataSetCSV ds = new DataSetCSV(csvFile.toString());
+		Reader csvFile = FS.getFile(endpoint, options);
+		DataSetCSV ds = new DataSetCSV(csvFile);
+		ds.load();
+		
 		return new DataFrame(ds);
 	}
 	
-	public DataFrame read_sql_query(Connection conn, String query) throws SQLException {
+	public DataFrame read_sql_query(Connection conn, String query) throws Exception {
 
 		DataSetDB ds = new DataSetDB(conn, query);
 		ds.load();
@@ -48,17 +49,22 @@ public class ST {
         return new DataFrame(ds);
         
 	}
+	
+	public DataFrame read_json(String endpoint) throws Exception {
+		
+		Reader jsonFile = FS.getFile(endpoint, options);
+		
+		DataSetJson ds = new DataSetJson(jsonFile);
+		ds.load();
+		return new DataFrame(ds);
+	}
+	
+	
+	
+	
 
 	
-	public DataFrame import_csv(String tableName, String endpoint, String query,  Connection conn) throws SQLException, IOException, URISyntaxException {
-    	
-    	File file = FS.getFile(endpoint, options);
-    	
-        Statement stmt = conn.createStatement();
-        stmt.execute("CREATE TABLE %s AS SELECT * FROM CSVREAD('%s')".formatted(tableName, file.getAbsolutePath()));
-    	
-    	return read_sql_query(conn, query);
-    }
+	
 
     
 }

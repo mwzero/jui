@@ -3,16 +3,13 @@ package com.jui.recipes;
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import com.jui.html.FormButton.ButtonType;
 
 public class AllYouCanEat {
 	
-	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
+	public static void main(String... args) throws Exception {
 		
 		jui.markdown("""
     			# JUI

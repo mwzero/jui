@@ -1,16 +1,12 @@
 package com.jui.recipes;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
 
 
 public class TableRecipe {
 	
-	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
+	public static void main(String... args) throws Exception {
 		
 		jui.markdown("""
     			# Table Examples

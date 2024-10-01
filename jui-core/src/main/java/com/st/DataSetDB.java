@@ -11,12 +11,10 @@ public class DataSetDB extends DataSet {
     public DataSetDB(Connection connection, String query) {
         this.connection = connection;
         this.query = query;
-        
-        this.data = new ArrayList<>();
     }
 
     @Override
-    public void load() throws SQLException {
+    public void load() throws Exception {
     	
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);

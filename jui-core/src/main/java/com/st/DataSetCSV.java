@@ -1,11 +1,10 @@
 package com.st;
 
+import java.io.FileReader;
+import java.io.Reader;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class DataSetCSV extends DataSet {
 	
@@ -13,13 +12,19 @@ public class DataSetCSV extends DataSet {
 
     public DataSetCSV(String filePath) {
         this.filePath = filePath;
-        this.data = new ArrayList<>();
+    }
+    
+    public DataSetCSV(Reader reader) {
+        this.reader = reader;
     }
 
     @Override
-    public void load() throws IOException {
-        FileReader reader = new FileReader(filePath);
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
+    public void load() throws Exception  {
+    	
+    	if ( reader == null ) {
+    		reader = new FileReader(filePath);
+    	}
+    	Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
         this.headers = records.iterator().next().toMap().keySet().toArray(new String[0]);
 
         for (CSVRecord record : records) {
