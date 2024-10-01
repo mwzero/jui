@@ -16,9 +16,6 @@ import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
-
-
-
 public class DbTableRecipe {
 	
 	public static void main(String... args) throws Exception {

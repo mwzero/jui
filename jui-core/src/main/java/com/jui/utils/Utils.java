@@ -23,7 +23,7 @@ public class Utils {
         for (int i = 0; i < array.length; i++) {
             result.append("\"").append(array[i].toString()).append("\"");
             if (i < array.length - 1) {
-                result.append(", ");  // Aggiungo la virgola tra gli elementi
+                result.append(", ");  
             }
         }
 
@@ -43,5 +43,4 @@ public class Utils {
 		
 		return jobj.toString();
 	}
-		
 }
