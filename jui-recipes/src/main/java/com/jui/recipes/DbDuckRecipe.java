@@ -23,7 +23,7 @@ public class DbDuckRecipe {
     	jui.divider();
     	
     	jui.table("Simple Table",
-    			st.read_sql_query("select id, first_name, second_name from test", connection));
+    			st.read_sql_query( connection, "select id, first_name, second_name from test"));
     	
     	jui.start();
     	
@@ -40,6 +40,8 @@ public class DbDuckRecipe {
         stmt.execute("DROP TABLE IF EXISTS test");
         stmt.execute("create table test(id int primary key, first_name varchar(255), second_name varchar(255))");
         stmt.execute("insert into test values(1, 'Cristoforo', 'Colombo')");
+        stmt.execute("insert into test values(2, 'Marco', 'Polo')");
+        stmt.execute("insert into test values(3, 'Giovanni', 'Gaboto')");
         stmt.close();
         conn.close();
     }

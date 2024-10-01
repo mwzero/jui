@@ -4,7 +4,7 @@ import com.jui.WebContext;
 import com.jui.builders.ChartMapAttributes.ChartMapAttributesBuilder;
 import com.jui.html.charts.BarChart;
 import com.jui.html.charts.LinesChart;
-import com.st.JuiDataFrame;
+import com.st.DataFrame;
 
 public class ChartBuilder extends BaseBuilder {
 	
@@ -12,10 +12,10 @@ public class ChartBuilder extends BaseBuilder {
 		super(context);
 	}
 
-	public LinesChart lines(JuiDataFrame df, int max_width, int max_height) {
+	public LinesChart lines(DataFrame df, int max_width, int max_height) {
 
 		LinesChart lines = LinesChart.builder()
-				.data(df)
+				.df(df)
 				.height(max_height)
 				.width(max_width)
 				.build();
@@ -25,10 +25,10 @@ public class ChartBuilder extends BaseBuilder {
 		
 	}
 	
-	public BarChart bars(JuiDataFrame df, int max_width, int max_height) {
+	public BarChart bars(DataFrame df, int max_width, int max_height) {
 		
 		BarChart lines = BarChart.builder()
-				.data(df)
+				.df(df)
 				.max_height(max_height)
 				.max_width(max_width)
 				.build();

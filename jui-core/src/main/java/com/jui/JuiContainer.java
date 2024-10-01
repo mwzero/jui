@@ -11,7 +11,7 @@ import com.jui.html.Text;
 import com.jui.html.UnorderedList;
 import com.jui.processors.MarkdownProcessor;
 import com.jui.templates.TemplateHelper;
-import com.st.JuiDataFrame;
+import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -89,7 +89,7 @@ public class JuiContainer {
 		
 	}
 	
-	public Table table(String caption, JuiDataFrame df) {
+	public Table table(String caption, DataFrame df) {
 		
 		Table table = new Table();
 		table.setDf(df);

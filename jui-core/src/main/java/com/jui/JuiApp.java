@@ -16,7 +16,7 @@ import com.jui.html.WebComponent;
 import com.jui.net.JuiServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
-import com.st.JuiDataFrame;
+import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -89,7 +89,7 @@ public class JuiApp {
 		return this.main.get(0).markdown(args);
 	}
 
-	public Table table(String caption, JuiDataFrame df, String... args) {
+	public Table table(String caption, DataFrame df, String... args) {
 		return this.main.get(0).table(caption, df);
 	}
 

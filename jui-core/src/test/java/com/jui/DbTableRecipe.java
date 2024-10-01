@@ -27,7 +27,7 @@ public class DbTableRecipe {
     	jui.divider();
     	
     	jui.table("Simple Table", 
-    			st.read_sql_query("select id, first_name, second_name from test", connection));
+    			st.read_sql_query( connection, "select id, first_name, second_name from test"));
     	
     	jui.table("CSV from Table",
     			st.import_csv("city", "cities.csv", "select * from city", connection));
@@ -48,7 +48,7 @@ public class DbTableRecipe {
         Class.forName("org.h2.Driver");
         Connection conn = DriverManager.getConnection("jdbc:h2:~/testdb");
         Statement stat = conn.createStatement();
-        stat.execute("runscript from './src/main/resources/sql/init.sql'");
+        stat.execute("runscript from './src/test/resources/sql/init.sql'");
         stat.close();
         conn.close();
     }

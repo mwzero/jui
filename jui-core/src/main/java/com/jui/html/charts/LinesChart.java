@@ -2,7 +2,7 @@ package com.jui.html.charts;
 
 import com.jui.html.WebComponent;
 import com.jui.utils.Utils;
-import com.st.JuiDataFrame;
+import com.st.DataFrame;
 
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 @Builder
 public class LinesChart extends WebComponent {
 	
-	JuiDataFrame data;
+	DataFrame df;
+	
 	int height;
 	int width;
 	
@@ -25,20 +26,20 @@ public class LinesChart extends WebComponent {
 				</div>		
 				""".formatted(this.getKey(), width == 0 ? "100%" : width + "px", height + "px");
 		
-		Object [] xasis = new Object [data.getDf().rowCount()];
-		Object  series[][] = new Object [data.getDf().columnCount() - 1][data.getDf().rowCount()];
+		Object [] xasis = new Object [df.getDs().rowCount()];
+		Object  series[][] = new Object [df.getDs().columnCount() - 1][df.getDs().rowCount()];
 		
-		for ( int irow=0; irow < data.getDf().rowCount(); irow++ ) {
+		for ( int irow=0; irow < df.getDs().rowCount(); irow++ ) {
 			
-			xasis[irow] = data.getDf().getObject(irow,0);
+			xasis[irow] = df.getDs().getObject(irow,0);
 
-			for ( int icol =1; icol <data.getDf().columnCount(); icol ++) {
-				series[icol-1][irow] = data.getDf().getObject(irow,icol);
+			for ( int icol =1; icol <df.getDs().columnCount(); icol ++) {
+				series[icol-1][irow] = df.getDs().getObject(irow,icol);
 			}
         }
 		
 		String jsSeries = "";
-		for ( int icol =1; icol <data.getDf().columnCount(); icol ++) {
+		for ( int icol =1; icol <df.getDs().columnCount(); icol ++) {
 
 			if ( jsSeries.length() > 0 ) jsSeries +=",";
 
@@ -47,7 +48,7 @@ public class LinesChart extends WebComponent {
 						name: '%s',
 						data: [%s]
 					}
-				""".formatted(data.getDf().getColumnAt(icol).getName(), Utils.buildString (series[icol-1]));
+				""".formatted(df.getDs().getColumnAt(icol), Utils.buildString (series[icol-1]));
 		}
 		
 		String js = """ 

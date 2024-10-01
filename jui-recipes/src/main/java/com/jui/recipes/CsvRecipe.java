@@ -9,11 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.eclipse.collections.api.factory.Lists;
-
-import com.st.JuiDataFrame;
-
-import io.github.vmzakharov.ecdataframe.dataframe.AggregateFunction;
+import com.st.DataFrame;
 
 public class CsvRecipe {
 	
@@ -26,10 +22,11 @@ public class CsvRecipe {
     	jui.divider();
     	
     	//country,continent,year,lifeExp,pop,gdpPercap
-    	JuiDataFrame df = st.read_csv("csv/gapminder_unfiltered.csv");
+    	DataFrame df = st.read_csv("csv/gapminder_unfiltered.csv");
     	
+    	/*
     	jui.chart.lines(
-    			new JuiDataFrame(
+    			new DataFrame(
     					df.getDf()
     						.selectBy("year == 2007")
     						.selectBy("continent=='Europe'")
@@ -57,6 +54,7 @@ public class CsvRecipe {
     							Lists.immutable.of(AggregateFunction.avg("gdpPercap")), Lists.immutable.of("country"))
     					));
     	
+    	*/
     	jui.start();
     	
     }

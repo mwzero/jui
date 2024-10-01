@@ -23,7 +23,7 @@ public class Expenses {
 		
 		jui.table(
 				"Expenses",
-				st.read_sql_query("select * from expenses", connection));
+				st.read_sql_query(connection, "select * from expenses"));
 		
 		jui.start();
 		
