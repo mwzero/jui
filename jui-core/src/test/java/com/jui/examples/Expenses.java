@@ -7,11 +7,11 @@ import static com.st.ST.st;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
-import com.jui.JuiAppAttributes;
 import com.jui.JuiContainer;
 import com.st.DB;
 
@@ -24,21 +24,19 @@ public class Expenses {
 		
 		Connection  connection = DB.getConnection("org.h2.Driver","jdbc:h2:~/expensesDB", "", "");
 		
-		jui.table(
-				"Expenses",
-				st.read_sql_query(connection, "select * from expenses"));
-		
-		jui.start();
-		
-		jui.set_page_config().page("sidebar").layout("wide");
+		jui.set_page_config().rootDoc("sidebar");
 		
 		// Sidebar with instructions
-		jui.sidebar.title("Expenses App");
-		jui.sidebar.write("**Overview:** This project showcases how to use JUI for gathering and analyzing personal expenses. It utilizes H2, a user-friendly database system, ideal for small-scale data management.");
-		jui.sidebar.write("**About the Developer:** I'm Maurizio Farina. Let's connect on LinkedIn: https://www.linkedin.com/in/farinamaurizio/");
-		jui.sidebar.write("**Source Code:** You can access the code on GitHub");
+		jui.sidebar.markdown("""
+				# Expenses App
+				
+				**Overview:** This project showcases how to use JUI for gathering and analyzing personal expenses. It utilizes H2, a user-friendly database system, ideal for small-scale data management.
+				**About the Developer:** I'm Maurizio Farina. Let's connect on LinkedIn: https://www.linkedin.com/in/farinamaurizio/
+				**Source Code:** You can access the code on GitHub
+				""");
 		
-	
+		jui.sidebar.dropDownButton("Settings", List.of("Profile", "Account Settings", "Logout"));
+		/*
 		jui.columns(Map.of("left", 3, "right", 1));
 		try ( JuiContainer col = jui.columns("left") ) {
 			
@@ -46,17 +44,24 @@ public class Expenses {
 		    col.write("Enter your expense to be recorded into the system.");
 			
 		}
+		*/
 		
-		/*
 		try ( JuiContainer col = jui.columns("right") ) {
+			/*
 		    col.download_button(
 		        label="Download data as CSV",
 		        data=df.to_csv().encode("utf-8"),
 		        file_name="expenses.csv",
 		        mime="text/csv",
 		    )
+		    */
 		}
-		*/
+		
+		jui.table(
+				"Expenses",
+				st.read_sql_query(connection, "select * from expenses"));
+		
+		jui.start();
 		
 		/*
 		b_left, b_right = st.columns([3, 1])

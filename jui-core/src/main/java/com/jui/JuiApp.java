@@ -14,7 +14,7 @@ import com.jui.html.Divider;
 import com.jui.html.Table;
 import com.jui.html.Text;
 import com.jui.html.WebComponent;
-
+import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
@@ -102,7 +102,11 @@ public class JuiApp {
 		return this.main.get(0).table(caption, df, limit);
 	}
 
-	public String render() {
+	public JuiContent render() {
+		
+		/**/
+		JuiContent content = new JuiContent();
+		
 		
 		StringBuilder html = new StringBuilder();
 
@@ -124,17 +128,39 @@ public class JuiApp {
 							));
 		}
 		
-		return html.toString();
-			
+		content.setMain(html.toString());
+		
+		
+		if ( this.sidebar.getContext().getLinkedMapContext() != null) {
+			StringBuilder sidebar = new StringBuilder();
+			for (WebComponent component : this.sidebar.getContext().getLinkedMapContext().values()) {
+				sidebar.append(component.render());
+			}
+			content.setSidebar(sidebar.toString());
+		} else
+			content.setSidebar("");
+		
+		return content;
 	}
 
 	
 	public void start() {
 		
-		this.start("html/", true, "0.0.0.0", 8080);
+		String rootDoc = "html/";
+		Boolean classLoading = true;
+		String host = "0.0.0.0";
+		int port = 8080;
+		
+		if ( attrsBuilder != null ) {
+			JuiAppAttributes attrs = attrsBuilder.build();
+			if ( attrs.getRootDoc() != null)
+				rootDoc = "html-" + attrs.getRootDoc() + "/";
+		}
+		
+		this.start(rootDoc, classLoading, host, port);
 	}
 	
-	public void start(String docRoot, boolean classLoading, String host, int port) {
+	protected void start(String docRoot, boolean classLoading, String host, int port) {
 	
 		JuiServer.start(docRoot, classLoading, host, port);
 	}

@@ -14,8 +14,14 @@ public class DataSet {
     public DataSet() {
         this.data = new ArrayList<>();
     }
+    
+    public DataSet(String[] headers, List<String[]> data) {
+        this.headers = headers;
+        this.data = data;
+    }
 
-    public void load() throws Exception {};
+
+	public void load() throws Exception {};
 
     public void show(int limit) {
     	

@@ -4,21 +4,25 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class DeployTest {
 	
 	@Test
-	public void simple() {
+	public void simple() throws IOException {
         
-		String sourceDir = "percorso/al/tuo/directory";  // Cartella da comprimere
-        String zipFile = "percorso/al/tuo/file.zip";  // File zip da creare
-
-        try {
+    	JuiDeploy deploy = JuiDeploy.builder()
+				        		.sourceFilePath("")
+				        		.sourceFilePath("")
+				        		.build();
+    	
+    	deploy.process();
+    	
+    	String deployFile = deploy.getDeployFile();
+    	
+    	log.info("Deploy to [{}]", deployFile);
         	
-        	JuiDeploy.zipFiles(sourceDir, zipFile);
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

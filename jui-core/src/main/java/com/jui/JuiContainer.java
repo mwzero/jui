@@ -1,14 +1,18 @@
 package com.jui;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.jui.annotations.JUI;
 import com.jui.builders.ChartBuilder;
 import com.jui.builders.InputBuilder;
 import com.jui.html.Divider;
+import com.jui.html.DropDownButton;
 import com.jui.html.Table;
 import com.jui.html.Text;
 import com.jui.html.UnorderedList;
+import com.jui.html.UnorderedListItem;
 import com.jui.processors.MarkdownProcessor;
 import com.jui.templates.TemplateHelper;
 import com.st.DataFrame;
@@ -87,6 +91,20 @@ public class JuiContainer implements AutoCloseable {
 		this.context.add(ul);
 		return ul;
 		
+	}
+	
+	public DropDownButton dropDownButton(String label, List<String> list) {
+		DropDownButton ul = new DropDownButton();
+		ul.setLabel(label);
+		
+		List<UnorderedListItem> uiList = new ArrayList<>(); 
+		list.stream().forEach(item -> {
+			UnorderedListItem uiItem = new UnorderedListItem(item, "", "", "");
+			uiList.add(uiItem);
+		});
+		ul.setItems(uiList);
+		this.context.add(ul);
+		return ul;
 	}
 	
 	public Table table(String caption, DataFrame df, int limit) {

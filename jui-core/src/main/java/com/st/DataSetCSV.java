@@ -24,6 +24,7 @@ public class DataSetCSV extends DataSet {
     	if ( reader == null ) {
     		reader = new FileReader(filePath);
     	}
+    	
     	Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
         this.headers = records.iterator().next().toMap().keySet().toArray(new String[0]);
 

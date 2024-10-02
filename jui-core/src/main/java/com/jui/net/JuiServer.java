@@ -12,16 +12,17 @@ public class JuiServer {
 	
 	public static HttpServer start(String docRoot, boolean classLoading, String host, int port) {
 		
+		log.info("Starting JUI server. DocRoot[{}]", docRoot);
 		HttpServer server = null;
 		try {
 			server = HttpServer.create(new InetSocketAddress(port), 0);
-			server.createContext("/html", new FileHandler());
+			server.createContext("/", new FileHandler(docRoot));
 			server.createContext("/jui", new JuiRequestHandler());
-			server.createContext("/css", new FileHandler());
-	        server.createContext("/js", new FileHandler());
+			server.createContext("/css", new FileHandler(""));
+	        server.createContext("/js", new FileHandler(""));
 	        server.createContext("/send_get", new RequestHandler());
 	        server.createContext("/send_post", new RequestHandler());
-	        server.createContext("/favicon.ico", new FileHandler());
+	        server.createContext("/favicon.ico", new FileHandler(""));
 
 	        server.setExecutor(null); // creates a default executor
 	        server.start();

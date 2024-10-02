@@ -12,14 +12,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileHandler extends BaseHandler implements HttpHandler {
 
+	String docRoot;
+	
+	public FileHandler(String docRoot) {
+		this.docRoot = docRoot;
+	}
+	
     @Override
     public void handle(HttpExchange exchange) throws IOException {
     	
         String endpoint = exchange.getRequestURI().getPath();
         log.debug("HTTP GET file[{}]", endpoint);
         
+        if ( docRoot != "" ) endpoint = docRoot + endpoint.substring(1);
         
-        InputStream is = getClass().getResourceAsStream(endpoint);
+        InputStream is = getClass().getResourceAsStream("/" + endpoint);
         if ( is == null ) {
         	
 			log.error("HTTP GET [{}] not found", endpoint);

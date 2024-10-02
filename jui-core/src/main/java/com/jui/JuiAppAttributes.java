@@ -1,15 +1,15 @@
 package com.jui;
 
-import com.jui.WebContext;
-import com.jui.html.WebComponent;
-import com.jui.html.charts.MapChart;
-
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class JuiAppAttributes {
 
 	String page;
 	String layout;
+	
+	String rootDoc;
 	
 }

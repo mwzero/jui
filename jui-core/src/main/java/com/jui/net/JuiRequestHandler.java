@@ -21,7 +21,7 @@ public class JuiRequestHandler extends BaseHandler implements HttpHandler {
         String response = null;
 		try {
 			
-			response = JuiApp.jui.render();
+			response = JuiApp.jui.render().toJsonString();
 			
 			/*
 			Map<String, Object> variables = new HashMap<String, Object>();

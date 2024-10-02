@@ -1,17 +1,9 @@
 package com.st;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.StringReader;
 import java.sql.Connection;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import com.jui.utils.FS;
 
@@ -57,6 +49,16 @@ public class ST {
 		DataSetJson ds = new DataSetJson(jsonFile);
 		ds.load();
 		return new DataFrame(ds);
+	}
+
+	public DataFrame read_csv_string(String csv) throws Exception {
+		
+		Reader csvFile = new StringReader(csv);
+		DataSetCSV ds = new DataSetCSV(csvFile);
+		ds.load();
+		
+		return new DataFrame(ds);
+		
 	}
 	
 	

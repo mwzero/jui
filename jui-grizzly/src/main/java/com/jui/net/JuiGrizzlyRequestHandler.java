@@ -9,7 +9,7 @@ import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 
 import com.jui.JuiApp;
-import com.jui.JuiMessage;
+import com.jui.model.JuiMessage;
 
 
 public class JuiGrizzlyRequestHandler extends HttpHandler {
@@ -42,7 +42,7 @@ public class JuiGrizzlyRequestHandler extends HttpHandler {
             } else if ("init".equals(msg.getAction())) {
             	
             	response.setContentType("text/html");
-            	response.getWriter().write(JuiApp.jui.render());
+            	response.getWriter().write(JuiApp.jui.render().toJsonString());
                 
             }
             

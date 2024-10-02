@@ -3,11 +3,11 @@ package com.jui.net;
 import java.io.IOException;
 
 import com.jui.JuiApp;
-import com.jui.JuiMessage;
+import com.jui.model.JuiMessage;
 
+import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
-import jakarta.websocket.OnClose;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class WebSocketEndpoint {
         	
         } else if ("init".equals(msg.getAction())) {
         	
-        	session.getAsyncRemote().sendText(JuiApp.jui.render());
+        	session.getAsyncRemote().sendText(JuiApp.jui.render().toJsonString());
             
         }
     }

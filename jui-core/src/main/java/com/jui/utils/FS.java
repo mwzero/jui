@@ -2,6 +2,8 @@ package com.jui.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,12 +21,11 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-@Getter
-@Setter
+@Slf4j
 public class FS {
 	
 	public static Reader getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
@@ -102,6 +103,43 @@ public class FS {
         }
         
 		return tempFile.toFile();
+    }
+	
+	private static void zipDirectory(File folderToZip, String parentFolder, ZipOutputStream zipOut) throws IOException {
+		
+        for (File file : folderToZip.listFiles()) {
+        	
+            if (file.isDirectory()) {
+            	
+                zipDirectory(file, parentFolder + file.getName() + "/", zipOut);
+                
+            } else {
+                
+            	try (FileInputStream fis = new FileInputStream(file)) {
+
+            		ZipEntry zipEntry = new ZipEntry(parentFolder + file.getName());
+                    zipOut.putNextEntry(zipEntry);
+
+                    byte[] bytes = new byte[2048];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void zipFiles(String sourceDirPath, String zipFilePath) throws IOException {
+    	
+    	log.debug("Zipping files from [{}] to [{}]", sourceDirPath, zipFilePath);
+        File sourceDir = new File(sourceDirPath);
+        try (FileOutputStream fos = new FileOutputStream(zipFilePath);
+             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+            zipDirectory(sourceDir, "", zipOut);
+            zipOut.flush();
+            zipOut.close();
+        }
     }
 	
 }

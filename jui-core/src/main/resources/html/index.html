@@ -45,10 +45,11 @@
                     if (!response.ok) {
                         throw new Error('Errore nel recupero del contenuto');
                     }
-                    return response.text();  // Ottieni il contenuto come testo (HTML)
+                    return response.json();  // Ottieni il contenuto come testo (HTML)
                 })
 			    .then(htmlContent  => {
-			    	setInnerHTML(document.getElementById("jui-form"), htmlContent );
+			    	setInnerHTML(document.getElementById("jui-form"), htmlContent.main );
+			    	//setInnerHTML(document.getElementById("jui-form"), htmlContent.sidebar );
 			    })
 			    .catch((error) => {
 			        console.error('Error:', error);
