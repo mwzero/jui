@@ -15,15 +15,12 @@ public class JuiServer {
 		HttpServer server = null;
 		try {
 			server = HttpServer.create(new InetSocketAddress(port), 0);
+			server.createContext("/html", new FileHandler());
 			server.createContext("/jui", new JuiRequestHandler());
-	        
 			server.createContext("/css", new FileHandler());
 	        server.createContext("/js", new FileHandler());
-	        server.createContext("/html", new FileHandler());
 	        server.createContext("/send_get", new RequestHandler());
 	        server.createContext("/send_post", new RequestHandler());
-	        
-	        
 	        server.createContext("/favicon.ico", new FileHandler());
 
 	        server.setExecutor(null); // creates a default executor

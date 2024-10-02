@@ -7,9 +7,12 @@ import static com.st.ST.st;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
+import com.jui.JuiAppAttributes;
+import com.jui.JuiContainer;
 import com.st.DB;
 
 
@@ -27,33 +30,33 @@ public class Expenses {
 		
 		jui.start();
 		
-		//jui.set_page_config(layout="wide");
+		jui.set_page_config().page("sidebar").layout("wide");
 		
 		// Sidebar with instructions
-		/*
-		st.sidebar.title("Expenses App")
-		st.sidebar.write("**Overview:** This project showcases how to use Streamlit for gathering and analyzing personal expenses. It utilizes SQLite, a user-friendly database system, ideal for small-scale data management.")
-		st.sidebar.write("**About the Developer:** I'm Alle Sravani, experienced Senior Data Analyst with 6+ years of experience in data analysis, data modeling, and business intelligence. Let's connect on LinkedIn: https://www.linkedin.com/in/alle-sravani/")
-		st.sidebar.write("**Source Code:** You can access the code on GitHub: https://github.com/sravz3/expenses/tree/main")
-		*/
+		jui.sidebar.title("Expenses App");
+		jui.sidebar.write("**Overview:** This project showcases how to use JUI for gathering and analyzing personal expenses. It utilizes H2, a user-friendly database system, ideal for small-scale data management.");
+		jui.sidebar.write("**About the Developer:** I'm Maurizio Farina. Let's connect on LinkedIn: https://www.linkedin.com/in/farinamaurizio/");
+		jui.sidebar.write("**Source Code:** You can access the code on GitHub");
+		
 	
+		jui.columns(Map.of("left", 3, "right", 1));
+		try ( JuiContainer col = jui.columns("left") ) {
+			
+			col.title("Personal Expenses App");
+		    col.write("Enter your expense to be recorded into the system.");
+			
+		}
+		
 		/*
-		t_left, t_right = st.columns([3, 1])
-
-		with t_left:
-		    st.title("Personal Expenses App")
-		    st.write(""" Enter your expense to be recorded into the system. """)
-
-		with t_right:
-		    # -------------- Download Button------------------ 
-		    df = u.get_expenses()
-		    st.download_button(
+		try ( JuiContainer col = jui.columns("right") ) {
+		    col.download_button(
 		        label="Download data as CSV",
 		        data=df.to_csv().encode("utf-8"),
 		        file_name="expenses.csv",
 		        mime="text/csv",
 		    )
-		 */
+		}
+		*/
 		
 		/*
 		b_left, b_right = st.columns([3, 1])
@@ -91,6 +94,41 @@ public class Expenses {
 		 */	    
 		
 	}
+	
+	/*
+	 * Gradio example
+	 * 
+	 * import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+	 */
 	
 	
 	public static void populateH2() throws Exception {

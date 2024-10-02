@@ -3,7 +3,9 @@ package com.jui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.jui.JuiAppAttributes.JuiAppAttributesBuilder;
 import com.jui.builders.ChartBuilder;
 import com.jui.builders.InputBuilder;
 
@@ -38,6 +40,9 @@ public class JuiApp {
 	// only to work over main container as default
 	public ChartBuilder chart;
 	public InputBuilder input;
+	
+	//Attributes
+	JuiAppAttributesBuilder attrsBuilder;
 	
 	protected JuiApp() {
 
@@ -141,6 +146,25 @@ public class JuiApp {
 			component.executeServerAction();
 		return component;
 		
+	}
+
+	public JuiAppAttributesBuilder set_page_config() {
+		
+		
+		attrsBuilder =  JuiAppAttributes.builder();
+		return attrsBuilder;
+		
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	public JuiContainer[] columns(Map<String, Integer> of) {
+		return null;
+	}
+
+	public JuiContainer columns(String string) {
+		return null;
 	}
 
 }

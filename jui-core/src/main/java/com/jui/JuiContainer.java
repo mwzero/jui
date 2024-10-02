@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Setter
 @Slf4j
-public class JuiContainer {
+public class JuiContainer implements AutoCloseable {
 	
 	private String cliendId;
 	private WebContext context;
@@ -102,5 +102,17 @@ public class JuiContainer {
 	public void divider(String color) {this.context.add(new Divider(color));}
 	
 	public Text markdown(String... args) { return this.input.markdown(args);}
+
+	public void title(String text) {
+		
+		this.context.add(new Text(text, false, true));
+		
+	}
+
+	@Override
+	public void close() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
