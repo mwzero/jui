@@ -52,7 +52,11 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml 
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -pl jui-core,jui-apps-dashboard -s $GITHUB_WORKSPACE/settings.xml
+    - name: Publish JuiCore to GitHub Packages Apache Maven
+      run: mvn deploy -pl com.jui:jui-core -s $GITHUB_WORKSPACE/settings.xml
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: Publish Jui Apps to GitHub Packages Apache Maven
+      run: mvn deploy -pl com.jui:jui-apps-dashboard -s $GITHUB_WORKSPACE/settings.xml --file jui-apps/pom.xml 
       env:
         GITHUB_TOKEN: ${{ github.token }}
