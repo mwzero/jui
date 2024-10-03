@@ -1,0 +1,37 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+
+name: Docker Package
+
+on:
+  workflow_dispatch:
+      inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'warning'
+          type: choice
+          options:
+          - info
+          - warning
+          - debug
+        tags:
+          description: 'Test scenario tags'
+          required: false
+          type: boolean
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps: 
+      - uses: actions/checkout@v3
+      - name: Build and push the image
+        run : |
+          docker login --username mwzero --password ${{ github.token }} ghcr.io
+          docker build ./jui-apps/jui-apps-dashboard --tag ghcr.io/mwzero/jui-core:latest
+          docker push ghcr.io/mwzero/actions-runner-controller:latest
