@@ -33,5 +33,5 @@ jobs:
       - name: Build and push the image
         run : |
           docker login --username mwzero --password ${{ github.token }} ghcr.io
-          docker build ./jui-apps/jui-apps-dashboard --tag ghcr.io/mwzero/jui-core:latest
-          docker push ghcr.io/mwzero/actions-runner-controller:latest
+          docker build ./jui-apps/jui-apps-dashboard --tag ghcr.io/mwzero/jui-apps-dashboard:latest
+          docker push ghcr.io/mwzero/jui-app-dashboard:latest
