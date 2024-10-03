@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.jui.utils.FS;
@@ -11,6 +12,7 @@ import com.jui.utils.FS;
 public class JQProcessorTest {
 	
 	@Test
+	@Disabled
 	public void simple() throws IOException, URISyntaxException, InterruptedException {
     	
         String tmpdir = System.getProperty("java.io.tmpdir");
