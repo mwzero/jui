@@ -1,10 +1,9 @@
 package com.jui;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jui.annotations.JUI;
+import com.jui.annotations.JuiAnnotationHelper;
 import com.jui.builders.ChartBuilder;
 import com.jui.builders.InputBuilder;
 import com.jui.html.Divider;
@@ -54,31 +53,7 @@ public class JuiContainer implements AutoCloseable {
 	}
 	
 	public void write ( Object obj ) {
-		
-		for ( Field field : obj.getClass().getDeclaredFields()) {
-			
-			if (  field.isAnnotationPresent(JUI.class) ) {
-			
-				// Recuperare il tipo del campo
-	            Class<?> fieldType = field.getType();
-
-				try {
-
-		            if (fieldType == int.class) {
-		            	
-		            	JUI column = field.getAnnotation(JUI.class);
-		            	this.input.slider("eccolo", column.min(), column.max(), 15);
-		                
-		            }
-		                
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
-				
-			}
-			
-		}
+		JuiAnnotationHelper.write(context, obj);
 	}
 	
 	public void divider() {

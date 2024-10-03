@@ -7,10 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface JUI {
+public @interface Jui {
 	
-	 public String component() default "";
-	 public int min() default 0;
-	 public int max() default 10;
-	 
+	 public String key() default "";
 }
