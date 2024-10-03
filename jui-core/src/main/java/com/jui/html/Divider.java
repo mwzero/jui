@@ -9,6 +9,8 @@ public class Divider extends WebComponent {
 	
 	String color;
 	
-    public Divider() {}
+    public Divider() {
+    	this.setId("Divider");
+    }
     public Divider(String color) {this.color= color;}
 }

@@ -1,0 +1,36 @@
+steps:
+  # Copy Maven dependencies to volume mavenrepo
+  #- name: gcr.io/cloud-builders/gsutil
+  #  volumes:
+  #    - name: 'mavenrepo'
+  #      path: '/root/.m2'
+  # args: ['cp', '-r', 'gs://m2cached/settings.xml', '/root/.m2']
+  # args: ['cp', '-r', 'gs://m2cached/', '/root/.m2']
+  
+  # Run the Maven build
+  - name: maven:3.8.6-jdk-11-slim
+    volumes:
+      - name: 'mavenrepo'
+        path: '/root/.m2'
+    entrypoint: 'mvn'
+    args: ['-B','clean', 'deploy','-Dmaven.test.skip=true', '-DskipTests','-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
+  # Preserve the Maven dependencies into the bucket
+  #- name: gcr.io/cloud-builders/gsutil
+  #  volumes:
+  #    - name: 'mavenrepo'
+  #      path: '/root/.m2'
+  #  args: ['cp', '-r', '/root/.m2', 'gs://m2cached/']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'europe-west8-docker.pkg.dev/license-portal-338513/jui-docker/jui-apps-dashboard:prod', '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'europe-west8-docker.pkg.dev/license-portal-338513/jui-docker/jui-apps-dashboard:prod']
+#  - name: maven:3.8.6-jdk-11-slim
+#    volumes:
+#      - name: 'mavenrepo'
+#        path: '/root/.m2'
+#    entrypoint: 'mvn'
+#    args: ['-B','verify', '-Dsonar.projectKey=LM', '-Dsonar.projectName=LM', '-Dsonar.host.url=http://34.154.228.85:7090', '-Dsonar.token=sqp_8a66e7b668485fb59ee94e307c9bc97057c1444a','-Dmaven.test.skip=true', '-DskipTests','-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn']
+
+#https://gist.github.com/jed204/e2ee82eab958d999b98c082bf4290624
+#https://cloud.google.com/build/docs/optimize-builds/speeding-up-builds
+#https://dzone.com/articles/automatic-builds-at-your-fingertips-with-gcp-cloud

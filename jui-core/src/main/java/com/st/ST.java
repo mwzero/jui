@@ -1,40 +1,72 @@
 package com.st;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.sql.Connection;
 import java.util.Map;
 
 import com.jui.utils.FS;
 
-import io.github.vmzakharov.ecdataframe.dataset.CsvDataSet;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.Singular;
 
-@Builder
 @Getter
 @Setter
 public class ST {
 	
+	public static final ST st = new ST();
+	
 	@Singular
 	Map<String, String> options;
 	
-	public static JuiDataFrame read_csv(String endpoint) throws IOException, URISyntaxException {
+    public ST() {
+    	
+    }
+    
+	public DataFrame read_csv(String endpoint) throws Exception {
 		
-		ST st = ST.builder()
-				.option("classLoading",  "true")
-				.build();
-			
-		return st.csv(FS.getFile(endpoint, st.options), ",", null);
+		Reader csvFile = FS.getFile(endpoint, options);
+		DataSetCSV ds = new DataSetCSV(csvFile);
+		ds.load();
+		
+		return new DataFrame(ds);
 	}
 	
-	private JuiDataFrame csv(File csvFile, String delimiter, String csvName) throws IOException {
+	public DataFrame read_sql_query(Connection conn, String query) throws Exception {
 
-		CsvDataSet ds = new CsvDataSet(csvFile.toString(), csvName);
-		return new JuiDataFrame(ds.loadAsDataFrame());
+		DataSetDB ds = new DataSetDB(conn, query);
+		ds.load();
+				
+        return new DataFrame(ds);
+        
+	}
+	
+	public DataFrame read_json(String endpoint) throws Exception {
+		
+		Reader jsonFile = FS.getFile(endpoint, options);
+		
+		DataSetJson ds = new DataSetJson(jsonFile);
+		ds.load();
+		return new DataFrame(ds);
+	}
+
+	public DataFrame read_csv_string(String csv) throws Exception {
+		
+		Reader csvFile = new StringReader(csv);
+		DataSetCSV ds = new DataSetCSV(csvFile);
+		ds.load();
+		
+		return new DataFrame(ds);
+		
 	}
 	
 	
+	
+	
+
+	
+	
+
+    
 }

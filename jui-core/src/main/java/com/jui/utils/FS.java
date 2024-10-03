@@ -1,8 +1,13 @@
 package com.jui.utils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -10,16 +15,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.Map;
+import java.util.UUID;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
-@Getter
-@Setter
+@Slf4j
 public class FS {
 	
-	public static File getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
+	public static Reader getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
 		
 		if ( endpoint.startsWith("http") )  {
 			
@@ -33,19 +42,43 @@ public class FS {
 	        	Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
 	        }
 	        
-	        return tempFile.toFile();
+	        InputStream fis = Files.newInputStream(tempFile);
+	        return new InputStreamReader(fis);
 			
-		} else if ( isClassLoading(options)) {
+		} 
+		
+		Path pathFile;
+		if ( isClassLoading(options)) {
 			
 			URI uri = ClassLoader.getSystemResource("").toURI();
 			String mainPath = Paths.get(uri).toString();
 			
-	    	Path path = Paths.get(mainPath ,endpoint);
-	    	
-	    	return path.toFile();
+			pathFile = Paths.get(mainPath ,endpoint);
 	    	
 		} else {
-			return new File(endpoint);
+			
+			pathFile = Paths.get(endpoint);
+		}
+	    	
+		if (endpoint.endsWith(".zip")) {
+			
+			InputStream fis = Files.newInputStream(pathFile);
+            ZipInputStream zis = new ZipInputStream(fis);
+            ZipEntry entry = zis.getNextEntry();
+            
+            return new InputStreamReader(zis);
+        }
+		else if (endpoint.endsWith(".gz")) {
+			
+			InputStream fis = Files.newInputStream(pathFile);
+            GZIPInputStream gzis = new GZIPInputStream(fis);
+            return new InputStreamReader(gzis);
+        }
+		else {
+			
+			InputStream fis = Files.newInputStream(pathFile);
+	        return new InputStreamReader(fis);
+	        
 		}
 	}
 	
@@ -57,5 +90,56 @@ public class FS {
 		return false;
 	}
 	
+	public static File TempFileWriter (Reader reader) throws IOException {
+		
+        Path tempFile = Files.createTempFile("JUI_" + UUID.randomUUID().toString(), ".jui");
 
+        try (BufferedWriter writer = Files.newBufferedWriter(tempFile, StandardOpenOption.WRITE)) {
+            char[] buffer = new char[1024];
+            int numCharsRead;
+            while ((numCharsRead = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, numCharsRead);
+            }
+        }
+        
+		return tempFile.toFile();
+    }
+	
+	private static void zipDirectory(File folderToZip, String parentFolder, ZipOutputStream zipOut) throws IOException {
+		
+        for (File file : folderToZip.listFiles()) {
+        	
+            if (file.isDirectory()) {
+            	
+                zipDirectory(file, parentFolder + file.getName() + "/", zipOut);
+                
+            } else {
+                
+            	try (FileInputStream fis = new FileInputStream(file)) {
+
+            		ZipEntry zipEntry = new ZipEntry(parentFolder + file.getName());
+                    zipOut.putNextEntry(zipEntry);
+
+                    byte[] bytes = new byte[2048];
+                    int length;
+                    while ((length = fis.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void zipFiles(String sourceDirPath, String zipFilePath) throws IOException {
+    	
+    	log.debug("Zipping files from [{}] to [{}]", sourceDirPath, zipFilePath);
+        File sourceDir = new File(sourceDirPath);
+        try (FileOutputStream fos = new FileOutputStream(zipFilePath);
+             ZipOutputStream zipOut = new ZipOutputStream(fos)) {
+            zipDirectory(sourceDir, "", zipOut);
+            zipOut.flush();
+            zipOut.close();
+        }
+    }
+	
 }

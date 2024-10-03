@@ -1,7 +1,8 @@
 package com.jui.html;
 
-import com.jui.html.WebComponent;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DatePicker extends WebComponent {
 	
     private String label;
@@ -15,12 +16,14 @@ public class DatePicker extends WebComponent {
 	@Override
 	public String render() {
 		
-				return """
-						<div class="mb-3">
-					      <label for="%s" class="form-label">%s</label>
-					      <input type="date" id="%s" name="%s" class="form-control">
-					    </div>		
-						""".formatted(this.getKey(),label,this.getKey(), this.getKey());
+		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
+		
+		return """
+				<div class="mb-3">
+			      <label for="%s" class="form-label">%s</label>
+			      <input type="date" id="%s" name="%s" class="form-control">
+			    </div>		
+				""".formatted(this.getKey(),label,this.getKey(), this.getKey());
 	}
 
 	@Override

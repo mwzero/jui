@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jui.html.WebComponent;
 import com.jui.templates.TemplateHelper;
 
@@ -29,8 +27,6 @@ public class WebContext {
 	@Builder
 	public WebContext(TemplateHelper engine) {
 	
-		log.debug("Initializing new context");
-		
 		this.i=0;
 		this.engine = engine;
 		this.context = new LinkedHashMap<>();

@@ -1,7 +1,5 @@
 package com.jui.html;
 
-import com.jui.html.WebComponent;
-
 import lombok.Getter;
 import lombok.Setter;
 

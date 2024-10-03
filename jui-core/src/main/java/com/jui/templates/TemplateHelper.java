@@ -24,6 +24,9 @@ public class TemplateHelper {
 		DefaultObjectWrapperBuilder owb = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_22);
 		owb.setIterableSupport(true);
 		cfg.setObjectWrapper(owb.build());
+		cfg.setDefaultEncoding("UTF-8");
+        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        
         try {
         	if ( templateClassLoading ) cfg.setClassForTemplateLoading(this.getClass(), "/" + templateFolder);
         	else
@@ -37,9 +40,6 @@ public class TemplateHelper {
 			throw e;
 		}
         
-        cfg.setObjectWrapper(new JSONArrayObjectWrapper());
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
     }
 	
 	public String renderTemplate(String templateName, Map<String, Object> variables) throws Exception {

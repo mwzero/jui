@@ -3,13 +3,13 @@ package com.jui.html;
 import java.util.List;
 
 import com.jui.html.WebComponent;
-import com.st.JuiDataFrame;
+import com.st.DataFrame;
 
 public class Select extends WebComponent {
 	
     private String label;
     List<String> values;
-    JuiDataFrame df;
+    DataFrame df;
 
 	public Select(String label, List<String> values) {
 		
@@ -17,7 +17,7 @@ public class Select extends WebComponent {
         this.values = values;
 	}
 	
-	public Select(String label, JuiDataFrame df) {
+	public Select(String label, DataFrame df) {
 		
         this.label = label;
         this.df = df;

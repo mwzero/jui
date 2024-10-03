@@ -3,28 +3,23 @@ package com.jui;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.glassfish.grizzly.PortRange;
-import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.server.NetworkListener;
-import org.glassfish.grizzly.http.server.StaticHttpHandler;
-import org.glassfish.tyrus.server.Server;
+import com.jui.JuiAppAttributes.JuiAppAttributesBuilder;
+import com.jui.builders.ChartBuilder;
+import com.jui.builders.InputBuilder;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jui.html.Button;
 import com.jui.html.Divider;
-import com.jui.html.InputHandler;
 import com.jui.html.Table;
 import com.jui.html.Text;
 import com.jui.html.WebComponent;
-import com.jui.html.charts.ChartHandler;
+import com.jui.model.JuiContent;
+import com.jui.net.JuiServer;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
-import com.st.JuiDataFrame;
+import com.st.DataFrame;
 
-import jakarta.websocket.DeploymentException;
-import jakarta.websocket.Session;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 public class JuiApp {
 	
-	public static JuiApp jui = JuiApp.getInstance();
+	public static final JuiApp jui = new JuiApp();
 	
 	TemplateHelper engine;
-	
-	@Setter
-	String template;
 	
 	// Web Application containers
 	public List<JuiContainer> main;
@@ -46,26 +38,18 @@ public class JuiApp {
 	int iContainer = 0;
 	
 	// only to work over main container as default
-	public ChartHandler chart;
-	public InputHandler input;
+	public ChartBuilder chart;
+	public InputBuilder input;
 	
-	private static synchronized JuiApp getInstance() {
-		
-		if (jui == null) {
-			jui = new JuiApp();
-		}
-		return jui;
-	}
-
+	//Attributes
+	JuiAppAttributesBuilder attrsBuilder;
+	
 	protected JuiApp() {
 
-		log.info("Building new PageHandler");
+		log.info("JUI App: Start Initialization");
 		try {
 
 			engine = new TemplateHelper(true, ".");
-
-			// template = "templates/jui";
-			template = "templates/bootstrap-simple";
 
 			main = new ArrayList<>();
 			main.add(new JuiContainer(engine, ++iContainer));
@@ -80,7 +64,7 @@ public class JuiApp {
 		}
 	}
 	
-	public JuiContainer getPage() {
+	public JuiContainer addContainer() {
 
 		JuiContainer container = new JuiContainer(this.engine, ++iContainer);
 		main.add(container);
@@ -88,7 +72,7 @@ public class JuiApp {
 	}
 
 	public Button button(String label, String type, String onClick, Runnable onServerSide) { 
-		return (Button) JuiApp.getInstance().input.button(label, type, onClick, onServerSide);}
+		return (Button) this.input.button(label, type, onClick, onServerSide);}
 
 	public void write(String... args) {
 		this.main.get(0).write(args);
@@ -110,11 +94,19 @@ public class JuiApp {
 		return this.main.get(0).markdown(args);
 	}
 
-	public Table table(String caption, JuiDataFrame df, String... args) {
-		return this.main.get(0).table(caption, df);
+	public Table table(String caption, DataFrame df) {
+		return this.main.get(0).table(caption, df, 0);
+	}
+	
+	public Table table(String caption, DataFrame df, int limit) {
+		return this.main.get(0).table(caption, df, limit);
 	}
 
-	public String render() {
+	public JuiContent render() {
+		
+		/**/
+		JuiContent content = new JuiContent();
+		
 		
 		StringBuilder html = new StringBuilder();
 
@@ -125,66 +117,52 @@ public class JuiApp {
 		}
 		
 		if ( getMain().size() == 1) {
-			try {
-				html.append("""
-						<script>
-							elementMapping=%s;
-							elementPostData=%s;
-						</script>
-						""".formatted(
-								Utils.buildJsonString(getMain().get(0).getContext().relations, "source", "commands"),
-								Utils.buildJsonString(getMain().get(0).getContext().elementPostData, "source", "commands")
-								));
-			} catch (JsonProcessingException e) {
-				
-				log.error("Error Processing relations for components. [{}]", e.getLocalizedMessage());
-			}
+			html.append("""
+					<script>
+						elementMapping=%s;
+						elementPostData=%s;
+					</script>
+					""".formatted(
+							Utils.buildJsonString(getMain().get(0).getContext().relations, "source", "commands"),
+							Utils.buildJsonString(getMain().get(0).getContext().elementPostData, "source", "commands")
+							));
 		}
 		
-		return html.toString();
-			
+		content.setMain(html.toString());
+		
+		
+		if ( this.sidebar.getContext().getLinkedMapContext() != null) {
+			StringBuilder sidebar = new StringBuilder();
+			for (WebComponent component : this.sidebar.getContext().getLinkedMapContext().values()) {
+				sidebar.append(component.render());
+			}
+			content.setSidebar(sidebar.toString());
+		} else
+			content.setSidebar("");
+		
+		return content;
 	}
 
 	
 	public void start() {
 		
-		this.start("html/", true, "0.0.0.0", 8080, 8025);
+		String rootDoc = "html/";
+		Boolean classLoading = true;
+		String host = "0.0.0.0";
+		int port = 8080;
+		
+		if ( attrsBuilder != null ) {
+			JuiAppAttributes attrs = attrsBuilder.build();
+			if ( attrs.getRootDoc() != null)
+				rootDoc = "html-" + attrs.getRootDoc() + "/";
+		}
+		
+		this.start(rootDoc, classLoading, host, port);
 	}
 	
-	public void start(String docRoot, boolean classLoading, String host, int port, int wsPort) {
-		
-		HttpServer webServer;
-		webServer = HttpServer.createSimpleServer();
-        webServer.getServerConfiguration().setName("JUI");
-        
-        if ( classLoading ) {
-        	webServer.getServerConfiguration().addHttpHandler(new CLStaticHttpHandler(JuiApp.class.getClassLoader(), docRoot), "/");
-        } else {
-        	webServer.getServerConfiguration().addHttpHandler(new StaticHttpHandler(docRoot), "/");
-        }
-        final NetworkListener listener = new NetworkListener("grizzly", host, new PortRange(port));
-        webServer.addListener(listener);
-        
-		//httpserver.getServerConfiguration().addHttpHandler(new RequestHandler(), "/js");
-		try {
-
-			webServer.start();
-			System.out.println("--- httpserver is running");
-
-			Server server;
-			server = new Server(host, wsPort, "/ws", null, WebSocketEndpoint.class);
-			server.start();
-			System.out.println("--- websocket server is running");
-
-			System.out.println("Press any key to stop the server...");
-			System.in.read();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		} catch (DeploymentException e) {
-			e.printStackTrace();
-		}
+	protected void start(String docRoot, boolean classLoading, String host, int port) {
+	
+		JuiServer.start(docRoot, classLoading, host, port);
 	}
 
 	public WebComponent executeServerAction(String id) {
@@ -194,6 +172,25 @@ public class JuiApp {
 			component.executeServerAction();
 		return component;
 		
+	}
+
+	public JuiAppAttributesBuilder set_page_config() {
+		
+		
+		attrsBuilder =  JuiAppAttributes.builder();
+		return attrsBuilder;
+		
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	public JuiContainer[] columns(Map<String, Integer> of) {
+		return null;
+	}
+
+	public JuiContainer columns(String string) {
+		return null;
 	}
 
 }

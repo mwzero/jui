@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script src="js/bootstrap.bundle.min.js"></script>
+		
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+		
+		<!--leaflet -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+	
+    
+    	<!-- web socket events -->
+		<!-- script>
+    	
+			var ws = new WebSocket("ws://localhost:8025/ws/jui");
+			
+			ws.onopen = function() {
+				ws.send(JSON.stringify({action: "init"}));
+	            
+	        };
+
+	        ws.onmessage = function(event) {
+	            setInnerHTML(document.getElementById("jui-form"), event.data);
+	        };
+	
+			function sendClick(id) {
+	            ws.send(JSON.stringify({action: "click", id: id}));
+	        }
+		</script-->
+	    
+	    <script>    
+	    
+	        document.addEventListener("DOMContentLoaded", (event) => {
+		        fetch('/jui', {
+			        method: 'POST',
+			        headers: {
+			            'Content-Type': 'application/json',
+			        },
+			        body: JSON.stringify({action: "init"}),
+			    })
+			    .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Errore nel recupero del contenuto');
+                    }
+                    return response.text();  // Ottieni il contenuto come testo (HTML)
+                })
+			    .then(htmlContent  => {
+			    	setInnerHTML(document.getElementById("jui-form"), htmlContent );
+			    })
+			    .catch((error) => {
+			        console.error('Error:', error);
+			    });
+			});
+		</script>
+	        
+		
+	
+		<script>
+		
+			var elementMapping = [];
+			
+        	/*
+        	* 1. Set JUI element with HTML from JU backend
+        	* 2. Create script element 
+        	*/
+			function setInnerHTML(elm, html) {
+	        
+				elm.innerHTML = html;
+	
+				Array.from(elm.querySelectorAll("script"))
+					.forEach( oldScriptEl => {
+						const newScriptEl = document.createElement("script");
+	  
+						Array.from(oldScriptEl.attributes).forEach( attr => {
+							newScriptEl.setAttribute(attr.name, attr.value) 
+						});
+	  
+	  					const scriptText = document.createTextNode(oldScriptEl.innerHTML);
+	  					newScriptEl.appendChild(scriptText);
+	  
+	  					oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+  				});
+			  
+				const formElements = document.querySelectorAll("form input, form select, form textarea");
+			
+				formElements.forEach(function(element) {
+					element.addEventListener("change", handleEvent);
+					element.addEventListener("input", handleEvent); 
+				});
+			}
+		
+    
+			/*
+			* used to manage events fired by web components.
+			* for example in MapChart: handleEvent({"name": "${clientId}", "value": {"lat": center.lat, "lng": center.lng, "zoom": zoom}});
+			*/
+			function handleEvent(event) {
+			
+				const sourceElement = event.target;
+			
+				elementMapping.forEach((element) => {
+				
+					if ( element.source === sourceElement.name ) {
+						element.commands.forEach((command) => {
+							console.log(`Elemento modificato: ${sourceElement.name}, Nuovo valore: ${sourceElement.value}, Aggiornato: ${command}`);
+							
+							let dynamicFunction = new Function('value' , command);
+							dynamicFunction(sourceElement.value);
+						});
+					}	
+				});
+			}
+        
+    </script>
+</head>
+<body>
+    <div class="container">
+    	<form id="jui-form" method="post" action="/send_post">
+		</form>
+	</div>
+</body>
+</html>

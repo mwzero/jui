@@ -13,7 +13,7 @@
 	
     
     	<!-- web socket events -->
-		<script>
+		<!-- script>
     	
 			var ws = new WebSocket("ws://localhost:8025/ws/jui");
 			
@@ -29,8 +29,74 @@
 			function sendClick(id) {
 	            ws.send(JSON.stringify({action: "click", id: id}));
 	        }
-	        
+		</script-->
+	    
+	    <script>    
+	    
+	        document.addEventListener("DOMContentLoaded", (event) => {
+		        fetch('/jui', {
+			        method: 'POST',
+			        headers: {
+			            'Content-Type': 'application/json',
+			        },
+			        body: JSON.stringify({action: "init"}),
+			    })
+			    .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Errore nel recupero del contenuto');
+                    }
+                    return response.json();  // Ottieni il contenuto come testo (HTML)
+                })
+			    .then(htmlContent  => {
+			    	setInnerHTML(document.getElementById("jui-form"), htmlContent.main );
+			    	//setInnerHTML(document.getElementById("jui-form"), htmlContent.sidebar );
+			    })
+			    .catch((error) => {
+			        console.error('Error:', error);
+			    });
+			
+				document.getElementById('jui-form').addEventListener('submit', function(event) {
+				    event.preventDefault(); // Previene il comportamento di default del form
+				
+				    // Cattura i dati dal form
+				    const form = event.target;
+				    const formData = new FormData(form);
+				    
+				    // Converte FormData in un oggetto JSON
+				    const formJSON = Object.fromEntries(formData.entries());
+				
+				    // Specifica l'endpoint dove inviare i dati
+				    const endpoint = '/send_post';
+				
+				    // Esegue la richiesta POST
+				    fetch(endpoint, {
+				        method: 'POST',
+				        headers: {
+				            'Content-Type': 'application/json'
+				        },
+				        body: JSON.stringify(formJSON)
+				    })
+				    .then(response => {
+				        if (response.ok) {
+				            return response.json();
+				        } else {
+				            throw new Error('Errore nella richiesta');
+				        }
+				    })
+				    .then(data => {
+				        // Gestione della risposta
+				        console.log('Success:', data);
+				    })
+				    .catch(error => {
+				        console.error('Error:', error);
+				    });
+				});
+			});
+			
+
 		</script>
+	        
+		
 	
 		<script>
 		

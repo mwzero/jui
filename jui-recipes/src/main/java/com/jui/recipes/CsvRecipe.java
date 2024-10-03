@@ -1,21 +1,13 @@
 package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import org.eclipse.collections.api.factory.Lists;
-
-import com.st.JuiDataFrame;
-import com.st.ST;
-
-import io.github.vmzakharov.ecdataframe.dataframe.AggregateFunction;
+import static com.st.ST.st;
+import com.st.DB;
+import com.st.DataFrame;
 
 public class CsvRecipe {
 	
-	public static void main(String... args) throws FileNotFoundException, IOException, URISyntaxException {
+	public static void main(String... args) throws Exception {
 		
 		jui.markdown("""
     			# JUI - CSV Recipes - Life Expetation
@@ -24,10 +16,11 @@ public class CsvRecipe {
     	jui.divider();
     	
     	//country,continent,year,lifeExp,pop,gdpPercap
-    	JuiDataFrame df = ST.read_csv("csv/gapminder_unfiltered.csv");
+    	DataFrame df = st.read_csv("csv/gapminder_unfiltered.csv");
     	
+    	/*
     	jui.chart.lines(
-    			new JuiDataFrame(
+    			new DataFrame(
     					df.getDf()
     						.selectBy("year == 2007")
     						.selectBy("continent=='Europe'")
@@ -55,6 +48,7 @@ public class CsvRecipe {
     							Lists.immutable.of(AggregateFunction.avg("gdpPercap")), Lists.immutable.of("country"))
     					));
     	
+    	*/
     	jui.start();
     	
     }
