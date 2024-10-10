@@ -71,6 +71,9 @@ public abstract class WebComponent {
 		variables.put("clientId", this.getKey());
 		variables.put("key", this.getKey());
 		variables.put("juiComponent", this);
+		if ( onServerSide != null ) {
+			variables.put("onServerSide", "server-side");
+		}
 		
 		for ( Field field : this.getClass().getDeclaredFields()) {
 			

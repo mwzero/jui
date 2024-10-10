@@ -30,6 +30,11 @@ public class JuiApp {
 	
 	public static final JuiApp jui = new JuiApp();
 	
+	//used onServerAction response
+	@Setter
+	String juiResponse;
+	
+	
 	TemplateHelper engine;
 	
 	// Web Application containers
@@ -165,11 +170,12 @@ public class JuiApp {
 		JuiServer.start(docRoot, classLoading, host, port);
 	}
 
-	public WebComponent executeServerAction(String id) {
+	public WebComponent executeServerAction(String id) throws Exception{
 		
 		WebComponent  component = this.main.get(0).getContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
+		
 		return component;
 		
 	}
@@ -192,5 +198,6 @@ public class JuiApp {
 	public JuiContainer columns(String string) {
 		return null;
 	}
+
 
 }

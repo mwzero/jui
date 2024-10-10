@@ -33,6 +33,36 @@
 	    
 	    <script>    
 	    
+	    	function sendClick(id) {
+	    		fetch('/jui', {
+			        method: 'POST',
+			        headers: {
+			            'Content-Type': 'application/json',
+			        },
+			        body: JSON.stringify({action: "click", id: id}),
+			    })
+			    .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();  // Ottieni il contenuto come testo (HTML)
+                })
+			    .then(htmlContent  => {
+			    	if ( htmlContent.sidebar == "KO" ) {
+			    		document.getElementById('errorMessage').textContent = htmlContent.main;
+                		document.getElementById('errorAlert').classList.remove('d-none');
+			    	}  
+			    	console.log("message",htmlContent); 
+			    	//setInnerHTML(document.getElementById("jui-form"), htmlContent.main );
+			    	//setInnerHTML(document.getElementById("jui-form"), htmlContent.sidebar );
+			    })
+			    .catch((error) => {
+			        console.error('Error:', error);
+			        // Display the error message in the Bootstrap alert
+                	
+			    });
+			}
+	    
 	        document.addEventListener("DOMContentLoaded", (event) => {
 		        fetch('/jui', {
 			        method: 'POST',
@@ -48,6 +78,7 @@
                     return response.json();  // Ottieni il contenuto come testo (HTML)
                 })
 			    .then(htmlContent  => {
+			    	console.log("message",htmlContent); 
 			    	setInnerHTML(document.getElementById("jui-form"), htmlContent.main );
 			    	//setInnerHTML(document.getElementById("jui-form"), htmlContent.sidebar );
 			    })
@@ -158,6 +189,10 @@
 </head>
 <body>
     <div class="container">
+    	<!-- Alert for errors -->
+    	<div id="errorAlert" class="alert alert-danger d-none" role="alert">
+        	An error occurred: <span id="errorMessage"></span>
+    	</div>
     	<form id="jui-form" method="post" action="/send_post">
 		</form>
 	</div>
