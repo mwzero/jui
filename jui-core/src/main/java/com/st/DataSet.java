@@ -92,9 +92,10 @@ public class DataSet {
 
 	public DataSet limit(int limit) {
 		
+		int newLimit = Math.min(this.data.size() , limit);
 		DataSet ds = new DataSet();
 		
-		IntStream.range(0, limit).forEach(idx -> {
+		IntStream.range(0, newLimit).forEach(idx -> {
 			ds.data.add(
 					this.data.get(idx));
 					

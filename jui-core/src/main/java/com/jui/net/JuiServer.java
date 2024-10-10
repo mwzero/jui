@@ -31,7 +31,7 @@ public class JuiServer {
 	        
 		} catch (IOException e) {
 			
-			log.error("HttpServer not started", e.getLocalizedMessage());
+			log.error("HttpServer not started. Error[{}]", e.getLocalizedMessage());
 		}
 		
 		return server;

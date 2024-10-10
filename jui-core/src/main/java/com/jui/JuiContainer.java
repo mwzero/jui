@@ -85,7 +85,10 @@ public class JuiContainer implements AutoCloseable {
 	public Table table(String caption, DataFrame df, int limit) {
 		
 		Table table = new Table();
-		table.setDf(df.limit(limit));
+		if ( limit != 0)
+			table.setDf(df.limit(limit));
+		else
+			table.setDf(df);
 		table.setCaption(caption);
 		
 		this.context.add(table);
