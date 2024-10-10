@@ -18,9 +18,23 @@ public class JuiContent {
 	 String sidebar;
      String main;
      
+     public JuiContent () {
+    	 
+     }
+     public JuiContent (String sidebar, String main) {
+    	 
+    	 this.main = main;
+    	 this.sidebar = sidebar;
+    	 
+     }
+     
      public String toJsonString() {
 	     Gson gson = new Gson();
 	     return gson.toJson(this);
+     }
+     
+     public static JuiContent builder(String sidebar, String main) {
+    	 return new JuiContent(sidebar, main);
      }
 
 }

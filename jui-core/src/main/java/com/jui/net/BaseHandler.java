@@ -65,18 +65,7 @@ public abstract class BaseHandler {
     }
 	
 	
-	protected String getErrorPage(Exception e) {
-		
-		log.error("Request handling Err[{}]", e.getLocalizedMessage());
-		return """
-					<html>
-						<body>
-							<p>Something wrong:[%s]</p>
-						</body>
-					</html>
-				""".formatted(Utils.getStackTraceAsString(e));
-		
-	}
+	
 	
 	protected URL getFileFromClassLoader (String fileName) throws IOException {
     	
