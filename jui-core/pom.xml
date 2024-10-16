@@ -12,7 +12,14 @@
 	<properties></properties>
 
 	<dependencies>
-	
+		
+		<dependency>
+			<groupId>com.jui</groupId>
+			<artifactId>jui-server</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -121,7 +128,7 @@
 			  <artifactId>maven-dependency-plugin</artifactId>
 			  <configuration>
 				<excludeArtifactIds>junit-jupiter-engine,lombok, h2</excludeArtifactIds>
-				<excludeTransitive>true</excludeTransitive>
+				<!--excludeTransitive>true</excludeTransitive-->
 			  </configuration>
 			</plugin>
 		</plugins>

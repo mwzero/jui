@@ -7,7 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jui-grizzly</artifactId>
+	<artifactId>jui-server-grizzly</artifactId>
 
 	<properties></properties>
 
@@ -34,6 +34,13 @@
 			<groupId>org.glassfish.tyrus.bundles</groupId>
 			<artifactId>tyrus-standalone-client</artifactId>
 			<version>2.1.5</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/io.javalin/javalin -->
+		<dependency>
+		    <groupId>io.javalin</groupId>
+		    <artifactId>javalin</artifactId>
+		    <version>6.3.0</version>
 		</dependency>
 		
 		<dependency>

@@ -1,4 +1,4 @@
-package com.jui.net;
+package com.jui.net.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import com.sun.net.httpserver.HttpHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class JuiRequestHandler extends BaseHandler implements HttpHandler {
+public class JuiRequestHandler extends BaseHandler {
 	
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {

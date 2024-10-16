@@ -1,4 +1,4 @@
-package com.jui.net;
+package com.jui.net.http;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.jui.utils.Utils;
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public abstract class BaseHandler {
+public abstract class BaseHandler implements HttpHandler {
 	
 	
 	class HttpStatus {

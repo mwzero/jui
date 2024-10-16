@@ -14,31 +14,17 @@
   <properties>
         	
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	    
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    		
     <timestamp>${maven.build.timestamp}</timestamp>
-    		
     <maven.build.timestamp.format>yyyy-MM-dd HH:mmss Z</maven.build.timestamp.format>
-    		
     <maven.compiler.source>17</maven.compiler.source>
-    		
     <maven.compiler.target>17</maven.compiler.target>
-    		
-		
     <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
-    		
-		
     <sonar.scanner.force-deprecated-java-version>true</sonar.scanner.force-deprecated-java-version>
-    		
     <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    		
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-    		
     <sonar.language>java</sonar.language>
-    		
     <sonar.coverage.jacoco.xmlReportPaths>${basedir}/lm-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    	
   </properties>
   	
 	
@@ -46,9 +32,11 @@
     	
 		
     <module>jui-core</module>
-    
-    <module>jui-grizzly</module>
-    		
+    <module>jui-server</module>
+    <module>jui-server-grizzly</module>
+
+    <module>jui-playground</module>
+	
     <!-- modules not included in JUI Core library -->
     <module>jui-recipes</module>
     <module>jui-sandbox</module>
@@ -67,9 +55,7 @@
       <dependency>
         				
         <groupId>com.jui</groupId>
-        				
         <artifactId>jui-core</artifactId>
-        				
         <version>0.0.1-SNAPSHOT</version>
         			
       </dependency>
@@ -78,9 +64,7 @@
       <dependency>
         				
         <groupId>org.springframework.boot</groupId>
-        				
         <artifactId>spring-boot-dependencies</artifactId>
-        				
         <version>2.7.9</version>
         				
         <type>pom</type>

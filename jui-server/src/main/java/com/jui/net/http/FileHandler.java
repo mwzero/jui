@@ -1,4 +1,4 @@
-package com.jui.net;
+package com.jui.net.http;
 
 import java.io.IOException;
 import java.io.InputStream;

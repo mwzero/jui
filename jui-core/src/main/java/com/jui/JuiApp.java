@@ -16,6 +16,8 @@ import com.jui.html.Text;
 import com.jui.html.WebComponent;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
+import com.jui.net.http.JuiRequestHandler;
+import com.jui.net.http.JuiWebSocketHandler;
 import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
 import com.st.DataFrame;
@@ -167,7 +169,16 @@ public class JuiApp {
 	
 	protected void start(String docRoot, boolean classLoading, String host, int port) {
 	
-		JuiServer.start(docRoot, classLoading, host, port);
+		JuiServer.builder()
+			.juiHttpHandler(new JuiRequestHandler())
+			.juiWebSocketHandler(new JuiWebSocketHandler())
+			.classLoading(true)
+			.docRoot(docRoot)
+			.host(host)
+			.port(port)
+			.wssPort(8025)
+		.build()
+		.start();
 	}
 
 	public WebComponent executeServerAction(String id) throws Exception{
