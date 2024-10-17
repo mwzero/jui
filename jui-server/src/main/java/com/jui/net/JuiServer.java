@@ -33,6 +33,7 @@ public class JuiServer {
 		HttpServer server = null;
 		try {
 			server = HttpServer.create(new InetSocketAddress(port), 0);
+			
 			server.createContext("/", new FileHandler(docRoot));
 			server.createContext("/jui", juiHttpHandler);
 			server.createContext("/css", new FileHandler(docRoot));

@@ -18,6 +18,10 @@ public class RequestHandler extends BaseHandler implements HttpHandler {
 
 	@Override
     public void handle(HttpExchange exchange) throws IOException {
+		
+		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Oppure specifica un'origine specifica
+		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
         
         if ("POST".equals(exchange.getRequestMethod())) {
         	

@@ -127,8 +127,8 @@
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-dependency-plugin</artifactId>
 			  <configuration>
-				<excludeArtifactIds>junit-jupiter-engine,lombok, h2</excludeArtifactIds>
-				<!--excludeTransitive>true</excludeTransitive-->
+				<excludeArtifactIds>junit-jupiter-engine, lombok, h2</excludeArtifactIds>
+				<excludeTransitive>true</excludeTransitive>
 			  </configuration>
 			</plugin>
 		</plugins>

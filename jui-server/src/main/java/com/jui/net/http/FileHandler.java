@@ -20,7 +20,10 @@ public class FileHandler extends BaseHandler implements HttpHandler {
 	
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-    	
+		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Oppure specifica un'origine specifica
+		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+		
         String endpoint = exchange.getRequestURI().getPath();
         log.debug("HTTP GET file[{}]", endpoint);
         

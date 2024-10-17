@@ -5,7 +5,19 @@
 	<artifactId>jui-playground</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	
-	<dependencyManagement>
+	<properties>
+        	
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	    <timestamp>${maven.build.timestamp}</timestamp>
+	    <maven.build.timestamp.format>yyyy-MM-dd HH:mmss Z</maven.build.timestamp.format>
+	    <maven.compiler.source>17</maven.compiler.source>
+	    <maven.compiler.target>17</maven.compiler.target>
+	    <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+  	</properties>
+  	
+	
+  <dependencyManagement>
     		
     	<dependencies>
 	      <dependency>
@@ -47,13 +59,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>8.0</version>
-            <scope>provided</scope>
-        </dependency>
-    
 		<dependency>
 			<groupId>com.jui</groupId>
 			<artifactId>jui-core</artifactId>
@@ -141,5 +146,22 @@
         -->
 
 	</dependencies>
+	
+	<build>
+	    <plugins>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-compiler-plugin</artifactId>
+	            <version>3.8.1</version> <!-- Puoi modificare la versione -->
+	            <configuration>
+	                <compileSourceRoots>
+	                    <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot> <!-- Default -->
+	                    <compileSourceRoot>${project.basedir}/src/examples</compileSourceRoot> <!-- Cartella aggiuntiva -->
+	                </compileSourceRoots>
+	            </configuration>
+	        </plugin>
+	    </plugins>
+	</build>
+
 	
 </project>

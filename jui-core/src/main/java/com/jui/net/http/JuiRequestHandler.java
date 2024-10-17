@@ -22,6 +22,9 @@ public class JuiRequestHandler extends BaseHandler {
 	public void handle(HttpExchange exchange) throws IOException {
 		
 		log.debug("Handling page");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Oppure specifica un'origine specifica
+		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
 		
         int pageStatus = 200;
         String response = null;
