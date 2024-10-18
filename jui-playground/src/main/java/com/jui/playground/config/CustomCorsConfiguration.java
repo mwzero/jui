@@ -1,4 +1,4 @@
-package com.jui.playground;
+package com.jui.playground.config;
 
 import java.util.List;
 

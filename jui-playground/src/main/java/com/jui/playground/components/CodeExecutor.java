@@ -1,12 +1,23 @@
-package com.jui.playground;
+package com.jui.playground.components;
 
 import javax.tools.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Component;
+
+import com.jui.playground.config.WebSocketConfig;
+
 import java.io.*;
 import java.util.*;
 
+@Component
 public class CodeExecutor {
+	
+	@Autowired
+    private WebSocketConfig webSocketConfig;
 
-	public static void compileAndRunJavaCode(String fileName) throws IOException {
+	public void compileAndRunJavaCode(String fileName) throws IOException {
 	    File sourceFile = new File(fileName);
 
 	    // Ottieni il nome della classe con il package
@@ -43,6 +54,8 @@ public class CodeExecutor {
 	    			"java",
 	    		    "-cp", 
 	    		    "libs/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar;", 
+	    		    "-Dlogging.level.root=INFO",
+	    		    "-Dlogging.level.com.jui=INFO",
 	    		    className
 	    		);
 	        
@@ -54,7 +67,7 @@ public class CodeExecutor {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        System.out.println("OUTPUT: " + line);
+                    	webSocketConfig.getWebSocketHandler().broadcastMessage(line);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -67,6 +80,7 @@ public class CodeExecutor {
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
                     String line;
                     while ((line = reader.readLine()) != null) {
+                    	webSocketConfig.getWebSocketHandler().broadcastMessage(line);
                     	errorOutput.append(line);
                     }
                 } catch (IOException e) {
