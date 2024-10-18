@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,13 +20,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jui.playground.CodeExecutor;
+import com.jui.playground.components.CodeExecutor;
+import com.jui.playground.config.WebSocketConfig;
 import com.jui.playground.model.ExampleFile;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 public class CodeExecutionController {
+	
+	 @Autowired
+	 private WebSocketConfig webSocketConfig;
+	
+	@Autowired
+	CodeExecutor codeExecutor;
 	
 	private static final String EXAMPLES_DIR = "src" + File.separator + "examples" + File.separator;
 
@@ -34,9 +43,10 @@ public class CodeExecutionController {
 
 	    try {
 	        //String output = 
-	        CodeExecutor.compileAndRunJavaCode(EXAMPLES_DIR + fileName);
+	    	codeExecutor.compileAndRunJavaCode(EXAMPLES_DIR + fileName);
 	        return ResponseEntity.ok("");
 	    } catch (IOException e) {
+	    	
 	        // Restituisci un errore 500 con il messaggio dell'eccezione
 	        return ResponseEntity.status(500).body(e.getMessage());
 	    }

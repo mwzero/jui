@@ -1,160 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jui Playground</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body, html {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden; /* Evita lo scrolling */
-    }
-    .container-fluid {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    .row {
-      flex-grow: 1;
-      display: flex;
-      overflow: hidden;
-    }
-    #editor {
-      height: 65vh; /* Occupa il 65% dell'altezza della finestra */
-      //width: 100%;
-    }
-    #preview {
-      height: 65vh; /* Occupa il 65% dell'altezza della finestra */
-      background-color: #f4f4f4;
-      padding: 10px;
-      overflow: auto;
-    }
-    #output {
-      height: 25vh;
-      background-color: black;
-      color: white;
-      padding: 10px;
-      overflow: auto;
-      font-family: monospace;
-    }
-    .sidebar {
-      height: 65vh; /* Altezza della lista degli esempi */
-      overflow-y: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUI Playground</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+    
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transition: margin-left 0.3s;
+            position: relative; /* Per consentire la sovrapposizione */
+        }
+
+        #editor {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .code-editor {
+            width: 100%;
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #preview-container {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #console {
+        	white-space: pre-wrap; /* Mantiene i ritorni a capo e gli spazi */
+            background-color: #1e1e1e;
+            color: #33ff33;
+            font-family: monospace;
+            padding: 10px;
+            height: 150px;
+            overflow-y: auto;
+            border-top: 2px solid #333;
+            display: none; /* La console è nascosta al caricamento */
+        }
+        
+        footer {
+            background-color: #282c34;
+            color: white;
+            text-align: center;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .toggle-link {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Header modificato */
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.25rem; /* Rimpicciolito */
+            margin-left: 15px;
+        }
+
+        .fa-bars {
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        /* Sidebar Collassabile */
+        #sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px; /* Sidebar nascosta fuori schermo */
+            background-color: #343a40;
+            color: white;
+            padding-top: 60px;
+            overflow-x: hidden;
+            transition: left 0.3s;
+        }
+
+        #sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: white;
+            display: block;
+        }
+
+        #sidebar a:hover {
+            background-color: #575757;
+        }
+
+        #sidebar.active {
+            left: 0; /* Sidebar visibile sovrapponendosi */
+        }
+
+        /* Nascondere il contenuto del main content quando sidebar è aperta */
+        #main-content.sidebar-collapsed {
+            margin-left: 0;
+        }
+        
+        #code-editor {
+	      height: 65vh; /* Occupa il 65% dell'altezza della finestra */
+	      //width: 100%;
+	    }
+
+    </style>
 </head>
 <body>
 
-	<div class="container-fluid">
-	    <div class="row">
-	      <div class="col-md-3">
-	        <h3>Esempi</h3>
-	        <ul id="exampleList" class="list-group">
-	          <!-- Elenco degli esempi -->
-	        </ul>
-	      </div>
-	      <div class="col-md-6">
-	        <h3>Editor di Codice</h3>
-	        <div id="editor"></div>
-	        <button id="runButton" class="btn btn-success mt-3">Esegui</button>
-	        <button id="saveButton" class="btn btn-primary mt-3">Salva Codice</button>
-	      </div>
-	      <div class="col-md-3">
-	        <h3>Output</h3>
-	        <div id="preview"></div>
-	      </div>
-	    </div>
-	 
-	    <div class="row">
-	      <div class="col-md-12">
-	        <div id="output"></div>
-	      </div>
-	    </div>
-  </div>
-
-  <!-- Bootstrap JS, Popper.js, and dependencies -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/loader.min.js"></script>
-  
-  <script>
-    let currentFileName = ""; // Variabile per mantenere il nome del file selezionato
-
-    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' } });
-    require(['vs/editor/editor.main'], function () {
-      window.editor = monaco.editor.create(document.getElementById('editor'), {
-        value: '',
-        language: 'java'
-      });
-    });
-
-    function loadExamples() {
-      fetch('/api/examples')
-        .then(response => response.json())
-        .then(data => {
-          const exampleList = document.getElementById('exampleList');
-          exampleList.innerHTML = ""; // Pulisci l'elenco degli esempi prima di aggiornare
-          data.forEach(example => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = example.name;
-            li.onclick = () => loadExampleCode(example.fileName);
-            exampleList.appendChild(li);
-          });
-        });
-    }
-
-    function loadExampleCode(fileName) {
-      fetch(`/api/examples/${fileName}`)
-        .then(response => response.text())
-        .then(code => {
-          editor.setValue(code);
-          currentFileName = fileName; // Memorizza il nome del file selezionato
-          document.getElementById('runButton').disabled = false; // Abilita il pulsante "Esegui" se è stato caricato un file esistente
-        });
-    }
-
-    document.getElementById('saveButton').onclick = function () {
-      const code = editor.getValue();
-      
-      // Usa il nome del file selezionato, altrimenti chiedi all'utente di inserirne uno
-  	let fileName;
-	if (currentFileName) {
-		fileName = currentFileName;  // Se esiste un file selezionato, usalo
-    } else {
-		fileName = "CustomCode.java";
-	}
+	<!-- Sidebar -->
+	<div id="sidebar">
+	    <a href="#">Dashboard</a>
+	    <a href="#">Projects</a>
+	    <a href="#">Settings</a>
+	    <a href="#">Help</a>
+	</div>
 	
-	fileName = prompt("Inserisci il nome del file da salvare", fileName);  // Altrimenti chiedi all'utente il nome
+	<!-- Header -->
+	<header>
+	    <i class="fas fa-bars" id="toggle-sidebar"></i>
+	    <h1>JUI Playground</h1>
+	</header>
+	
+	<div id="main-content" class="container-fluid">
+	    <div id="editor" class="container-fluid">
+	        <div class="row">
+	            <!-- Primo editor con dropdown -->
+	            <div class="col-md-6">
+	                <div class="d-flex justify-content-between align-items-center mb-2">
+	                	
+	                	<button id="run-btn" class="btn btn-primary btn-sm">Run Code</button>
+	                    <button id="save-btn" class="btn btn-secondary btn-sm">Save Code</button>
+	                    
+	                    <label for="example-selector">Select Example:</label>
+	                    <select id="example-selector" class="form-select form-select-sm w-50">
+	                    
+	                    
+	                    </select>
+	                </div>
+	                <div id="code-editor"></div>
+	            </div>
+	            
+	            <div class="col-md-6">
+	                <div class="d-flex justify-content-between align-items-center mb-2">
+	                    <input type="text" id="url-input" class="form-control-sm w-75" placeholder="Enter URL...">
+	                    <button id="open-browser-btn" class="btn btn-info btn-sm">Open in Browser</button>
+	                </div>
+	                <iframe id="preview-container" class="code-editor" title="Website Preview"></iframe>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <div id="console" class="container-fluid mt-3">
+	    </div>
+	</div>
+	
+	<footer class="mt-auto">
+	    <span id="toggle-console" class="toggle-link">Show Console</span>
+	    <span>Web IDE Simulation &copy; 2024</span>
+	</footer>
 
-      if (fileName) {
-        fetch('/api/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code, fileName })
-        })
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('output').textContent = data.message;
-          loadExamples();
-          currentFileName = fileName; // Memorizza il nome del file salvato
-          document.getElementById('runButton').disabled = false; // Abilita il pulsante "Esegui" dopo il salvataggio
-        });
-      }
-    };
+	<!-- Bootstrap JS, Popper.js, and dependencies -->
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/loader.min.js"></script>
+  
+	<script>
+	    let currentFileName = ""; // Variabile per mantenere il nome del file selezionato
+	
+	    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' } });
+	    require(['vs/editor/editor.main'], function () {
+	      window.editor = monaco.editor.create(document.getElementById('code-editor'), {
+	        value: '',
+	        language: 'java',
+	        automaticLayout: true,
+	        theme: "vs-dark",
+	        lineNumbers: "on"
+			
+	      });
+	    });
+	    
+	    function loadExamples() {
+	      fetch('/api/examples')
+	        .then(response => response.json())
+	        .then(data => {
+	          const exampleList = document.getElementById('example-selector');
+	          exampleList.innerHTML = ""; // Pulisci l'elenco degli esempi prima di aggiornare
+	          
+	          const optionDefault = document.createElement('option');
+              optionDefault.textContent = "choose a file";
+              optionDefault.value = "";
+              exampleList.appendChild(optionDefault);
+	            
+	          data.forEach(example => {
+	            const option = document.createElement('option');
+	            option.textContent = example.name;
+	            option.value = example.name;
+	            exampleList.appendChild(option);
+	          });
+	        });
+	    }
+	    
+	    function loadExampleCode(fileName) {
+	      fetch(`/api/examples/${fileName}`)
+	        .then(response => response.text())
+	        .then(code => {
+	          editor.setValue(code);
+	          currentFileName = fileName; 
+	          runButton.disabled = false; 
+	        });
+	    }
+    
+	    window.onload = loadExamples;
+	    
+	</script>
 
-    document.getElementById('runButton').onclick = function () {
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const runButton = document.getElementById('run-btn');
+    const saveButton = document.getElementById('save-btn');
+    const outputDiv = document.getElementById('console');
+    const previewContainer = document.getElementById('preview-container');
+    const urlInput = document.getElementById('url-input');
+    const openBrowserButton = document.getElementById('open-browser-btn');
+    const exampleSelector = document.getElementById('example-selector');
+    const consoleDiv = document.getElementById('console');
+    const toggleConsoleLink = document.getElementById('toggle-console');
+    const sidebar = document.getElementById('sidebar');
+    const toggleSidebarButton = document.getElementById('toggle-sidebar');
+    const mainContent = document.getElementById('main-content');
+
+    saveButton.addEventListener('click', function () {
+        
+        const code = editor.getValue();
+
+	  	let fileName;
+		if (currentFileName) fileName = currentFileName;
+	    else fileName = "CustomCode.java";
+		
+		fileName = prompt("Inserisci il nome del file da salvare", fileName);  // Altrimenti chiedi all'utente il nome
+	
+		if (fileName) {
+    		fetch('/api/save', {
+      			method: 'POST',
+      			headers: { 'Content-Type': 'application/json' },
+      			body: JSON.stringify({ code, fileName })
+    		})
+    		.then(response => response.json())
+    		.then(data => {
+      			outputDiv.innerHTML+= data.message  + "\n";
+      			loadExamples();
+      			currentFileName = fileName; 
+      			runButton.disabled = false; 
+    		});
+  		}
+	});
+	
+	runButton.addEventListener('click', function () {
       if (!currentFileName) {
-        document.getElementById('output').textContent = "Salva prima il file per poterlo eseguire.";
+        outputDiv.innerHTML  = "Salva prima il file per poterlo eseguire.";
         return;
       }
 
-      // Mostra un messaggio di avvio della compilazione/esecuzione nella console
-      document.getElementById('output').textContent = "Il codice sta venendo compilato ed eseguito, attendere prego...";
+      outputDiv.innerHTML   = "Il codice sta venendo compilato ed eseguito, attendere prego...";
 
       // Effettua la richiesta per compilare ed eseguire il codice
       fetch('/api/compile', {
@@ -171,48 +315,88 @@
         return response.text();
       })
       .then(output => {
-        document.getElementById('output').textContent = output;
+        outputDiv.innerHTML  = output;
         
-         // Crea un nuovo elemento iframe
-    const iframe = document.createElement('iframe');
-    
-    // Specifica l'URL della pagina da caricare nell'iframe
-    iframe.src = 'http://127.0.0.1:8080/index.html';
-    
-    // Imposta alcune proprietà dell'iframe (stile, altezza, larghezza, ecc.)
-    iframe.id = 'preview-frame';
-    iframe.style.width = '100%';
-    iframe.style.height = '80vh';
-    iframe.style.border = 'none';
-    
-    // Aggiungi l'iframe al contenitore
-    const outputContainer = document.getElementById('preview');
-    outputContainer.innerHTML = ''; // Pulisci il contenuto precedente
-    outputContainer.appendChild(iframe);
-    
-        /*
-        fetch('http://127.0.0.1:8080/index.html', {
-        	method: 'GET',
-        	headers: { 'Content-Type': 'application/html' },
-	   	})
-	   	.then((response) => response.text())
-	   	.then((html) => {
-        	document.getElementById("preview").innerHTML = html;
-        })
-    	.catch((error) => {
-    		document.getElementById('output').textContent = "Errore : " + error.message;
-    	 });
-    	 */
+		// Specifica l'URL della pagina da caricare nell'iframe
+	    previewContainer.src = 'http://127.0.0.1:8080/index.html';
+	    urlInput.value = 'http://127.0.0.1:8080/index.html';
+	    
 	  })
       
       .catch(error => {
         // Mostra l'errore nella console di output
-        document.getElementById('output').textContent = "Errore durante la compilazione o esecuzione: " + error.message;
+        outputDiv.innerHTML  = "Errore durante la compilazione o esecuzione: " + error.message;
       });
-    };
+    });
+    
+    // Funzione per caricare un esempio predefinito nel primo editor
+    exampleSelector.addEventListener('change', function () {
+        const selectedExample = exampleSelector.value;
+        if (selectedExample) {
+	        loadExampleCode(selectedExample);
+        }
+    });
 
-    window.onload = loadExamples;
-  </script>
+    // Funzione per aprire il sito in una nuova finestra del browser
+    openBrowserButton.addEventListener('click', function () {
+        const url = urlInput.value;
+        if (url) {
+            window.open(url, '_blank');
+        } else {
+            alert('Please enter a valid URL');
+        }
+    });
+
+    // Funzione per mostrare/nascondere la console
+    toggleConsoleLink.addEventListener('click', function () {
+        if (consoleDiv.style.display === 'block') {
+            consoleDiv.style.display = 'none';
+            toggleConsoleLink.textContent = 'Hide Console';
+        } else {
+            consoleDiv.style.display = 'block';
+            toggleConsoleLink.textContent = 'Show Console';
+        }
+    });
+
+    // Funzione per mostrare/nascondere la sidebar
+    toggleSidebarButton.addEventListener('click', function () {
+        if (sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+        } else {
+            sidebar.classList.add('active');
+        }
+    });
+
+</script>
+
+	<script>
+    
+	    var socket;
+	
+	    function connectWebSocket() {
+	    
+	        socket = new WebSocket("ws://localhost:9090/ws");
+	        socket.onopen = function () {
+	            console.log("Connessione WebSocket aperta.");
+	        };
+	
+	        socket.onmessage = function (event) {
+	        	outputDiv.innerHTML+= event.data  + "\n";
+	            outputDiv.scrollTop = outputDiv.scrollHeight;
+	        };
+	
+	        socket.onclose = function () {
+	            console.log("Connessione WebSocket chiusa.");
+	        };
+	
+	        socket.onerror = function (error) {
+	            console.log("Errore WebSocket: " + error);
+	        };
+	    }
+	    
+		connectWebSocket();
+
+	</script>
 
 </body>
 </html>
