@@ -1,4 +1,4 @@
-package com.jui.juiplayground;
+package com.jui.playground;
 
 import javax.tools.*;
 import java.io.*;
@@ -39,18 +39,14 @@ public class CodeExecutor {
 	    try {
 	        // Esegui la classe compilata utilizzando il nome completo del pacchetto
 	    	ProcessBuilder processBuilder = new ProcessBuilder(
-	    		    "..\\\\..\\\\..\\\\res\\\\jbr-17.0.11-windows-x64-b1207.30\\\\bin\\\\java.exe", 
+	    		    //"..\\\\..\\\\..\\\\res\\\\jbr-17.0.11-windows-x64-b1207.30\\\\bin\\\\java.exe", 
+	    			"java",
 	    		    "-cp", 
 	    		    "libs/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar;", 
 	    		    className
 	    		);
-	        //ProcessBuilder processBuilder = new ProcessBuilder("C:\\mwzero\\res\\jbr-17.0.11-windows-x64-b1207.30\\bin\\java.exe -cp \"%s\" %s".formatted(libPath, className));
-	        File file = new File("./file.txt");
-	        if(file.createNewFile()){
-	            System.out.println("file.txt File Created in Project root directory");
-	        }else System.out.println("File file.txt already exists in the project root directory");
 	        
-	        processBuilder.directory(new File("C:\\mwzero\\src\\jui\\jui-playground"));  // Assicurati che il processo venga eseguito nella directory corrente
+	        processBuilder.directory(new File("."));  // Assicurati che il processo venga eseguito nella directory corrente
 	        Process process = processBuilder.start();
 
 	        // Thread per gestire l'output standard

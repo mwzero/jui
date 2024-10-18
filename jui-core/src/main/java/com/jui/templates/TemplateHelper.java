@@ -18,6 +18,7 @@ public class TemplateHelper {
 	private Configuration cfg;
 	
 	public TemplateHelper(boolean templateClassLoading, String templateFolder) throws IOException {
+		
 		cfg = new Configuration(Configuration.VERSION_2_3_22);
 		
 		//support for iterable in FreeMarker
@@ -28,7 +29,7 @@ public class TemplateHelper {
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
         
         try {
-        	if ( templateClassLoading ) cfg.setClassForTemplateLoading(this.getClass(), "/" + templateFolder);
+        	if ( templateClassLoading ) cfg.setClassLoaderForTemplateLoading(this.getClass().getClassLoader(), templateFolder);
         	else
         		cfg.setDirectoryForTemplateLoading(new File(templateFolder));
         	

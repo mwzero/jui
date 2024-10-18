@@ -56,7 +56,7 @@ public class JuiApp {
 		log.info("JUI App: Start Initialization");
 		try {
 
-			engine = new TemplateHelper(false, "c:\\temp");
+			engine = new TemplateHelper(true, "/");
 
 			main = new ArrayList<>();
 			main.add(new JuiContainer(engine, ++iContainer));
