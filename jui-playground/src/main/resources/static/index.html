@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUI Playground</title>
-    <!-- Bootstrap CSS -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
@@ -27,110 +25,18 @@
             display: flex;
             flex-direction: column;
             transition: margin-left 0.3s;
-            position: relative; /* Per consentire la sovrapposizione */
-        }
-
-        #editor {
-            flex-grow: 1;
-            padding: 20px;
-        }
-
-        .code-editor {
-            width: 100%;
-            height: 100%;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 5px;
+            position: relative; 
+			z-index: 1; /* Metti il contenuto sotto la sidebar */
+			
         }
 
         #preview-container {
             width: 100%;
-            height: 100%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        #console {
-        	white-space: pre-wrap; /* Mantiene i ritorni a capo e gli spazi */
-            background-color: #1e1e1e;
-            color: #33ff33;
-            font-family: monospace;
+            height: 65vh; /* Occupa il 65% dell'altezza della finestra */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
             padding: 10px;
-            height: 150px;
-            overflow-y: auto;
-            border-top: 2px solid #333;
-            display: none; /* La console è nascosta al caricamento */
-        }
-        
-        footer {
-            background-color: #282c34;
-            color: white;
-            text-align: center;
-            padding: 5px 15px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-        }
-
-        .toggle-link {
-            color: #007bff;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        /* Header modificato */
-        header {
-            background-color: #343a40;
-            color: white;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        header h1 {
-            font-size: 1.25rem; /* Rimpicciolito */
-            margin-left: 15px;
-        }
-
-        .fa-bars {
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        /* Sidebar Collassabile */
-        #sidebar {
-            height: 100%;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: -250px; /* Sidebar nascosta fuori schermo */
-            background-color: #343a40;
-            color: white;
-            padding-top: 60px;
-            overflow-x: hidden;
-            transition: left 0.3s;
-        }
-
-        #sidebar a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            color: white;
-            display: block;
-        }
-
-        #sidebar a:hover {
-            background-color: #575757;
-        }
-
-        #sidebar.active {
-            left: 0; /* Sidebar visibile sovrapponendosi */
-        }
-
-        /* Nascondere il contenuto del main content quando sidebar è aperta */
-        #main-content.sidebar-collapsed {
-            margin-left: 0;
+            border-radius: 5px;
         }
         
         #code-editor {
@@ -138,61 +44,227 @@
 	      //width: 100%;
 	    }
 
+        #preview-container {
+            width: 100%;
+            height: 65vh; /* Occupa il 65% dell'altezza della finestra */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Pannello console */
+		#console {
+		    position: fixed;
+		    bottom: 40px; /* Posizionato sopra il footer */
+		    left: 0;
+		    width: 100%; /* Occupa tutta la larghezza */
+		    white-space: pre-wrap; /* Mantiene i ritorni a capo e gli spazi */
+		    background-color: #1e1e1e;
+		    color: #33ff33;
+		    font-family: monospace;
+		    padding: 10px;
+		    height: 150px;
+		    overflow-y: auto; /* Scorrimento solo all'interno */
+		    border-top: 2px solid #333;
+		    display: none; /* La console è nascosta al caricamento */
+		    z-index: 999; /* Sopra altri elementi */
+		}
+		
+		/* Footer */
+		footer {
+		    background-color: #282c34;
+		    color: white;
+		    text-align: center;
+		    padding: 5px 15px;
+		    display: flex;
+		    justify-content: space-between;
+		    font-size: 0.9rem;
+		    position: fixed;
+		    bottom: 0; /* Sempre nella parte bassa dello schermo */
+		    left: 0;
+		    width: 100%;
+		    height: 40px; /* Altezza del footer */
+		    z-index: 1000; /* Sopra il contenuto principale ma sotto la console */
+		}
+		
+		/* Link del footer per visualizzare la console */
+		footer a {
+		    color: #33ff33;
+		    cursor: pointer;
+		}
+		
+		/* Mostra il pannello console quando attivo */
+		#console.active {
+		    display: block;
+		}
+
+
+        .toggle-link {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Header */
+		header {
+		    background-color: #343a40;
+		    color: white;
+		    padding: 10px 15px;
+		    display: flex;
+		    align-items: center;
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    z-index: 1001; /* Assicurati che l'header sia sopra la sidebar */
+		}
+		
+		header h1 {
+		    font-size: 1.25rem;
+		    margin-left: 15px;
+		}
+		
+		.fa-bars {
+		    cursor: pointer;
+		    font-size: 1.5rem;
+		}
+		
+		/* Sidebar Collassabile */
+		#sidebar {
+		    height: 100%;
+		    width: 250px;
+		    position: fixed;
+		    top: 50px; /* Sotto l'header */
+		    left: -250px; /* Sidebar nascosta fuori schermo */
+		    background-color: #495057; 
+		    color: white;
+		    padding-top: 20px;
+		    overflow-x: hidden;
+		    transition: left 0.3s;
+		    z-index: 1000; /* Sotto l'header */
+		}
+		
+		#sidebar.active {
+		    left: 0; /* Sidebar visibile sovrapponendosi al contenuto, ma sotto l'header */
+		}
+		
+		#sidebar a {
+		    padding: 10px 15px;
+		    text-decoration: none;
+		    font-size: 1.1rem;
+		    color: white;
+		    display: block;
+		}
+		
+		#sidebar a:hover {
+		    background-color: #575757;
+		}
+		
+				/* Overlay per oscurare il contenuto sottostante */
+		#overlay {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    background-color: rgba(0, 0, 0, 0.5); /* Opacità */
+		    z-index: 999; /* Sotto la sidebar */
+		    display: none;
+		}
+		
+		#overlay.active {
+		    display: block;
+		}
+
+		
+		/* Contenuto principale */
+		#main-content {
+		    margin-left: 0;
+		    padding: 80px 20px 20px 20px; /* Aggiunto padding top per non essere coperto dall'header */
+		    transition: margin-left 0.3s;
+		}
+		
+		#main-content.sidebar-collapsed {
+		    margin-left: 250px; /* Sposta il contenuto quando la sidebar è aperta */
+		}
+        
     </style>
 </head>
+
 <body>
 
 	<!-- Sidebar -->
 	<div id="sidebar">
-	    <a href="#">Dashboard</a>
-	    <a href="#">Projects</a>
-	    <a href="#">Settings</a>
-	    <a href="#">Help</a>
+	    <a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+	    <a href="#"><i class="fas fa-folder"></i> Projects</a>
+	    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+	    <a href="#"><i class="fas fa-question-circle"></i> Help</a>
 	</div>
+
 	
+	<!-- Overlay (facoltativo, per oscurare il contenuto) -->
+	<div id="overlay"></div>
+
 	<!-- Header -->
 	<header>
-	    <i class="fas fa-bars" id="toggle-sidebar"></i>
+		<a href="javascript:void(0)" class="close-btn" onclick="toggleSidebar()">
+	        <i class="fas fa-bars"></i> <!-- Icona di chiusura -->
+	    </a>
 	    <h1>JUI Playground</h1>
 	</header>
 	
 	<div id="main-content" class="container-fluid">
-	    <div id="editor" class="container-fluid">
 	        <div class="row">
-	            <!-- Primo editor con dropdown -->
-	            <div class="col-md-6">
-	                <div class="d-flex justify-content-between align-items-center mb-2">
-	                	
-	                	<button id="run-btn" class="btn btn-primary btn-sm">Run Code</button>
-	                    <button id="save-btn" class="btn btn-secondary btn-sm">Save Code</button>
-	                    
-	                    <label for="example-selector">Select Example:</label>
-	                    <select id="example-selector" class="form-select form-select-sm w-50">
-	                    
-	                    
-	                    </select>
-	                </div>
-	                <div id="code-editor"></div>
-	            </div>
+	        	
+	           <div class="col-md-6">
+			    <div class="d-flex justify-content-between align-items-center mb-2">
+			        <!-- Sezione a sinistra: Select Example -->
+			        <div class="d-flex align-items-center flex-grow-1">
+			            <label for="example-selector" class="me-2 mb-0" style="white-space: nowrap;">Select Example:</label>
+			            <select id="example-selector" class="form-select form-select-sm flex-grow-1">
+			                <!-- Opzioni da inserire qui -->
+			            </select>
+			        </div>
+			
+			        <!-- Sezione a destra: Pulsanti Run e Save -->
+			        <div class="d-flex justify-content-end ms-3">
+			            <button id="run-btn" class="btn btn-primary btn-sm me-2">
+			                <i class="fas fa-play"></i> Run 
+			            </button>
+			            <button id="save-btn" class="btn btn-secondary btn-sm">
+			                <i class="fas fa-save"></i> Save 
+			            </button>
+			        </div>
+			    </div>
+			    <div id="code-editor"></div>
+			</div>
+				           
 	            
 	            <div class="col-md-6">
 	                <div class="d-flex justify-content-between align-items-center mb-2">
 	                    <input type="text" id="url-input" class="form-control-sm w-75" placeholder="Enter URL...">
-	                    <button id="open-browser-btn" class="btn btn-info btn-sm">Open in Browser</button>
+	                    <button id="open-browser-btn" class="btn btn-primary btn-sm me-2">
+			                <i class="fa fa-window-maximize" aria-hidden="true"></i> Open 
+			            </button>
 	                </div>
-	                <iframe id="preview-container" class="code-editor" title="Website Preview"></iframe>
+	                <iframe id="preview-container" title="Website Preview"></iframe>
 	            </div>
 	        </div>
-	    </div>
 	    
-	    <div id="console" class="container-fluid mt-3">
-	    </div>
 	</div>
 	
+	
+	
 	<footer class="mt-auto">
-	    <span id="toggle-console" class="toggle-link">Show Console</span>
-	    <span>Web IDE Simulation &copy; 2024</span>
+	    <span id="toggle-console" class="toggle-link">
+	    	<a href="javascript:void(0)" class="close-btn" onclick="toggleConsole()">
+	        	<i class="fas fa-terminal"></i> <!-- Icona di chiusura -->
+	    	</a>
+	    </span>
+	    <span>maurizio.farina@gmail.com - 2024</span>
 	</footer>
+	<div id="console" class="container-fluid mt-3">
+	</div>
+	
 
 	<!-- Bootstrap JS, Popper.js, and dependencies -->
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -201,7 +273,7 @@
   
 	<script>
 	    let currentFileName = ""; // Variabile per mantenere il nome del file selezionato
-	
+		
 	    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' } });
 	    require(['vs/editor/editor.main'], function () {
 	      window.editor = monaco.editor.create(document.getElementById('code-editor'), {
@@ -214,7 +286,11 @@
 	      });
 	    });
 	    
+	    let optionsLoaded = false;
+	    
 	    function loadExamples() {
+	      if (optionsLoaded) return;
+	       
 	      fetch('/api/examples')
 	        .then(response => response.json())
 	        .then(data => {
@@ -233,7 +309,10 @@
 	            exampleList.appendChild(option);
 	          });
 	        });
+	        
+	        optionsLoaded = true;
 	    }
+	    document.getElementById('example-selector').addEventListener('click', loadExamples);
 	    
 	    function loadExampleCode(fileName) {
 	      fetch(`/api/examples/${fileName}`)
@@ -244,8 +323,35 @@
 	          runButton.disabled = false; 
 	        });
 	    }
-    
-	    window.onload = loadExamples;
+	    
+	    	    
+	    
+	    
+	    function setDraftCode() {
+	    	var code = `package src.examples;
+
+import static com.jui.JuiApp.jui;
+
+public class JUIExample {
+	
+	public static void main(String... args) throws FileNotFoundException, IOException {
+		
+		jui.input.header("Input Example", "blue");
+    	
+		//write here JUI code
+		jui.input.header("Input Example", "blue");
+		
+    	jui.start();
+    }
+}
+`
+	    	
+	    	editor.setValue(code);
+	        currentFileName = "JUIExample.java";
+	         
+		}
+    window.onload = setDraftCode;
+	    
 	    
 	</script>
 
@@ -261,9 +367,7 @@
     const openBrowserButton = document.getElementById('open-browser-btn');
     const exampleSelector = document.getElementById('example-selector');
     const consoleDiv = document.getElementById('console');
-    const toggleConsoleLink = document.getElementById('toggle-console');
     const sidebar = document.getElementById('sidebar');
-    const toggleSidebarButton = document.getElementById('toggle-sidebar');
     const mainContent = document.getElementById('main-content');
 
     saveButton.addEventListener('click', function () {
@@ -348,7 +452,7 @@
     });
 
     // Funzione per mostrare/nascondere la console
-    toggleConsoleLink.addEventListener('click', function () {
+    function toggleConsole() {
         if (consoleDiv.style.display === 'block') {
             consoleDiv.style.display = 'none';
             toggleConsoleLink.textContent = 'Hide Console';
@@ -356,17 +460,25 @@
             consoleDiv.style.display = 'block';
             toggleConsoleLink.textContent = 'Show Console';
         }
-    });
+    }
 
-    // Funzione per mostrare/nascondere la sidebar
-    toggleSidebarButton.addEventListener('click', function () {
-        if (sidebar.classList.contains('active')) {
-            sidebar.classList.remove('active');
-        } else {
-            sidebar.classList.add('active');
-        }
-    });
-
+    function toggleSidebar() {
+    
+    	var sidebar = document.getElementById('sidebar');
+	    var overlay = document.getElementById('overlay');
+	    
+	    // Attiva/disattiva la sidebar
+	    sidebar.classList.toggle('active');
+	    
+	    // Mostra/nascondi l'overlay
+	    if (sidebar.classList.contains('active')) {
+	        overlay.classList.add('active');
+	    } else {
+	        overlay.classList.remove('active');
+	    }
+	    
+    }
+    
 </script>
 
 	<script>
