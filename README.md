@@ -12,13 +12,11 @@ Jui comes with a built-in HTTP server to run and serve applications.
 Download the latest JUI Framework release from [JUI GitHub Releases](https://github.com/mwzero/jui/releases) or if you prefer add the following dependency to your POM file:
 
 ```xml
-<dependencies>
-	<dependency>
-		<groupId>com.jui</groupId>
-		<artifactId>jui-core</artifactId>
-		<version>0.0.1</version>
-	</dependency>
-</dependencies>
+<dependency>
+  <groupId>com.jui</groupId>
+  <artifactId>jui-core</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</dependency>
 ```
 
 Note: Publishing JUI to Maven central repository is on the roadmap; 
