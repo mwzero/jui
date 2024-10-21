@@ -60,7 +60,7 @@ Run the following command:
 java -cp jui-0.0.1.jar MapZoomerRecipe.java
 ```
 
-try to navigate to http://localhost:8000/jui
+try to navigate to http://localhost:8000/index.html
 
 <img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
 
