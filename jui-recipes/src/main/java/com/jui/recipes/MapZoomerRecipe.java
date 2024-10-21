@@ -21,6 +21,4 @@ public class MapZoomerRecipe {
     	
     	jui.start();
 	}
-	
-
 }

@@ -32,21 +32,52 @@
 
         #preview-container {
             width: 100%;
-            height: 65vh; /* Occupa il 65% dell'altezza della finestra */
+            height: 80vh; 
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
             padding: 10px;
             border-radius: 5px;
+            background-color: #f5f5f5;
         }
         
-        #code-editor {
-	      height: 65vh; /* Occupa il 65% dell'altezza della finestra */
-	      //width: 100%;
-	    }
+	    /* Stile per il Code Editor */
+		#code-editor {
+		    border: 1px solid #ddd;
+		    height: 80vh; 
+		    background-color: #f9f9f9;
+		    #padding: 10px;
+		}
+		
+		/* Pannello per le icone */
+		#icon-panel {
+		    width: 40px; /* Larghezza fissa per visualizzare solo le icone */
+		    background-color: #343a40;
+		    height: 80vh;
+		    color: white;
+		    padding: 10px 0;
+		    display: flex;
+		    flex-direction: column;
+		}
+		
+		/* Stile per i pulsanti delle icone */
+		.btn-icon {
+		    background-color: transparent;
+		    border: none;
+		    color: white;
+		    margin-bottom: 15px;
+		    font-size: 1.5rem;
+		    cursor: pointer;
+		}
+		
+		.btn-icon:hover {
+		    color: #33ff33; /* Cambia colore al passaggio del mouse */
+		}
+	    
+	    
 
         #preview-container {
             width: 100%;
-            height: 65vh; /* Occupa il 65% dell'altezza della finestra */
+            height: 80vh; /* Occupa il 65% dell'altezza della finestra */
             border: 1px solid #ddd;
             border-radius: 5px;
         }
@@ -216,6 +247,7 @@
 	        <div class="row">
 	        	
 	           <div class="col-md-6">
+	           
 			    <div class="d-flex justify-content-between align-items-center mb-2">
 			        <!-- Sezione a sinistra: Select Example -->
 			        <div class="d-flex align-items-center flex-grow-1">
@@ -225,7 +257,7 @@
 			            </select>
 			        </div>
 			
-			        <!-- Sezione a destra: Pulsanti Run e Save -->
+			        <!-- Sezione a destra: Pulsanti Run e Save 
 			        <div class="d-flex justify-content-end ms-3">
 			            <button id="run-btn" class="btn btn-primary btn-sm me-2">
 			                <i class="fas fa-play"></i> Run 
@@ -234,8 +266,30 @@
 			                <i class="fas fa-save"></i> Save 
 			            </button>
 			        </div>
+			        -->
 			    </div>
-			    <div id="code-editor"></div>
+			    
+				<div class="d-flex">
+				    
+				    <div id="icon-panel" class="d-flex flex-column justify-content-start align-items-center">
+			            
+				        <button id="run-btn" class="btn btn-icon">
+				            <i class="fas fa-play"></i>
+				        </button>
+				        <button id="save-btn" class="btn btn-icon">
+				            <i class="fas fa-save"></i>
+				        </button>
+				        <!--
+				        <button class="btn btn-icon">
+				            <i class="fas fa-cog"></i>
+				        </button>
+				        -->
+				    </div>
+				
+				    <div id="code-editor" class="flex-grow-1">
+				    </div>
+				</div>
+								
 			</div>
 				           
 	            
@@ -257,10 +311,10 @@
 	<footer class="mt-auto">
 	    <span id="toggle-console" class="toggle-link">
 	    	<a href="javascript:void(0)" class="close-btn" onclick="toggleConsole()">
-	        	<i class="fas fa-terminal"></i> <!-- Icona di chiusura -->
+	        	<i class="fas fa-terminal"></i>
 	    	</a>
 	    </span>
-	    <span>maurizio.farina@gmail.com - 2024</span>
+	    <span>maurizio.farina@gmail.com</span>
 	</footer>
 	<div id="console" class="container-fluid mt-3">
 	</div>
@@ -281,7 +335,8 @@
 	        language: 'java',
 	        automaticLayout: true,
 	        theme: "vs-dark",
-	        lineNumbers: "on"
+	        lineNumbers: "on",
+			minimap: { enabled: false }
 			
 	      });
 	    });
