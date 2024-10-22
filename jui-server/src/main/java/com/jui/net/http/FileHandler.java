@@ -22,7 +22,12 @@ public class FileHandler extends BaseHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Oppure specifica un'origine specifica
 		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Content-Range, Content-Disposition, Content-Description");
+		
+		if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+            exchange.sendResponseHeaders(204, -1);
+            return;
+        }
 		
         String endpoint = exchange.getRequestURI().getPath();
         log.debug("HTTP GET file[{}]", endpoint);
