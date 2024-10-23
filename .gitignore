@@ -28,3 +28,4 @@ replay_pid*
 **/*.classpath
 **/*.settings
 **/*.bin
+swa/.$jui.drawio.bkp
