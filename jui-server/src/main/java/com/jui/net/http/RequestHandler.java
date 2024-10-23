@@ -21,7 +21,12 @@ public class RequestHandler extends BaseHandler implements HttpHandler {
 		
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Oppure specifica un'origine specifica
 		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Content-Range, Content-Disposition, Content-Description");
+		
+		if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
+            exchange.sendResponseHeaders(204, -1);
+            return;
+        }
         
         if ("POST".equals(exchange.getRequestMethod())) {
         	

@@ -1,0 +1,211 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s;
+    position: relative; 
+	z-index: 1; /* Metti il contenuto sotto la sidebar */
+	
+}
+
+#preview-container {
+    width: 100%;
+    height: 80vh; 
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+/* Stile per il Code Editor */
+#code-editor {
+    border: 1px solid #ddd;
+    height: 80vh; 
+    background-color: #f9f9f9;
+    #padding: 10px;
+}
+
+/* Pannello per le icone */
+#icon-panel {
+    width: 40px; /* Larghezza fissa per visualizzare solo le icone */
+    background-color: #343a40;
+    height: 80vh;
+    color: white;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Stile per i pulsanti delle icone */
+.btn-icon {
+    background-color: transparent;
+    border: none;
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.btn-icon:hover {
+    color: #33ff33; /* Cambia colore al passaggio del mouse */
+}
+
+
+
+#preview-container {
+    width: 100%;
+    height: 80vh; /* Occupa il 65% dell'altezza della finestra */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Pannello console */
+#console {
+    position: fixed;
+    bottom: 40px; /* Posizionato sopra il footer */
+    left: 0;
+    width: 100%; /* Occupa tutta la larghezza */
+    white-space: pre-wrap; /* Mantiene i ritorni a capo e gli spazi */
+    background-color: #1e1e1e;
+    color: #33ff33;
+    font-family: monospace;
+    padding: 10px;
+    height: 150px;
+    overflow-y: auto; /* Scorrimento solo all'interno */
+    border-top: 2px solid #333;
+    display: none; /* La console è nascosta al caricamento */
+    z-index: 999; /* Sopra altri elementi */
+}
+
+/* Footer */
+footer {
+    background-color: #282c34;
+    color: white;
+    text-align: center;
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    position: fixed;
+    bottom: 0; /* Sempre nella parte bassa dello schermo */
+    left: 0;
+    width: 100%;
+    height: 40px; /* Altezza del footer */
+    z-index: 1000; /* Sopra il contenuto principale ma sotto la console */
+}
+
+/* Link del footer per visualizzare la console */
+footer a {
+    color: #33ff33;
+    cursor: pointer;
+}
+
+/* Mostra il pannello console quando attivo */
+#console.active {
+    display: block;
+}
+
+
+.toggle-link {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Header */
+header {
+    background-color: #343a40;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1001; /* Assicurati che l'header sia sopra la sidebar */
+}
+
+header h1 {
+    font-size: 1.25rem;
+    margin-left: 15px;
+}
+
+.fa-bars {
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+/* Sidebar Collassabile */
+#sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 50px; /* Sotto l'header */
+    left: -250px; /* Sidebar nascosta fuori schermo */
+    background-color: #495057; 
+    color: white;
+    padding-top: 20px;
+    overflow-x: hidden;
+    transition: left 0.3s;
+    z-index: 1000; /* Sotto l'header */
+}
+
+#sidebar.active {
+    left: 0; /* Sidebar visibile sovrapponendosi al contenuto, ma sotto l'header */
+}
+
+#sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    color: white;
+    display: block;
+}
+
+#sidebar a:hover {
+    background-color: #575757;
+}
+
+		/* Overlay per oscurare il contenuto sottostante */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Opacità */
+    z-index: 999; /* Sotto la sidebar */
+    display: none;
+}
+
+#overlay.active {
+    display: block;
+}
+
+
+/* Contenuto principale */
+#main-content {
+    margin-left: 0;
+    padding: 80px 20px 20px 20px; /* Aggiunto padding top per non essere coperto dall'header */
+    transition: margin-left 0.3s;
+}
+
+#main-content.sidebar-collapsed {
+    margin-left: 250px; /* Sposta il contenuto quando la sidebar è aperta */
+}
+
+#capture-area {
+    display: none; /* Nascondiamo il div contenitore temporaneo */
+}

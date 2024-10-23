@@ -1,4 +1,4 @@
-package com.ui.apps.mail;
+package com.ui.apps;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
