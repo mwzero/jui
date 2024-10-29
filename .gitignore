@@ -29,3 +29,5 @@ replay_pid*
 **/*.settings
 **/*.bin
 swa/.$jui.drawio.bkp
+/jui-wasm/target
+/teavm-demo-main/target
