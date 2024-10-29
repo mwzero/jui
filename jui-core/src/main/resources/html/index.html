@@ -135,35 +135,37 @@
 		
 			var elementMapping = [];
 			
-        	/*
-        	* 1. Set JUI element with HTML from JU backend
-        	* 2. Create script element 
-        	*/
 			function setInnerHTML(elm, html) {
-	        
-				elm.innerHTML = html;
-	
-				Array.from(elm.querySelectorAll("script"))
-					.forEach( oldScriptEl => {
-						const newScriptEl = document.createElement("script");
-	  
-						Array.from(oldScriptEl.attributes).forEach( attr => {
-							newScriptEl.setAttribute(attr.name, attr.value) 
-						});
-	  
-	  					const scriptText = document.createTextNode(oldScriptEl.innerHTML);
-	  					newScriptEl.appendChild(scriptText);
-	  
-	  					oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
-  				});
-			  
-				const formElements = document.querySelectorAll("form input, form select, form textarea");
 			
+				elm.innerHTML = html;
+			
+				var oldScripts = elm.querySelectorAll("script");
+				
+				oldScripts.forEach( oldScriptEl => { 
+				
+					var newScriptEl = document.createElement("script");
+			  
+					// Copia tutti gli attributi
+					for (var i = 0; i < oldScriptEl.attributes.length; i++) {
+						var attr = oldScriptEl.attributes[i];
+						newScriptEl.setAttribute(attr.name, attr.value);
+					
+					}
+					
+					newScriptEl.textContent = oldScriptEl.textContent;
+					oldScriptEl.parentNode.replaceChild(newScriptEl, oldScriptEl);
+				
+				});
+			
+				var formElements = elm.querySelectorAll("form input, form select, form textarea");
 				formElements.forEach(function(element) {
 					element.addEventListener("change", handleEvent);
-					element.addEventListener("input", handleEvent); 
+					element.addEventListener("input", handleEvent);
 				});
 			}
+			
+			
+			
 		
     
 			/*

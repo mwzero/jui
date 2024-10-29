@@ -5,9 +5,10 @@ import com.jui.utils.Utils;
 import com.st.DataFrame;
 
 import lombok.Builder;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 @Builder
 public class LinesChart extends WebComponent {
 	
@@ -19,7 +20,7 @@ public class LinesChart extends WebComponent {
 	@Override
 	public String render() {
 		
-		log.debug("Rendering lines chart graph");
+		log.fine("Rendering lines chart graph");
 		
 		String html = """
 				<div id="%s" style="width: %s; height=%s; display: inline-block">

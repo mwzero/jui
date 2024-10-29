@@ -12,7 +12,6 @@ import com.google.gson.JsonParser;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class DataSetJson extends DataSet {
 	
     private String filePath;

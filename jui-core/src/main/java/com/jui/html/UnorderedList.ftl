@@ -1,13 +1,14 @@
 <ul class="nav flex-column">
-	<#list items as item>
+  {{#items}}
     <li class="nav-item">
-    	<#if item.link??>
-        	<a class="nav-link" href="#" data-url="${(item.link)!"#"}">
-        <#else>
-        	<a class="nav-link" href="#" data-content="${(item.content)!"#"}">
-        </#if>
-            <i class="bi bi-${item.icon}-fill"></i> <span> ${item.label}</span>
+      {{#link}}
+        <a class="nav-link" href="#" data-url="{{link}}">
+      {{/link}}
+      {{^link}}
+        <a class="nav-link" href="#" data-content="{{content}}">
+      {{/link}}
+          <i class="bi bi-{{icon}}-fill"></i> <span>{{label}}</span>
         </a>
     </li>
-    </#list>
+  {{/items}}
 </ul>

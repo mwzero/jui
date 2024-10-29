@@ -13,16 +13,15 @@ import com.jui.html.Text;
 import com.jui.html.UnorderedList;
 import com.jui.html.UnorderedListItem;
 import com.jui.processors.MarkdownProcessor;
-import com.jui.templates.TemplateHelper;
 import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 @Getter
 @Setter
-@Slf4j
+@Log
 public class JuiContainer implements AutoCloseable {
 	
 	private String cliendId;
@@ -34,7 +33,7 @@ public class JuiContainer implements AutoCloseable {
 	
 	public JuiContainer(TemplateHelper engine, int counter) {
 		
-		log.debug("New JuiContainer[{}]", counter);
+		log.fine("New JuiContainer[%d]".formatted(counter));
 		cliendId = "div_" + counter;
 	
 		context = new WebContext(engine);

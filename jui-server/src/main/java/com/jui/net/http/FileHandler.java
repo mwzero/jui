@@ -7,9 +7,9 @@ import java.io.OutputStream;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class FileHandler extends BaseHandler implements HttpHandler {
 
 	String docRoot;
@@ -30,14 +30,14 @@ public class FileHandler extends BaseHandler implements HttpHandler {
         }
 		
         String endpoint = exchange.getRequestURI().getPath();
-        log.debug("HTTP GET file[{}]", endpoint);
+        log.fine("HTTP GET file[%s]".formatted(endpoint));
         
         if ( docRoot != "" ) endpoint = docRoot + endpoint.substring(1);
         
         InputStream is = getClass().getResourceAsStream("/" + endpoint);
         if ( is == null ) {
         	
-			log.error("HTTP GET [{}] not found", endpoint);
+			log.severe("HTTP GET [%s] not found".formatted(endpoint));
 			HttpStatus.RESOURCE_NOT_FOUND(exchange, "Resource %s not found".formatted(endpoint));
 			return;
 		} 

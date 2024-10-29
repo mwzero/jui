@@ -6,12 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.jui.html.WebComponent;
-import com.jui.templates.TemplateHelper;
 
 import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class WebContext {
 	
 	TemplateHelper engine;

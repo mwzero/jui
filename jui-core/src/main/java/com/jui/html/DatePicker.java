@@ -1,8 +1,8 @@
 package com.jui.html;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class DatePicker extends WebComponent {
 	
     private String label;
@@ -16,7 +16,7 @@ public class DatePicker extends WebComponent {
 	@Override
 	public String render() {
 		
-		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
+		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
 		
 		return """
 				<div class="mb-3">

@@ -18,15 +18,15 @@ import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
 import com.jui.net.http.JuiRequestHandler;
 import com.jui.net.http.JuiWebSocketHandler;
-import com.jui.templates.TemplateHelper;
 import com.jui.utils.Utils;
 import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 @Getter
 public class JuiApp {
 	
@@ -56,7 +56,7 @@ public class JuiApp {
 		log.info("JUI App: Start Initialization");
 		try {
 
-			engine = new TemplateHelper(true, "/");
+			engine = new TemplateHelper(true, null);
 
 			main = new ArrayList<>();
 			main.add(new JuiContainer(engine, ++iContainer));
@@ -67,7 +67,7 @@ public class JuiApp {
 			input = main.get(0).input;
 
 		} catch (IOException e) {
-			log.error("Impossible to use TemplateEngine [{}]", e.getLocalizedMessage());
+			log.severe("Impossible to use TemplateEngine [%s]".formatted(e.getLocalizedMessage()));
 		}
 	}
 	

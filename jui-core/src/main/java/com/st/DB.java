@@ -3,9 +3,9 @@ package com.st;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class DB {
 	
     public static Connection getConnection(String driver, String url, String username, String password) throws Exception {
@@ -15,7 +15,7 @@ public class DB {
 			
 		} catch (ClassNotFoundException e) {
 			
-			log.error("Impossible to load driver", e);
+			log.severe(e.getLocalizedMessage());
 			throw e;
 		}
 		
@@ -24,7 +24,7 @@ public class DB {
 			return conn;
 		} catch ( Exception err) {
 			
-			log.error("Impossible to get a connection from [{}] with [{}]. Error[{}]", url, username, err.getLocalizedMessage());
+			log.severe("Impossible to get a connection from [%s] with [%s]. Error[%s]".formatted(url, username, err.getLocalizedMessage()));
 			throw err;
 			
 		}

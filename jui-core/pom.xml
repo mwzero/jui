@@ -12,29 +12,25 @@
 	<properties></properties>
 
 	<dependencies>
-		
+	
+		<!--https://github.com/samskivert/jmustache -->
+		<dependency>
+		    <groupId>com.samskivert</groupId>
+		    <artifactId>jmustache</artifactId>
+		    <version>1.16</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.jui</groupId>
 			<artifactId>jui-server</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
-		
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-		</dependency>
-
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-		</dependency>
-		
 		<dependency>
         	<groupId>org.apache.commons</groupId>
         	<artifactId>commons-csv</artifactId>

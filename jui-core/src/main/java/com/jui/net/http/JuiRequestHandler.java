@@ -13,15 +13,16 @@ import com.jui.model.JuiMessage;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public class JuiRequestHandler extends BaseHandler {
 	
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		
-		log.debug("Handling page");
+		log.fine("Handling page");
 		exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*"); // Oppure specifica un'origine specifica
 		exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
 		exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type, Content-Range, Content-Disposition, Content-Description");
@@ -71,7 +72,7 @@ public class JuiRequestHandler extends BaseHandler {
 		} catch (Exception e) {
 			
 			pageStatus = 500;
-			log.error("Request handling Err[{}]", e.getLocalizedMessage());
+			log.severe("Request handling Err[%s]".formatted(e.getLocalizedMessage()));
 			response = """
 					{
 						"error": "%s"
@@ -90,7 +91,7 @@ public class JuiRequestHandler extends BaseHandler {
             os.close();
 
         } catch (IOException e) {
-        	log.error("Something wrong sending Error",  e.getLocalizedMessage());
+        	log.severe("Something wrong sending Error.[%s]".formatted(e.getLocalizedMessage()));
         	
         }
     }
