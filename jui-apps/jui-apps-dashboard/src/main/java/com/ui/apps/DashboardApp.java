@@ -8,9 +8,10 @@ import java.util.Map;
 
 import com.st.DataFrame;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public class DashboardApp {
 
     public static void main(String[] args) throws Exception {
@@ -41,7 +42,7 @@ public class DashboardApp {
     	
     	} catch ( Exception err) {
     		
-    		log.error(err.getLocalizedMessage());
+    		log.severe(err.getLocalizedMessage());
     	}
     	
     	jui.start();
