@@ -13,9 +13,10 @@ import com.jui.net.wss.WebSocketHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import lombok.Builder;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 @Builder
 public class JuiServer {
 	
@@ -29,7 +30,7 @@ public class JuiServer {
 	
 	public void start() {
 		
-		log.info("Starting JUI server. DocRoot[{}]", docRoot);
+		log.info("Starting JUI server. DocRoot[%s]".formatted(docRoot));
 		HttpServer server = null;
 		try {
 			server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -53,11 +54,11 @@ public class JuiServer {
 		        wss.start();    
 	        }
 	        
-	        log.info("Server is running on port [{}]", port);
+	        log.info("Server is running on port [%s]".formatted(port));
 	        
 		} catch (IOException e) {
 			
-			log.error("HttpServer not started. Error[{}]", e.getLocalizedMessage());
+			log.severe("HttpServer not started. Error[%s]".formatted(e.getLocalizedMessage()));
 		}
 	}
 		

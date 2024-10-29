@@ -10,9 +10,10 @@ import java.util.stream.Collectors;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public abstract class BaseHandler implements HttpHandler {
 	
 	
@@ -43,7 +44,7 @@ public abstract class BaseHandler implements HttpHandler {
 		
 		String endpoint = exchange.getRequestURI().getPath();
         String queryParameters =  exchange.getRequestURI().getQuery();
-        log.debug("Managing endpoint[{}] parameters[{}]", endpoint, queryParameters);
+        log.fine("Managing endpoint[%s] parameters[%s]".formatted(endpoint, queryParameters));
         
         return queryToMap(queryParameters);
 	}
@@ -51,7 +52,7 @@ public abstract class BaseHandler implements HttpHandler {
 	protected Map<String, String> queryToMap(String query) {
         
 		if(query == null) {
-			log.warn("Query params is null");
+			log.warning("Query params is null");
             return null;
         }
         

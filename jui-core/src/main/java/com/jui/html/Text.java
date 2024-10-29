@@ -1,8 +1,9 @@
 package com.jui.html;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public class Text extends WebComponent {
 	
     private String text;
@@ -21,7 +22,7 @@ public class Text extends WebComponent {
 	@Override
 	public String render() {
 		
-		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
+		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
 		
 		if ( input ) {
 			

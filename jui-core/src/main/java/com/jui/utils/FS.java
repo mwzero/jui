@@ -23,12 +23,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class FS {
 	
-	public static Reader getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
+	public static Path getFilePath(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
 		
 		if ( endpoint.startsWith("http") )  {
 			
@@ -42,24 +42,28 @@ public class FS {
 	        	Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
 	        }
 	        
-	        InputStream fis = Files.newInputStream(tempFile);
-	        return new InputStreamReader(fis);
-			
+	        return tempFile;
 		} 
 		
 		Path pathFile;
 		if ( isClassLoading(options)) {
 			
-			URI uri = ClassLoader.getSystemResource("").toURI();
-			String mainPath = Paths.get(uri).toString();
 			
-			pathFile = Paths.get(mainPath ,endpoint);
+			URI uri = FS.class.getClassLoader().getResource(endpoint).toURI();
+			pathFile = Paths.get(uri);
 	    	
 		} else {
 			
 			pathFile = Paths.get(endpoint);
 		}
-	    	
+		
+		return pathFile;
+		
+	}
+	public static Reader getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
+		
+		Path pathFile = getFilePath(endpoint, options);
+	        
 		if (endpoint.endsWith(".zip")) {
 			
 			InputStream fis = Files.newInputStream(pathFile);
@@ -132,7 +136,7 @@ public class FS {
 
     public static void zipFiles(String sourceDirPath, String zipFilePath) throws IOException {
     	
-    	log.debug("Zipping files from [{}] to [{}]", sourceDirPath, zipFilePath);
+    	log.fine("Zipping files from [%s] to [%s]".formatted(sourceDirPath, zipFilePath));
         File sourceDir = new File(sourceDirPath);
         try (FileOutputStream fos = new FileOutputStream(zipFilePath);
              ZipOutputStream zipOut = new ZipOutputStream(fos)) {

@@ -1,20 +1,18 @@
 package com.jui.html;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jui.templates.TemplateHelper;
+import com.jui.TemplateHelper;
 
-import freemarker.template.TemplateException;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 @Getter
 @Setter
-@Slf4j
+@Log
 public abstract class WebComponent {
 	
 	String Id;
@@ -38,22 +36,17 @@ public abstract class WebComponent {
 	
 	public String render() {	
 		
-		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
+		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
 
 		Map<String, Object> variables = this.getVariables();
 
 		try {
 			return this.getEngine().renderTemplate(this.getTemplateName(), variables);
 
-		} catch (TemplateException | IOException e) {
+		} catch ( Exception e) {
 			
-			log.error("Error processing. Error [{}]", e.getLocalizedMessage());
-			log.error("Error freeamrker template", e);
+			log.severe(e.getLocalizedMessage());
 			
-		}
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		return "";

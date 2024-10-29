@@ -34,7 +34,7 @@ public class DataSetDB extends DataSet {
             }
             data.add(row);
         }
-        connection.close();
+        //connection.close();
     }
 }
 

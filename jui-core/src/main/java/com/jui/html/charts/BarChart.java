@@ -4,9 +4,10 @@ import com.jui.html.WebComponent;
 import com.st.DataFrame;
 
 import lombok.Builder;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 @Builder
 public class BarChart extends WebComponent {
 	
@@ -18,7 +19,7 @@ public class BarChart extends WebComponent {
 	@Override
 	public String render() {
 		
-		log.debug("Rendering chart lines");
+		log.fine("Rendering chart lines");
 		
 		String html = """
 				<div id="%s" style="max-width: %s; max_height=%s; display: inline-block">

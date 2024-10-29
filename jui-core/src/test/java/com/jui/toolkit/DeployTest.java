@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
-@Slf4j
+@Log
 public class DeployTest {
 	
 	@Test
@@ -21,7 +21,7 @@ public class DeployTest {
     	
     	String deployFile = deploy.getDeployFile();
     	
-    	log.info("Deploy to [{}]", deployFile);
+    	log.info("Deploy to [%s]".formatted(deployFile));
         	
     }
 

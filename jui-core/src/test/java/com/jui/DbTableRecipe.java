@@ -9,6 +9,7 @@ import com.st.DataFrame;
 
 import java.io.File;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
@@ -31,6 +32,7 @@ public class DbTableRecipe {
     	
     	jui.table("Simple Table", 
     			st.read_sql_query( connection, "select id, first_name, second_name from test"));
+    	
     	
     	jui.table("CSV from Table",
     			import_csv("city", "cities.csv", "select * from city", connection));
@@ -58,10 +60,10 @@ public class DbTableRecipe {
 	
 	public static DataFrame import_csv(String tableName, String endpoint, String query,  Connection conn) throws Exception {
     	
-    	Reader file = FS.getFile(endpoint, Map.of("classLoading", "True"));
+    	Path file = FS.getFilePath(endpoint, Map.of("classLoading", "True"));
     	Statement stmt = conn.createStatement();
         stmt.execute(
-        		"CREATE TABLE %s AS SELECT * FROM CSVREAD('%s')".formatted(tableName, file));
+        		"CREATE TABLE %s AS SELECT * FROM CSVREAD('%s')".formatted(tableName, file.toAbsolutePath()));
     	
     	return st.read_sql_query(conn, query);
     }

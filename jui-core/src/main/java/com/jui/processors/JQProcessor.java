@@ -9,10 +9,11 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import lombok.Builder;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Builder
-@Slf4j
+@Log
 public class JQProcessor {
 	
 	String workingFolder;
@@ -43,13 +44,13 @@ public class JQProcessor {
         Process process = processBuilder.start();
 
         if ( jsonString != null ) {
-	        log.trace("Writing json string to process input stream");
+	        log.finer("Writing json string to process input stream");
 	        BufferedWriter processInput = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
 	        processInput.write(jsonString);
 	        processInput.close(); 
         }
 
-        log.trace("Reading jq output");
+        log.finer("Reading jq output");
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath));
 
@@ -62,7 +63,7 @@ public class JQProcessor {
         writer.close();
         reader.close();
 
-        log.trace("waiting for process ending");
+        log.finer("waiting for process ending");
         int exitCode = process.waitFor();
         
         return exitCode;

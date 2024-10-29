@@ -1,8 +1,9 @@
 package com.jui.recipes;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public class ConfifurationEnvironment  {
 
 	public static void settingProxy() {
@@ -15,7 +16,7 @@ public class ConfifurationEnvironment  {
 
         if ( useProxy ) {
         	
-        	log.info("Setting proxy to[{}:{}]", proxyUrl, proxyPort );
+        	log.info("Setting proxy to[%s:%s]".formatted(proxyUrl, proxyPort ));
         	System.setProperty("http.proxyHost", proxyUrl);
         	System.setProperty("http.proxyPort", proxyPort);
         	System.setProperty("https.proxyHost", proxyUrl);

@@ -8,9 +8,10 @@ import com.jui.html.Slider;
 import com.jui.html.Text;
 import com.jui.html.WebComponent;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public class JuiAnnotationHelper {
 	
 	public static void write ( WebContext context, Object obj ) {
@@ -53,7 +54,7 @@ public class JuiAnnotationHelper {
 		                
 				} catch (IllegalArgumentException e) {
 					
-					log.warn("Somthng wrong adding object.Err[{}]", e.getLocalizedMessage());
+					log.warning("Somthng wrong adding object.Err[%s]".formatted(e.getLocalizedMessage()));
 				}
 				
 			}

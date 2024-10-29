@@ -1,8 +1,9 @@
 package com.jui.html;
 
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Log
 public class ColorPicker extends WebComponent {
 	
     private String label;
@@ -16,7 +17,7 @@ public class ColorPicker extends WebComponent {
 	@Override
 	public String render() {
 		
-		log.debug("Rendering [{}] [{}]", this.getId(), this.getKey());
+		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
 		
 		return """
 				<div class="mb-3">
