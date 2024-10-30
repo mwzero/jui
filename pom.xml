@@ -32,14 +32,11 @@
     	
 		
     <module>jui-core</module>
-    <module>jui-server</module>
-    <module>jui-server-grizzly</module>
-
-    <module>jui-playground</module>
+    <module>jui-core-st</module>
+    <module>jui-core-server</module>
 	
-    <!-- modules not included in JUI Core library -->
+    <module>jui-playground</module>
     <module>jui-recipes</module>
-    <module>jui-sandbox</module>
     
     <!-- apps -->
     <module>jui-apps</module>
@@ -52,13 +49,23 @@
     <dependencies>
       	
 			
-      <dependency>
-        				
-        <groupId>com.jui</groupId>
-        <artifactId>jui-core</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-        			
-      </dependency>
+		<dependency>
+			<groupId>com.jui</groupId>
+			<artifactId>jui-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	  
+		<dependency>
+			<groupId>com.jui</groupId>
+			<artifactId>jui-core-st</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	  
+	    <dependency>
+			<groupId>com.jui</groupId>
+			<artifactId>jui-core-server</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
       			
 			
       <dependency>

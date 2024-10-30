@@ -2,10 +2,10 @@ package com.jui.builders;
 
 import java.util.List;
 
+import com.jui.MarkdownProcessor;
 import com.jui.WebContext;
 import com.jui.html.*;
 import com.jui.html.FormButton.ButtonType;
-import com.jui.processors.MarkdownProcessor;
 
 public class InputBuilder extends BaseBuilder {
 	

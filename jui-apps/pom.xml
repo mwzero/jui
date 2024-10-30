@@ -16,6 +16,7 @@
 	</properties>
 	<modules>
 		<module>jui-apps-dashboard</module>
+		<module>jui-apps-grizzly</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

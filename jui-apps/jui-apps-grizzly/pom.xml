@@ -7,7 +7,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jui-core</artifactId>
+	<artifactId>jui-apps-grizzly</artifactId>
 
 	<properties></properties>
 
@@ -15,21 +15,30 @@
 	
 		<dependency>
 			<groupId>com.jui</groupId>
-			<artifactId>jui-core-server</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>jui-core</artifactId>
 		</dependency>
 		
 		<dependency>
-			<groupId>com.jui</groupId>
-			<artifactId>jui-core-st</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-server</artifactId>
+			<version>2.2.0</version>
 		</dependency>
-	
-		<!--https://github.com/samskivert/jmustache -->
+
 		<dependency>
-		    <groupId>com.samskivert</groupId>
-		    <artifactId>jmustache</artifactId>
-		    <version>1.16</version>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-container-grizzly-server</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.tyrus.bundles</groupId>
+			<artifactId>tyrus-standalone-client</artifactId>
+			<version>2.1.5</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 		</dependency>
 
 		<dependency>
@@ -43,14 +52,10 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!-- H2 Database JDBC Driver -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.2.224</version>
-            <scope>test</scope>
-        </dependency>
-
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -58,7 +63,9 @@
 			<scope>test</scope>
 		</dependency>
 
+
 	</dependencies>
+
 
 	<build>
 		<resources>
@@ -118,14 +125,6 @@
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
 				</configuration>
-			</plugin>
-			<plugin>
-			  <groupId>org.apache.maven.plugins</groupId>
-			  <artifactId>maven-dependency-plugin</artifactId>
-			  <configuration>
-				<excludeArtifactIds>junit-jupiter-engine, lombok, h2</excludeArtifactIds>
-				<excludeTransitive>true</excludeTransitive>
-			  </configuration>
 			</plugin>
 		</plugins>
 	</build>
