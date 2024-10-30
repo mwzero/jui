@@ -16,20 +16,17 @@
 		<dependency>
 			<groupId>com.jui</groupId>
 			<artifactId>jui-core-server</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.jui</groupId>
 			<artifactId>jui-core-st</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	
 		<!--https://github.com/samskivert/jmustache -->
 		<dependency>
 		    <groupId>com.samskivert</groupId>
 		    <artifactId>jmustache</artifactId>
-		    <version>1.16</version>
 		</dependency>
 
 		<dependency>
