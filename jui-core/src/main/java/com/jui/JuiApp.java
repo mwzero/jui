@@ -160,8 +160,8 @@ public class JuiApp {
 		
 		if ( attrsBuilder != null ) {
 			JuiAppAttributes attrs = attrsBuilder.build();
-			if ( attrs.getRootDoc() != null)
-				rootDoc = "html-" + attrs.getRootDoc() + "/";
+			if ( attrs.layout != null)
+				rootDoc = "html-" + attrs.layout + "/";
 		}
 		
 		this.start(rootDoc, classLoading, host, port);

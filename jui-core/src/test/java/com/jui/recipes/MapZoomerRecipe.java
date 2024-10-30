@@ -1,4 +1,4 @@
-package com.jui;
+package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
 

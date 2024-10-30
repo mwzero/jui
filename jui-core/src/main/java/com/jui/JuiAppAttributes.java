@@ -10,6 +10,4 @@ public class JuiAppAttributes {
 	String page;
 	String layout;
 	
-	String rootDoc;
-	
 }

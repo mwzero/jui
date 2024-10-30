@@ -1,4 +1,4 @@
-package com.jui.examples;
+package com.jui.recipes.extra;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
@@ -24,7 +24,7 @@ public class Expenses {
 		
 		Connection  connection = DB.getConnection("org.h2.Driver","jdbc:h2:~/expensesDB", "", "");
 		
-		jui.set_page_config().rootDoc("sidebar");
+		jui.set_page_config().layout("sidebar");
 		
 		// Sidebar with instructions
 		jui.sidebar.markdown("""
