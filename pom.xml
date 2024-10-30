@@ -34,6 +34,9 @@
     <module>jui-core</module>
     <module>jui-core-st</module>
     <module>jui-core-server</module>
+    
+    <!--  -->
+    <module>jui-toolkits</module>
 	
     <module>jui-playground</module>
     <module>jui-recipes</module>

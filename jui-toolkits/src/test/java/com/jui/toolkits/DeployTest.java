@@ -1,4 +1,4 @@
-package com.jui.toolkit;
+package com.jui.toolkits;
 
 import java.io.IOException;
 
