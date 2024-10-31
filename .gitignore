@@ -31,3 +31,6 @@ replay_pid*
 swa/.$jui.drawio.bkp
 /jui-wasm/target
 /teavm-demo-main/target
+/jui-sandbox/target
+/jui-server-grizzly/target
+/jui-server/target
