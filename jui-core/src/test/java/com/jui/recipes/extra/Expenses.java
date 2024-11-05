@@ -12,7 +12,7 @@ import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
-import com.jui.JuiContainer;
+import com.jui.html.JuiContainer;
 import com.st.DB;
 
 

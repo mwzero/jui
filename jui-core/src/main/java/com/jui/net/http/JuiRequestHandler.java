@@ -11,10 +11,8 @@ import com.jui.JuiApp;
 import com.jui.model.JuiContent;
 import com.jui.model.JuiMessage;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 public class JuiRequestHandler extends BaseHandler {

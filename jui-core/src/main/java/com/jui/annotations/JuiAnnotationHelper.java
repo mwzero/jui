@@ -3,13 +3,12 @@ package com.jui.annotations;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import com.jui.WebContext;
-import com.jui.html.Slider;
-import com.jui.html.Text;
 import com.jui.html.WebComponent;
+import com.jui.html.WebContext;
+import com.jui.html.base.tags.Slider;
+import com.jui.html.base.tags.Text;
 
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 public class JuiAnnotationHelper {

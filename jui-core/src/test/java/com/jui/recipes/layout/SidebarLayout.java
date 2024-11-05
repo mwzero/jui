@@ -2,9 +2,7 @@ package com.jui.recipes.layout;
 
 import static com.jui.JuiApp.jui;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.LogManager;
+import com.jui.tests.utils.TestUtils;
 
 import lombok.extern.java.Log;
 
@@ -13,12 +11,7 @@ public class SidebarLayout {
 
 	public static void main(String[] args)  {
 
-		//VM arguments -Djava.util.logging.config.file=src/test/resources/logging.properties
-		try (InputStream inputStream = SidebarLayout.class.getResourceAsStream("/logging.properties")) {
-		    LogManager.getLogManager().readConfiguration(inputStream);
-		} catch (final IOException e) {
-			log.severe("Could not load default logging.properties file.Err: " + e.getMessage());
-		}
+		TestUtils.initializedLogManager();
 		
 		jui.set_page_config()
 			.layout("sidebar")

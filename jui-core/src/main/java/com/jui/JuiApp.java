@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.jui.JuiAppAttributes.JuiAppAttributesBuilder;
-import com.jui.builders.ChartBuilder;
-import com.jui.builders.InputBuilder;
-
-import com.jui.html.Button;
-import com.jui.html.Divider;
-import com.jui.html.Table;
-import com.jui.html.Text;
+import com.jui.helpers.TemplateHelper;
+import com.jui.html.JuiContainer;
 import com.jui.html.WebComponent;
+import com.jui.html.base.builders.InputBuilder;
+import com.jui.html.base.tags.Button;
+import com.jui.html.base.tags.Divider;
+import com.jui.html.base.tags.Table;
+import com.jui.html.base.tags.Text;
+import com.jui.html.charts.builders.ChartBuilder;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
 import com.jui.net.http.JuiRequestHandler;
@@ -24,7 +25,6 @@ import com.st.DataFrame;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 @Getter

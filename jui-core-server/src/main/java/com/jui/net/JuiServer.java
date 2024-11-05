@@ -14,7 +14,6 @@ import com.sun.net.httpserver.HttpServer;
 
 import lombok.Builder;
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 @Builder
