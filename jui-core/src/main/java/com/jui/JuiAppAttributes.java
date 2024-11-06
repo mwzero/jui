@@ -7,7 +7,6 @@ import lombok.Getter;
 @Getter
 public class JuiAppAttributes {
 
-	String page;
 	String layout;
 	
 }

@@ -32,7 +32,7 @@ public class Input extends WebComponent {
 	}
 
 	@Override
-	public String render() {
+	public String getHtml() {
 		
 		if ( input ) {
 			

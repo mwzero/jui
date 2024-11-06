@@ -14,8 +14,7 @@ public class SidebarLayout {
 		TestUtils.initializedLogManager();
 		
 		jui.set_page_config()
-			.layout("sidebar")
-			.page("");
+			.layout("sidebar");
 		
 		jui.markdown("""
         		# Esempio SideBar

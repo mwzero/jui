@@ -1,5 +1,6 @@
 package com.jui.html.base.tags;
 
+import com.jui.helpers.TemplateHelper;
 import com.jui.html.WebComponent;
 
 public class FormButton extends WebComponent {
@@ -27,7 +28,7 @@ public class FormButton extends WebComponent {
     }
 
 	@Override
-	public String render() {
+	public String getHtml() {
 		
 		return """
 				<button class="btn btn-%s">%s</button>

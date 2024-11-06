@@ -18,7 +18,7 @@ public class LinesChart extends WebComponent {
 	int width;
 	
 	@Override
-	public String render() {
+	public String getHtml() {
 		
 		log.fine("Rendering lines chart graph");
 		

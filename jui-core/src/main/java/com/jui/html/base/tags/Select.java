@@ -24,7 +24,7 @@ public class Select extends WebComponent {
 	}
 
 	@Override
-	public String render() {
+	public String getHtml() {
 		
 		String html = "";
 		

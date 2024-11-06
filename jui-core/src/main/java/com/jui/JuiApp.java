@@ -17,8 +17,10 @@ import com.jui.html.base.tags.Text;
 import com.jui.html.charts.builders.ChartBuilder;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
+
 import com.jui.net.http.JuiRequestHandler;
 import com.jui.net.http.JuiWebSocketHandler;
+
 import com.jui.utils.Utils;
 import com.st.DataFrame;
 
@@ -48,7 +50,7 @@ public class JuiApp {
 	public ChartBuilder chart;
 	public InputBuilder input;
 	
-	//Attributes
+	//Attributes Builder
 	JuiAppAttributesBuilder attrsBuilder;
 	
 	protected JuiApp() {
@@ -119,7 +121,22 @@ public class JuiApp {
 
 		for (WebComponent component : this.main.get(0).getContext().getLinkedMapContext().values()) {
 			
-			html.append(component.render());
+			
+			log.fine("Rendering [%s] [%s]".formatted(component.getId(), component.getKey()));
+
+			if ( component.getHtml() != null ) html.append( component.getHtml() );
+			else {
+				Map<String, Object> variables = component.getVariables();
+	
+				try {
+					html.append( engine.renderTemplate(component.getTemplateName(), variables));
+	
+				} catch ( Exception e) {
+					
+					log.severe(e.getLocalizedMessage());
+					
+				}
+			}  
 			
 		}
 		
@@ -141,7 +158,21 @@ public class JuiApp {
 		if ( this.sidebar.getContext().getLinkedMapContext() != null) {
 			StringBuilder sidebar = new StringBuilder();
 			for (WebComponent component : this.sidebar.getContext().getLinkedMapContext().values()) {
-				sidebar.append(component.render());
+				
+				
+				log.fine("Rendering [%s] [%s]".formatted(component.getId(), component.getKey()));
+
+				Map<String, Object> variables = component.getVariables();
+
+				try {
+					sidebar.append( engine.renderTemplate(component.getTemplateName(), variables));
+
+				} catch ( Exception e) {
+					
+					log.severe(e.getLocalizedMessage());
+					
+				}
+				
 			}
 			content.setSidebar(sidebar.toString());
 		} else
@@ -176,6 +207,7 @@ public class JuiApp {
 			.docRoot(docRoot)
 			.host(host)
 			.port(port)
+			.useWSS(true)
 			.wssPort(8025)
 		.build()
 		.start();
@@ -193,15 +225,11 @@ public class JuiApp {
 
 	public JuiAppAttributesBuilder set_page_config() {
 		
-		
 		attrsBuilder =  JuiAppAttributes.builder();
 		return attrsBuilder;
 		
-		
-		// TODO Auto-generated method stub
-		
 	}
-
+	
 	public JuiContainer[] columns(Map<String, Integer> of) {
 		return null;
 	}

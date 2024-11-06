@@ -11,8 +11,6 @@ import lombok.Builder;
 
 public class WebContext {
 	
-	TemplateHelper engine;
-	
 	//contains webcomponent 
 	LinkedHashMap<String, WebComponent> context;
 	
@@ -22,22 +20,19 @@ public class WebContext {
 	int i; 
 	
 	@Builder
-	public WebContext(TemplateHelper engine) {
+	public WebContext() {
 	
 		this.i=0;
-		this.engine = engine;
 		this.context = new LinkedHashMap<>();
 		this.relations = new LinkedHashMap<>();
 		this.elementPostData = new LinkedHashMap<>();
 		
 	}
 	
-	
 	public WebComponent add(WebComponent component) {
 		
 		String uuid = "c"+(++i);
 		component.setKey(uuid);
-		component.setEngine(engine);
 		this.context.put(uuid, component);
 		
 		String postDataElement = component.getPostData();

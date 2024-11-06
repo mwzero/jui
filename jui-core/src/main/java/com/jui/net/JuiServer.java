@@ -21,11 +21,13 @@ public class JuiServer {
 	
 	BaseHandler juiHttpHandler;
 	WebSocketHandler juiWebSocketHandler;
+	
 	String docRoot;
 	boolean classLoading;
 	String host;
 	int port;
 	int wssPort;
+	boolean useWSS;
 	
 	public void start() {
 		
@@ -45,12 +47,14 @@ public class JuiServer {
 	        server.setExecutor(null); // creates a default executor
 	        server.start();
 	        
-	        if ( wssPort != 0 ) {
+	        if ( useWSS) {
+
 	        	
 		        SimpleWebSocketServer wss = SimpleWebSocketServer.create(new InetSocketAddress(wssPort), 8025);
 				wss.createContext("/echo", new EchoWebSocketHandler());
 				wss.createContext("/ws/jui", juiWebSocketHandler);
 		        wss.start();    
+		        log.info("WSS listening on port[%d]".formatted(wssPort));
 	        }
 	        
 	        log.info("Server is running on port [%s]".formatted(port));

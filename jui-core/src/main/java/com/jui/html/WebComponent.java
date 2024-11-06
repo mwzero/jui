@@ -18,7 +18,6 @@ public abstract class WebComponent {
 	String Id;
 	String key;
 	String data;
-	TemplateHelper engine;
 	
 	protected Runnable onServerSide;
 	
@@ -34,25 +33,10 @@ public abstract class WebComponent {
 		return null;
 	}
 	
-	public String render() {	
-		
-		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
-
-		Map<String, Object> variables = this.getVariables();
-
-		try {
-			return this.getEngine().renderTemplate(this.getTemplateName(), variables);
-
-		} catch ( Exception e) {
-			
-			log.severe(e.getLocalizedMessage());
-			
-		}
-
-		return "";
-	}
+	public String getHtml() { return null;}
 	
-	public String getTemplateName() { 
+	public String getTemplateName() {
+		
 		return "%s/%s".formatted(
 				this.getClass().getPackage().getName()
 				,this.getClass().getSimpleName());

@@ -17,7 +17,7 @@ public class BarChart extends WebComponent {
 	int max_width;
 	
 	@Override
-	public String render() {
+	public String getHtml() {
 		
 		log.fine("Rendering chart lines");
 		

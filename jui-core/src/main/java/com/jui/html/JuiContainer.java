@@ -28,7 +28,7 @@ public class JuiContainer implements AutoCloseable {
 	private String cliendId;
 	private WebContext context;
 	
-	//handlers
+	//builders
 	public ChartBuilder chart; 
 	public InputBuilder input;
 	
@@ -37,7 +37,7 @@ public class JuiContainer implements AutoCloseable {
 		log.fine("New JuiContainer[%d]".formatted(counter));
 		cliendId = "div_" + counter;
 	
-		context = new WebContext(engine);
+		context = new WebContext();
 		
 		//initialzing Builder
 		chart = new ChartBuilder(context);

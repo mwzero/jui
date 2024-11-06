@@ -22,7 +22,7 @@ public class Text extends WebComponent {
 	}
 
 	@Override
-	public String render() {
+	public String getHtml() {
 		
 		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
 		

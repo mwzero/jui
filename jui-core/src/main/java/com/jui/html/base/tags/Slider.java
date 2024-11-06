@@ -59,7 +59,7 @@ public class Slider extends WebComponent {
     }
     
     @Override
-    public String render() {
+	public String getHtml() {
         
         return """
         		<div class="mb-3">

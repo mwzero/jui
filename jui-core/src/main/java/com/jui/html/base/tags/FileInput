@@ -1,0 +1,4 @@
+<div class="mb-3">
+	<label for="{{key}}" class="form-label">{{label}}</label>
+	<input class="form-control" type="file" id="{{key}}" multiple>
+</div>
