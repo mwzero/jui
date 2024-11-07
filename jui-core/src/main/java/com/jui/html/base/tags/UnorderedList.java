@@ -25,7 +25,7 @@ public class UnorderedList extends WebComponent {
     public  UnorderedList add(String label, String icon, JuiContainer link, JuiContainer content, boolean active) {
     	
     	UnorderedListItem item = new UnorderedListItem(label, icon, 
-    			link != null ? link.getCliendId() : null, content != null ? content.getCliendId() : null);
+    			link != null ? link.getClientId() : null, content != null ? content.getClientId() : null);
     	items.add(item);
     	
 		return this;

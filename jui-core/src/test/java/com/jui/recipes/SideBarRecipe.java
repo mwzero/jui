@@ -18,7 +18,7 @@ public class SideBarRecipe {
 	
 	static JuiContainer mapZoomer() {
 		
-		JuiContainer page = jui.addContainer();
+		JuiContainer page = jui.addContainer("mapZoomer");
 		
 		page.markdown("## Map Chart Example");
 		page.divider("blue");
@@ -39,7 +39,7 @@ public class SideBarRecipe {
 	
 	static JuiContainer markdownTrials() {
 		
-		JuiContainer page = jui.addContainer();
+		JuiContainer page = jui.addContainer("markdown");
 		
 		page.markdown("# Header 1");
 		page.markdown("## Header 2");

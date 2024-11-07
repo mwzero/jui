@@ -1,7 +1,11 @@
 package com.jui.html;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.jui.annotations.JuiAnnotationHelper;
 import com.jui.helpers.MarkdownProcessor;
@@ -23,26 +27,34 @@ import lombok.extern.java.Log;
 @Getter
 @Setter
 @Log
-public class JuiContainer implements AutoCloseable {
+public class JuiContainer extends WebComponent implements AutoCloseable {
 	
-	private String cliendId;
+	private String clientId;
 	private WebContext context;
 	
 	//builders
 	public ChartBuilder chart; 
 	public InputBuilder input;
-	
-	public JuiContainer(TemplateHelper engine, int counter) {
+
+	public JuiContainer(String key) {
 		
-		log.fine("New JuiContainer[%d]".formatted(counter));
-		cliendId = "div_" + counter;
-	
+		clientId = key;
+		log.fine("New JuiContainer:" + clientId);
+		
 		context = new WebContext();
 		
 		//initialzing Builder
 		chart = new ChartBuilder(context);
 		input = new InputBuilder(context);
 			
+	}
+	
+	@Override
+	public String getHtml() {
+		
+		return """
+				<div class="row" id="%s">{{content}}</div>
+			   """.formatted(clientId);
 	}
 	
 	public void write(String... args) {
@@ -108,6 +120,54 @@ public class JuiContainer implements AutoCloseable {
 	@Override
 	public void close() throws Exception {
 		// TODO Auto-generated method stub
+		
+	}
+
+	public Collection<WebComponent> getComponents() {
+		
+		return this.context.getLinkedMapContext().values();
+	}
+
+	public List<JuiContainerCol> columns(Map<String, Integer> of) {
+		
+		List<JuiContainerCol> cols = new ArrayList<JuiContainerCol>();
+		
+		JuiContainerRow row = new JuiContainerRow("");
+		
+		for (Entry<String, Integer> column : of.entrySet()) {
+			
+			JuiContainerCol col = new JuiContainerCol(column.getKey(), column.getValue());
+			row.getContext().add( col);
+			cols.add(col);
+			
+		}
+		this.getContext().add(row);
+		
+		return cols;
+	}
+	
+	public JuiContainerCol columns(String key) {
+		
+		for ( WebComponent component :  this.getContext().getLinkedMapContext().values() ) {
+			
+			if ( component instanceof JuiContainerRow ) {
+				JuiContainerRow row = ( JuiContainerRow)component;
+				for ( WebComponent component2 :  row.getContext().getLinkedMapContext().values() ) {
+					
+					if ( component2 instanceof JuiContainerCol ) {
+				
+						JuiContainerCol col = ( JuiContainerCol)component2;
+						if ( col.getClientId().compareTo(key) == 0 ) {
+							return col; 
+						}
+					}
+				}
+				
+			}
+			
+		}
+		
+		return null;
 		
 	}
 	

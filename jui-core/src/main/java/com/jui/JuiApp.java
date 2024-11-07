@@ -1,26 +1,28 @@
 package com.jui;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.jui.JuiAppAttributes.JuiAppAttributesBuilder;
 import com.jui.helpers.TemplateHelper;
 import com.jui.html.JuiContainer;
+import com.jui.html.JuiContainerCol;
+import com.jui.html.JuiContainerRow;
+import com.jui.html.JuiHtmlRenderer;
 import com.jui.html.WebComponent;
 import com.jui.html.base.builders.InputBuilder;
 import com.jui.html.base.tags.Button;
-import com.jui.html.base.tags.Divider;
 import com.jui.html.base.tags.Table;
 import com.jui.html.base.tags.Text;
 import com.jui.html.charts.builders.ChartBuilder;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
-
 import com.jui.net.http.JuiRequestHandler;
 import com.jui.net.http.JuiWebSocketHandler;
-
 import com.jui.utils.Utils;
 import com.st.DataFrame;
 
@@ -38,14 +40,9 @@ public class JuiApp {
 	@Setter
 	String juiResponse;
 	
-	
-	TemplateHelper engine;
-	
-	// Web Application containers
-	public List<JuiContainer> main;
+	public JuiContainer main;
 	public JuiContainer sidebar;
-	int iContainer = 0;
-	
+		
 	// only to work over main container as default
 	public ChartBuilder chart;
 	public InputBuilder input;
@@ -53,132 +50,63 @@ public class JuiApp {
 	//Attributes Builder
 	JuiAppAttributesBuilder attrsBuilder;
 	
+	//
+	JuiHtmlRenderer renderer;
+	
 	protected JuiApp() {
 
 		log.info("JUI App: Start Initialization");
-		try {
-
-			engine = new TemplateHelper(true, null);
-
-			main = new ArrayList<>();
-			main.add(new JuiContainer(engine, ++iContainer));
-
-			sidebar = new JuiContainer(engine, ++iContainer);
-
-			chart = main.get(0).chart;
-			input = main.get(0).input;
-
-		} catch (IOException e) {
-			log.severe("Impossible to use TemplateEngine [%s]".formatted(e.getLocalizedMessage()));
-		}
+		renderer = new JuiHtmlRenderer();
+		main = new JuiContainer("main");
+		sidebar = new JuiContainer("sidebar");
+		
+		chart = main.chart;
+		input = main.input;
 	}
 	
-	public JuiContainer addContainer() {
-
-		JuiContainer container = new JuiContainer(this.engine, ++iContainer);
-		main.add(container);
+	public JuiContainer addContainer(String key) {
+		
+		JuiContainerRow container = new JuiContainerRow(key);
+		main.getContext().add(container);
+		
 		return container;
 	}
-
+	
 	public Button button(String label, String type, String onClick, Runnable onServerSide) { 
 		return (Button) this.input.button(label, type, onClick, onServerSide);}
 
 	public void write(String... args) {
-		this.main.get(0).write(args);
+		this.main.write(args);
 	}
 
 	public void write(Object obj) {
-		this.main.get(0).write(obj);
+		this.main.write(obj);
 	}
 
 	public void divider() {
-		this.main.get(0).divider();
+		this.main.divider();
 	}
 
 	public void divider(String color) {
-		this.main.get(0).getContext().add(new Divider(color));
+		this.main.divider(color);
 	}
 
 	public Text markdown(String... args) {
-		return this.main.get(0).markdown(args);
+		return this.main.markdown(args);
 	}
 
 	public Table table(String caption, DataFrame df) {
-		return this.main.get(0).table(caption, df, 0);
+		return this.main.table(caption, df, 0);
 	}
 	
 	public Table table(String caption, DataFrame df, int limit) {
-		return this.main.get(0).table(caption, df, limit);
+		return this.main.table(caption, df, limit);
 	}
 
 	public JuiContent render() {
 		
-		/**/
-		JuiContent content = new JuiContent();
+		return renderer.process(main, sidebar);
 		
-		
-		StringBuilder html = new StringBuilder();
-
-		for (WebComponent component : this.main.get(0).getContext().getLinkedMapContext().values()) {
-			
-			
-			log.fine("Rendering [%s] [%s]".formatted(component.getId(), component.getKey()));
-
-			if ( component.getHtml() != null ) html.append( component.getHtml() );
-			else {
-				Map<String, Object> variables = component.getVariables();
-	
-				try {
-					html.append( engine.renderTemplate(component.getTemplateName(), variables));
-	
-				} catch ( Exception e) {
-					
-					log.severe(e.getLocalizedMessage());
-					
-				}
-			}  
-			
-		}
-		
-		if ( getMain().size() == 1) {
-			html.append("""
-					<script>
-						elementMapping=%s;
-						elementPostData=%s;
-					</script>
-					""".formatted(
-							Utils.buildJsonString(getMain().get(0).getContext().relations, "source", "commands"),
-							Utils.buildJsonString(getMain().get(0).getContext().elementPostData, "source", "commands")
-							));
-		}
-		
-		content.setMain(html.toString());
-		
-		
-		if ( this.sidebar.getContext().getLinkedMapContext() != null) {
-			StringBuilder sidebar = new StringBuilder();
-			for (WebComponent component : this.sidebar.getContext().getLinkedMapContext().values()) {
-				
-				
-				log.fine("Rendering [%s] [%s]".formatted(component.getId(), component.getKey()));
-
-				Map<String, Object> variables = component.getVariables();
-
-				try {
-					sidebar.append( engine.renderTemplate(component.getTemplateName(), variables));
-
-				} catch ( Exception e) {
-					
-					log.severe(e.getLocalizedMessage());
-					
-				}
-				
-			}
-			content.setSidebar(sidebar.toString());
-		} else
-			content.setSidebar("");
-		
-		return content;
 	}
 
 	
@@ -215,7 +143,7 @@ public class JuiApp {
 
 	public WebComponent executeServerAction(String id) throws Exception{
 		
-		WebComponent  component = this.main.get(0).getContext().getLinkedMapContext().get(id);
+		WebComponent  component = this.main.getContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
 		
@@ -230,12 +158,27 @@ public class JuiApp {
 		
 	}
 	
-	public JuiContainer[] columns(Map<String, Integer> of) {
-		return null;
+	public List<JuiContainerCol> columns(Map<String, Integer> of) {
+		
+		return this.main.columns(of);
 	}
 
-	public JuiContainer columns(String string) {
-		return null;
+	public JuiContainer columns(String key) {
+		
+		return this.main.columns(key);
+	}
+	
+	public static <K, V> LinkedHashMap<K, V> linkedMapOf(K key1, V value1, Object... moreKeysAndValues) {
+	    LinkedHashMap<K, V> map = new LinkedHashMap<>();
+	    map.put(key1, value1);
+	    for (int i = 0; i < moreKeysAndValues.length; i += 2) {
+	        @SuppressWarnings("unchecked")
+	        K key = (K) moreKeysAndValues[i];
+	        @SuppressWarnings("unchecked")
+	        V value = (V) moreKeysAndValues[i + 1];
+	        map.put(key, value);
+	    }
+	    return map;
 	}
 
 

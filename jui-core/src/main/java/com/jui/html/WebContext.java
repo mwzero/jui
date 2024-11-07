@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import com.jui.helpers.TemplateHelper;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.Builder;
 
@@ -17,12 +16,12 @@ public class WebContext {
 	
 	public LinkedHashMap<String, ArrayList<String>> relations;
 	public LinkedHashMap<String, String> elementPostData;
-	int i; 
+	
+	private static AtomicInteger instanceCount = new AtomicInteger(0);
 	
 	@Builder
 	public WebContext() {
 	
-		this.i=0;
 		this.context = new LinkedHashMap<>();
 		this.relations = new LinkedHashMap<>();
 		this.elementPostData = new LinkedHashMap<>();
@@ -31,7 +30,7 @@ public class WebContext {
 	
 	public WebComponent add(WebComponent component) {
 		
-		String uuid = "c"+(++i);
+		String uuid = "c"+ instanceCount.incrementAndGet();
 		component.setKey(uuid);
 		this.context.put(uuid, component);
 		
@@ -43,7 +42,7 @@ public class WebContext {
 	}
 	
 	public LinkedHashMap<String, WebComponent> getLinkedMapContext() { 
-		if ( i>0 ) return context;
+		if ( instanceCount.get() >0 ) return context;
 		else return null;
 	}
 	
