@@ -15,6 +15,9 @@ import lombok.extern.java.Log;
 @Log
 public abstract class WebComponent {
 	
+	//parent
+	WebContext webContext;
+	
 	String Id;
 	String key;
 	String data;
@@ -33,6 +36,7 @@ public abstract class WebComponent {
 		return null;
 	}
 	
+	public void preProcessBindingAndRelations() {;}
 	public String getHtml() { return null;}
 	
 	public String getTemplateName() {

@@ -16,6 +16,8 @@ import com.jui.html.JuiHtmlRenderer;
 import com.jui.html.WebComponent;
 import com.jui.html.base.builders.InputBuilder;
 import com.jui.html.base.tags.Button;
+import com.jui.html.base.tags.Divider;
+
 import com.jui.html.base.tags.Table;
 import com.jui.html.base.tags.Text;
 import com.jui.html.charts.builders.ChartBuilder;
@@ -83,14 +85,10 @@ public class JuiApp {
 		this.main.write(obj);
 	}
 
-	public void divider() {
-		this.main.divider();
+	public Divider divider() {
+		return this.main.divider();
 	}
-
-	public void divider(String color) {
-		this.main.divider(color);
-	}
-
+	
 	public Text markdown(String... args) {
 		return this.main.markdown(args);
 	}
@@ -180,6 +178,8 @@ public class JuiApp {
 	    }
 	    return map;
 	}
+
+
 
 
 }

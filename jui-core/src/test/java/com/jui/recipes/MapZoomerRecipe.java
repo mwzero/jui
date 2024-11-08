@@ -8,7 +8,7 @@ public class MapZoomerRecipe {
 		
 		//jui.setTemplate("templates/bootstrap-simple");
 		jui.markdown("## Map Chart Example");
-		jui.divider("blue");
+		jui.divider().color("blue");
     	
     	var slider = jui.input.slider("Zoom Level", 0, 19, 13);
     	var lat = jui.input.input("lat", "40.85631", "latitude");
@@ -17,8 +17,7 @@ public class MapZoomerRecipe {
     	jui.chart.map()
 				.c_lat(lat)
 				.c_lng(lng)
-				.c_zoom(slider)
-			.build();
+				.c_zoom(slider);
     	
     	jui.start();
 	}

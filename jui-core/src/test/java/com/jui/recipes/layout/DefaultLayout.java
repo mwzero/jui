@@ -1,9 +1,7 @@
 package com.jui.recipes.layout;
 
 import static com.jui.JuiApp.jui;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
+import static com.jui.JuiApp.linkedMapOf;
 
 import lombok.extern.java.Log;
 
@@ -17,7 +15,7 @@ public class DefaultLayout {
         		Triggering server method from html *button*
         		""");
 
-        jui.divider();
+        jui.divider().color("blue");
         
         jui.button("Click Me!!", "primary", "alert('Button clicked!')", () -> {
         	log.info("Botton Clicked! Executing Server-side Code");
@@ -31,7 +29,7 @@ public class DefaultLayout {
         		# Container Two
         		""");
         
-        jui.columns(jui.linkedMapOf("left", 8, "right", 4));
+        jui.columns(linkedMapOf("left", 8, "right", 4));
         
         jui.columns("left").markdown("""
         		# Container Left

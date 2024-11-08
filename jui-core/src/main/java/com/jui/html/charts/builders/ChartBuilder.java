@@ -2,9 +2,9 @@ package com.jui.html.charts.builders;
 
 import com.jui.html.WebContext;
 import com.jui.html.base.builders.BaseBuilder;
-import com.jui.html.charts.builders.ChartMapAttributes.ChartMapAttributesBuilder;
 import com.jui.html.charts.tags.BarChart;
 import com.jui.html.charts.tags.LinesChart;
+import com.jui.html.charts.tags.MapChart;
 import com.st.DataFrame;
 
 public class ChartBuilder extends BaseBuilder {
@@ -38,9 +38,12 @@ public class ChartBuilder extends BaseBuilder {
 		return lines;
 	}
 	
-	public ChartMapAttributesBuilder map() {
+	public MapChart map() {
 		
-		return com.jui.html.charts.builders.ChartMapAttributes.builder().context(context);
+		MapChart map = new MapChart();
+		context.add(map);
+		
+		return map;
 	}
 
 }

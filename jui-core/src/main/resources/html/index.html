@@ -172,7 +172,15 @@
 			*/
 			function handleEvent(event) {
 			
+				
+				if (event.target === undefined) {
+    				console.log('La proprietà age è undefined');
+					return;
+				}
+
 				const sourceElement = event.target;
+				
+				
 			
 				elementMapping.forEach((element) => {
 				

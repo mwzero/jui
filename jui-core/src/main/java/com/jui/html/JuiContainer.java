@@ -68,8 +68,12 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		JuiAnnotationHelper.write(context, obj);
 	}
 	
-	public void divider() {
-		this.context.add(new Divider());
+	public Divider divider() {
+		
+		Divider divider = new Divider();
+		this.context.add(divider );
+		return divider;
+		
 	}
 	
 	public UnorderedList ul(String label) {
@@ -106,8 +110,6 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		this.context.add(table);
 		return table;
 	}
-	
-	public void divider(String color) {this.context.add(new Divider(color));}
 	
 	public Text markdown(String... args) { return this.input.markdown(args);}
 
@@ -170,5 +172,4 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		return null;
 		
 	}
-	
 }

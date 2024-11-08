@@ -32,6 +32,8 @@ public class JuiHtmlRenderer {
 		
 		StringBuilder html = new StringBuilder();
 		
+		component.preProcessBindingAndRelations();
+		
 		if ( component.getHtml() != null ) html.append( component.getHtml() );
 		else {
 			Map<String, Object> variables = component.getVariables();

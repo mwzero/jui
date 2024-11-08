@@ -21,7 +21,7 @@ public class SideBarRecipe {
 		JuiContainer page = jui.addContainer("mapZoomer");
 		
 		page.markdown("## Map Chart Example");
-		page.divider("blue");
+		page.divider().color("blue");
     	
     	var slider = page.input.slider("Zoom Level", 0, 19, 13);
     	var lat = page.input.input("lat", "40.85631", "latitude");
@@ -30,8 +30,7 @@ public class SideBarRecipe {
     	page.chart.map()
 					.c_lat(lat)
 					.c_lng(lng)
-					.c_zoom(slider)
-				.build();
+					.c_zoom(slider);
     	
     	return page;
     	
@@ -44,7 +43,7 @@ public class SideBarRecipe {
 		page.markdown("# Header 1");
 		page.markdown("## Header 2");
 		page.markdown("### Header 3");
-		page.divider("blue");
+		page.divider().color("blue");
 		
 		return page;
     	
