@@ -7,26 +7,30 @@ import com.jui.helpers.TemplateHelper;
 import com.jui.model.JuiContent;
 import com.jui.utils.Utils;
 
-import lombok.Getter;
 import lombok.extern.java.Log;
 
 @Log
-@Getter
 public class JuiHtmlRenderer {
 	
 	TemplateHelper engine;
 	
 	public JuiHtmlRenderer() {
 
-		log.info("JUI App: Start Initialization");
-		try {
-
-			engine = new TemplateHelper(true, null);
-
-		} catch (IOException e) {
-			log.severe("Impossible to use TemplateEngine [%s]".formatted(e.getLocalizedMessage()));
-		}
+		log.info("Initializing Rendering engine");
+        this.engine = initializeTemplateHelper();
 	}
+	
+	
+	private TemplateHelper initializeTemplateHelper() {
+        
+		try {
+            return new TemplateHelper(true, null);
+            
+        } catch (IOException e) {
+            log.severe("Failed to initialize TemplateEngine: " + e.getLocalizedMessage());
+            throw new IllegalStateException("Template engine initialization failed", e);
+        }
+    }
 	
 	protected String render (WebComponent component) {
 		
@@ -73,19 +77,24 @@ public class JuiHtmlRenderer {
 				
 		}
 		
-		
-		html.append("""
-				<script>
-					elementMapping=%s;
-					elementPostData=%s;
-				</script>
-				""".formatted(
-						Utils.buildJsonString(container.getContext().relations, "source", "commands"),
-						Utils.buildJsonString(container.getContext().elementPostData, "source", "commands")
-						));
+		html.append( buildScripts(container) );
 		
 		return html.toString();
 	}
+	
+	private String buildScripts(JuiContainer container) {
+		
+        String elementMappingJson = Utils.buildJsonString(container.getContext().relations, "source", "commands");
+        String elementPostDataJson = Utils.buildJsonString(container.getContext().elementPostData, "source", "commands");
+
+        return """
+                <script>
+                    elementMapping=%s;
+                    elementPostData=%s;
+                </script>
+                """.formatted(elementMappingJson, elementPostDataJson);
+    }
+	
 	
 	public JuiContent process(JuiContainer main, JuiContainer sidebar) {
 		
