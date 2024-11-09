@@ -23,11 +23,11 @@ public class SideBarRecipe {
 		page.markdown("## Map Chart Example");
 		page.divider().color("blue");
     	
-    	var slider = page.input.slider("Zoom Level", 0, 19, 13);
-    	var lat = page.input.input("lat", "40.85631", "latitude");
-    	var lng = page.input.input("lng", "14.24641" ,"longitude");
+    	var slider = page.slider("Zoom Level", 0, 19, 13);
+    	var lat = page.input("lat", "40.85631", "latitude");
+    	var lng = page.input("lng", "14.24641" ,"longitude");
     	
-    	page.chart.map()
+    	page.map()
 					.c_lat(lat)
 					.c_lng(lng)
 					.c_zoom(slider);

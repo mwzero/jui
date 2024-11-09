@@ -84,8 +84,8 @@ public class JuiHtmlRenderer {
 	
 	private String buildScripts(JuiContainer container) {
 		
-        String elementMappingJson = Utils.buildJsonString(container.getContext().relations, "source", "commands");
-        String elementPostDataJson = Utils.buildJsonString(container.getContext().elementPostData, "source", "commands");
+        String elementMappingJson = Utils.buildJsonString(container.context().relations, "source", "commands");
+        String elementPostDataJson = Utils.buildJsonString(container.context().elementPostData, "source", "commands");
 
         return """
                 <script>
@@ -101,7 +101,7 @@ public class JuiHtmlRenderer {
 		JuiContent content = new JuiContent();
 		content.setMain(render(main));
 		
-		if ( sidebar.getContext().getLinkedMapContext() != null) {
+		if ( sidebar.context().getLinkedMapContext() != null) {
 			
 			content.setSidebar(render(sidebar));
 		} else

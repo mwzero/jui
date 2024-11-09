@@ -19,6 +19,6 @@ public class JuiContainerCol extends JuiContainer {
 		
 		return """
 				<div id="%s" class="col-%s" >{{content}}</div>
-			   """.formatted(this.getClientId(), this.width);
+			   """.formatted(this.clientId(), this.width);
 	}	
 }

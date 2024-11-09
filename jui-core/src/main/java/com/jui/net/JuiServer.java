@@ -3,13 +3,11 @@ package com.jui.net;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.jui.net.http.BaseHandler;
-import com.jui.net.http.FileHandler;
-import com.jui.net.http.RequestHandler;
-
-import com.jui.net.wss.EchoWebSocketHandler;
-import com.jui.net.wss.SimpleWebSocketServer;
-import com.jui.net.wss.WebSocketHandler;
+import com.jui.net.handlers.HandlerBase;
+import com.jui.net.handlers.HandlerFile;
+import com.jui.net.handlers.HandlerRequest;
+import com.jui.net.handlers.HandlerWebSocket;
+import com.jui.net.handlers.HandlerWebSocketEcho;
 import com.sun.net.httpserver.HttpServer;
 
 import lombok.Builder;
@@ -19,8 +17,8 @@ import lombok.extern.java.Log;
 @Builder
 public class JuiServer {
 	
-	BaseHandler juiHttpHandler;
-	WebSocketHandler juiWebSocketHandler;
+	HandlerBase juiHttpHandler;
+	HandlerWebSocket juiWebSocketHandler;
 	
 	String docRoot;
 	boolean classLoading;
@@ -36,13 +34,13 @@ public class JuiServer {
 		try {
 			server = HttpServer.create(new InetSocketAddress(port), 0);
 			
-			server.createContext("/", new FileHandler(docRoot));
+			server.createContext("/", new HandlerFile(docRoot));
 			server.createContext("/jui", juiHttpHandler);
-			server.createContext("/css", new FileHandler(docRoot));
-	        server.createContext("/js", new FileHandler(docRoot));
-	        server.createContext("/send_get", new RequestHandler());
-	        server.createContext("/send_post", new RequestHandler());
-	        server.createContext("/favicon.ico", new FileHandler(docRoot));
+			server.createContext("/css", new HandlerFile(docRoot));
+	        server.createContext("/js", new HandlerFile(docRoot));
+	        server.createContext("/send_get", new HandlerRequest());
+	        server.createContext("/send_post", new HandlerRequest());
+	        server.createContext("/favicon.ico", new HandlerFile(docRoot));
 
 	        server.setExecutor(null); // creates a default executor
 	        server.start();
@@ -50,8 +48,8 @@ public class JuiServer {
 	        if ( useWSS) {
 
 	        	
-		        SimpleWebSocketServer wss = SimpleWebSocketServer.create(new InetSocketAddress(wssPort), 8025);
-				wss.createContext("/echo", new EchoWebSocketHandler());
+		        JuiSimpleWebSocketServer wss = JuiSimpleWebSocketServer.create(new InetSocketAddress(wssPort), 8025);
+				wss.createContext("/echo", new HandlerWebSocketEcho());
 				wss.createContext("/ws/jui", juiWebSocketHandler);
 		        wss.start();    
 		        log.info("WSS listening on port[%d]".formatted(wssPort));

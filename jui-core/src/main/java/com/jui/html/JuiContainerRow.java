@@ -16,6 +16,6 @@ public class JuiContainerRow extends JuiContainer {
 		
 		return """
 				<div class="row" id="%s">{{content}}</div>
-			   """.formatted(this.getClientId());
+			   """.formatted(this.clientId());
 	}	
 }

@@ -10,14 +10,14 @@ public class MapZoomerRecipe {
 		jui.markdown("## Map Chart Example");
 		jui.divider().color("blue");
     	
-    	var slider = jui.input.slider("Zoom Level", 0, 19, 13);
-    	var lat = jui.input.input("lat", "40.85631", "latitude");
-    	var lng = jui.input.input("lng", "14.24641" ,"longitude");
+    	var slider = jui.slider("Zoom Level", 0, 19, 13);
+    	var lat = jui.input("lat", "40.85631", "latitude");
+    	var lng = jui.input("lng", "14.24641" ,"longitude");
     	
-    	jui.chart.map()
-				.c_lat(lat)
-				.c_lng(lng)
-				.c_zoom(slider);
+    	jui.map()
+			.c_lat(lat)
+			.c_lng(lng)
+			.c_zoom(slider);
     	
     	jui.start();
 	}

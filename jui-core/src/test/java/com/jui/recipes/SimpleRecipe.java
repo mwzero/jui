@@ -10,8 +10,7 @@ public class SimpleRecipe {
 	public static void main(String[] args)  {
 
         jui.markdown("""
-        		# Esempio
-        		piccolo esempio *buttone*
+        		# Simple Recipe
         		""");
 
         jui.divider();
