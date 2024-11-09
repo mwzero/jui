@@ -17,6 +17,7 @@
 	});
 	
 	function postData{{clientId}}() {
+	
 		var center = {{clientId}}.getCenter();
 	    var zoom = {{clientId}}.getZoom();
 	    

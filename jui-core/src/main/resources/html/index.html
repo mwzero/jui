@@ -174,14 +174,11 @@
 			
 				
 				if (event.target === undefined) {
-    				console.log('La proprietà age è undefined');
-					return;
-				}
+					//event fired manually
+					sourceElement = event;
+				} else 
+					sourceElement = event.target; 
 
-				const sourceElement = event.target;
-				
-				
-			
 				elementMapping.forEach((element) => {
 				
 					if ( element.source === sourceElement.name ) {

@@ -18,7 +18,7 @@ public class DashboardApp {
     	
     	log.info("Starting Dashboard APP");
     	
-    	jui.set_page_config().rootDoc("sidebar");
+    	jui.set_page_config().layout("sidebar");
     	
     	jui.markdown("""
     			# Dashboard: Covid 19

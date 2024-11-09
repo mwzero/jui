@@ -78,7 +78,7 @@ public class JuiAppGrizzly extends JuiApp {
 
 	public WebComponent executeServerAction(String id) {
 		
-		WebComponent  component = this.main.get(0).getContext().getLinkedMapContext().get(id);
+		WebComponent  component = this.main.getContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
 		return component;
