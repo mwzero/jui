@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import com.jui.annotations.JuiAnnotationHelper;
 import com.jui.helpers.MarkdownProcessor;
+import com.jui.html.apis.TextElements;
 import com.jui.html.tags.Button;
 import com.jui.html.tags.CheckBox;
 import com.jui.html.tags.ColorPicker;
@@ -33,9 +34,9 @@ import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Singular;
 import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
+import lombok.AccessLevel;
 
 @Log
 @Getter
@@ -57,28 +58,25 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	
 	ContainerType type;
 	
-	public JuiContainer(String key) {
-		
-		log.fine("New JuiContainer:" + key);
-		this.clientId = key;
-		this.type = ContainerType.DIV;
-		
-		
-		attributes = new HashMap<String, Object>();
-		context = new WebContext();
-	}
-
-	public JuiContainer(String key, ContainerType type) {
-		
-		this(key);
-		this.type = type;
-	}
+	@Getter(AccessLevel.NONE)
+	TextElements textApis;
+	
+	public JuiContainer(String key) {  this(key, ContainerType.DIV, null); }
+	public JuiContainer(String key, ContainerType type) { this(key, type, null);}
 	
 	public JuiContainer(String key, ContainerType type, Map<String, Object> attributes) {
 		
-		this(key, type);
-		this.attributes = attributes;
+		log.fine("New JuiContainer:" + key);
 		
+		this.clientId = key;
+		this.type = type;
+		if ( attributes == null ) attributes = new HashMap<String, Object>(); 
+		else this.attributes = attributes;
+		
+		context = new WebContext();
+		
+		//Apis
+		textApis = new TextElements(context);
 	}
 	
 	@Override
@@ -177,7 +175,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	
 	public JuiContainer addContainer(String key) {
 		
-		JuiContainer container = new JuiContainer(key, ContainerType.DIV);
+		JuiContainer container = new JuiContainer(key, ContainerType.DIV, null);
 		context().add(container);
 		
 		return container;
@@ -187,7 +185,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		
 		List<JuiContainer> cols = new ArrayList<JuiContainer>();
 		
-		JuiContainer row = new JuiContainer("", ContainerType.ROW);
+		JuiContainer row = new JuiContainer("", ContainerType.ROW, null);
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
@@ -250,54 +248,16 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	public FileInput file_uploader(String label) { return (FileInput) this.context.add(new FileInput(label));}
 	public ColorPicker color_picker(String label) { return (ColorPicker) this.context.add(new ColorPicker(label));}
 	public DatePicker date_input(String label) { return (DatePicker) this.context.add(new DatePicker(label));}
+
+	//Text Elements APIs
+	public Text title(String text) { return textApis.title(text); }
+	public Text header(String text, boolean divider) { return textApis.header(text, divider); }
+	public Text header(String text, String dividerColor) { return textApis.header(text, dividerColor); }
+	public Text subHeader(String text) { return textApis.subHeader(text); }
+	public Text caption(String text) { return textApis.caption(text); }
+	public Text markdown(String... args) { return textApis.markdown(args); }
+	public String code(String text, String language, boolean line_numbers) { return textApis.code(text, language, line_numbers); }
 	
-	public Text title(String text) {
-		return (Text) context.add(new Text(getMarkdown(text), true, true));
-	}
-
-	public Text header(String text, boolean divider) {
-		Text web = new Text(getMarkdown(text), false, true);
-		context.add(web);
-		context.add(this.context.add(new Divider()));
-		return web;
-	}
-	
-	public Text header(String text, String dividerColor) {
-		
-		Text web = (Text) context.add(new Text(text, false, true));
-		context.add(new Divider(dividerColor));
-		return web;
-	}
-
-	public Text subHeader(String text) {
-		return (Text) context.add(new Text(getMarkdown(text), false, true));
-	}
-
-	public Text caption(String text) {
-		return (Text) context.add(new Text(getMarkdown(text), false, true));
-	}
-
-	public Text markdown(String... args) {
-		return (Text) this.context.add(new Text(getMarkdown(args), false, true));
-	}
-
-	public String code(String text, String language, boolean line_numbers) {
-		
-		return """
-				<pre><code>
-				%s
-				</code></pre>
-		""".formatted(text);
-	}
-
-	protected String getMarkdown(String... args) {
-
-		StringBuilder sb = new StringBuilder();
-		for (String arg : args) {
-			sb.append(MarkdownProcessor.builder().build().render(arg));
-		}
-		return sb.toString();
-	}
 	
 	public ChartLines lines() {
 
