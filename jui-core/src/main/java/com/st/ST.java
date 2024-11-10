@@ -9,7 +9,6 @@ import com.jui.utils.FS;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.Singular;
 
 @Getter
 @Setter
@@ -17,7 +16,6 @@ public class ST {
 	
 	public static final ST st = new ST();
 	
-	@Singular
 	Map<String, String> options;
 	
     public ST() {

@@ -2,6 +2,7 @@ package com.jui.html;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,32 +33,71 @@ import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
 
+@Log
 @Getter
 @Setter
 @Accessors(fluent = true)
-@Log
 public class JuiContainer extends WebComponent implements AutoCloseable {
 	
-	private String clientId;
-	private WebContext context;
+	String clientId;
+	WebContext context;
+	
+	Map<String, Object> attributes;
+	public final static String WIDTH_ATTRIBUTES = "width";
+	
+	enum ContainerType {
+		DIV,
+		ROW,
+		COL
+	};
+	
+	ContainerType type;
 	
 	public JuiContainer(String key) {
 		
-		clientId = key;
-		log.fine("New JuiContainer:" + clientId);
+		log.fine("New JuiContainer:" + key);
+		this.clientId = key;
+		this.type = ContainerType.DIV;
 		
+		
+		attributes = new HashMap<String, Object>();
 		context = new WebContext();
+	}
+
+	public JuiContainer(String key, ContainerType type) {
+		
+		this(key);
+		this.type = type;
+	}
+	
+	public JuiContainer(String key, ContainerType type, Map<String, Object> attributes) {
+		
+		this(key, type);
+		this.attributes = attributes;
+		
 	}
 	
 	@Override
 	public String getHtml() {
 		
-		return """
-				<div class="row" id="%s">{{content}}</div>
-			   """.formatted(clientId);
+		if ( type == ContainerType.COL ) {
+			
+			int width = (int) this.attributes.get(WIDTH_ATTRIBUTES);
+			return """
+					<div id="%s" class="col-%s" >{{content}}</div>
+				   """.formatted(this.clientId(), width);
+		} else {
+			
+			return """
+					<div class="row" id="%s">{{content}}</div>
+				   """.formatted(clientId);
+			
+		}
+		
 	}
 	
 	public void write(String... args) {
@@ -137,21 +177,21 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	
 	public JuiContainer addContainer(String key) {
 		
-		JuiContainerRow container = new JuiContainerRow(key);
+		JuiContainer container = new JuiContainer(key, ContainerType.DIV);
 		context().add(container);
 		
 		return container;
 	}
 
-	public List<JuiContainerCol> columns(Map<String, Integer> of) {
+	public List<JuiContainer> columns(Map<String, Integer> of) {
 		
-		List<JuiContainerCol> cols = new ArrayList<JuiContainerCol>();
+		List<JuiContainer> cols = new ArrayList<JuiContainer>();
 		
-		JuiContainerRow row = new JuiContainerRow("");
+		JuiContainer row = new JuiContainer("", ContainerType.ROW);
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
-			JuiContainerCol col = new JuiContainerCol(column.getKey(), column.getValue());
+			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.COL, Map.of( WIDTH_ATTRIBUTES, column.getValue()));
 			row.context().add( col);
 			cols.add(col);
 			
@@ -161,28 +201,17 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		return cols;
 	}
 	
-	public JuiContainerCol columns(String key) {
+	public JuiContainer columns(String key) {
 		
-		for ( WebComponent component :  this.context().getLinkedMapContext().values() ) {
-			
-			if ( component instanceof JuiContainerRow ) {
-				JuiContainerRow row = ( JuiContainerRow)component;
-				for ( WebComponent component2 :  row.context().getLinkedMapContext().values() ) {
-					
-					if ( component2 instanceof JuiContainerCol ) {
-				
-						JuiContainerCol col = ( JuiContainerCol)component2;
-						if ( col.clientId().compareTo(key) == 0 ) {
-							return col; 
-						}
-					}
-				}
-				
-			}
-			
-		}
-		
-		return null;
+		return this.context().getLinkedMapContext().values().stream()
+		        .filter(component -> component instanceof JuiContainer && ((JuiContainer) component).type == ContainerType.ROW)
+		        .map(component -> (JuiContainer) component)
+		        .flatMap(row -> row.context().getLinkedMapContext().values().stream())
+		        .filter(component2 -> component2 instanceof JuiContainer && ((JuiContainer) component2).type == ContainerType.COL)
+		        .map(component2 -> (JuiContainer) component2)
+		        .filter(col -> col.clientId().equals(key))
+		        .findFirst()
+		        .orElse(null);
 		
 	}
 	

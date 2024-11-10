@@ -2,7 +2,6 @@ package com.jui;
 
 import java.util.LinkedHashMap;
 
-import com.jui.JuiAppAttributes.JuiAppAttributesBuilder;
 import com.jui.html.JuiContainer;
 import com.jui.html.JuiHtmlRenderer;
 import com.jui.html.WebComponent;
@@ -26,9 +25,9 @@ public class JuiApp extends JuiContainer {
 	String juiResponse;
 	
 	public JuiContainer sidebar;
-		
-	//Attributes Builder
-	JuiAppAttributesBuilder attrsBuilder;
+
+	//
+	JuiAppAttributes attributes;
 	
 	//
 	JuiHtmlRenderer renderer;
@@ -36,14 +35,31 @@ public class JuiApp extends JuiContainer {
 	protected JuiApp() {
 		
 		super("core");
-
+		
 		log.info("JUI App: Start Initialization");
 		renderer = new JuiHtmlRenderer();
 		sidebar = new JuiContainer("sidebar");
 	}
 	
+	public JuiAppAttributes set_page_config() {
+		
+		attributes =  new JuiAppAttributes();
+		return attributes;
+		
+	}
+
 	public JuiContent render() {
-		return renderer.process(this, sidebar);
+			
+		JuiContent content = new JuiContent();
+		content.setMain( renderer.render(this));
+		
+		if ( sidebar.context().getLinkedMapContext() != null) {
+			
+			content.setSidebar(renderer.render(sidebar));
+		} else
+			content.setSidebar("");
+		
+		return content;
 	}
 
 	public void start() {
@@ -53,10 +69,10 @@ public class JuiApp extends JuiContainer {
 		String host = "0.0.0.0";
 		int port = 8080;
 		
-		if ( attrsBuilder != null ) {
-			JuiAppAttributes attrs = attrsBuilder.build();
-			if ( attrs.layout != null)
-				rootDoc = "html-" + attrs.layout + "/";
+		if ( attributes != null ) {
+			
+			if ( attributes.layout != null)
+				rootDoc = "html-" + attributes.layout + "/";
 		}
 		
 		this.start(rootDoc, classLoading, host, port);
@@ -87,12 +103,7 @@ public class JuiApp extends JuiContainer {
 		
 	}
 
-	public JuiAppAttributesBuilder set_page_config() {
-		
-		attrsBuilder =  JuiAppAttributes.builder();
-		return attrsBuilder;
-		
-	}
+	
 	
 	public static <K, V> LinkedHashMap<K, V> linkedMapOf(K key1, V value1, Object... moreKeysAndValues) {
 	    LinkedHashMap<K, V> map = new LinkedHashMap<>();

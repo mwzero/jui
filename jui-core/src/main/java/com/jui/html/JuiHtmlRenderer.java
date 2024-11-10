@@ -32,7 +32,7 @@ public class JuiHtmlRenderer {
         }
     }
 	
-	protected String render (WebComponent component) {
+	public String render (WebComponent component) {
 		
 		StringBuilder html = new StringBuilder();
 		
@@ -94,19 +94,4 @@ public class JuiHtmlRenderer {
                 </script>
                 """.formatted(elementMappingJson, elementPostDataJson);
     }
-	
-	
-	public JuiContent process(JuiContainer main, JuiContainer sidebar) {
-		
-		JuiContent content = new JuiContent();
-		content.setMain(render(main));
-		
-		if ( sidebar.context().getLinkedMapContext() != null) {
-			
-			content.setSidebar(render(sidebar));
-		} else
-			content.setSidebar("");
-		
-		return content;
-	}
 }

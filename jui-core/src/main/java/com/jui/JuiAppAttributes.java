@@ -1,10 +1,12 @@
 package com.jui;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-@Builder
 @Getter
+@Setter
+@Accessors(fluent = true)
 public class JuiAppAttributes {
 
 	String layout;
