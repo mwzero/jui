@@ -64,6 +64,14 @@ try to navigate to http://localhost:8000/index.html
 
 <img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
 
+## Roadmap
+
+- **GeoJson & D3 Integration**: Add components for geographic data and advanced visualizations.
+- **WebComponent Enhancements**: Implementing feature-rich builders
+- **Html Elements**: Complete and expand statement support
+- **UI Consistency**: Ensure uniformity across HTML/CSS/JS layouts.
+- **Method Improvements**: Revise and optimize `JuiServer` start method.
+
 ## 👨‍💻‍ Contributors
 
 <a href="https://github.com/mwzero/jui/graphs/contributors">
