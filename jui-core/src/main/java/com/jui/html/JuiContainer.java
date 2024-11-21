@@ -5,10 +5,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.jui.annotations.JuiAnnotationHelper;
 import com.jui.helpers.MarkdownProcessor;
+import com.jui.html.apis.ChartElements;
+import com.jui.html.apis.ContainerElements;
+import com.jui.html.apis.ContainerElements.ContainerType;
+import com.jui.html.apis.InputButtonElements;
+import com.jui.html.apis.InputSelectionElements;
+import com.jui.html.apis.OtherElements;
 import com.jui.html.apis.TextElements;
 import com.jui.html.tags.Button;
 import com.jui.html.tags.CheckBox;
@@ -18,6 +23,7 @@ import com.jui.html.tags.Divider;
 import com.jui.html.tags.DropDownButton;
 import com.jui.html.tags.FileInput;
 import com.jui.html.tags.FormButton;
+import com.jui.html.tags.FormButton.ButtonType;
 import com.jui.html.tags.Input;
 import com.jui.html.tags.Radio;
 import com.jui.html.tags.Select;
@@ -26,17 +32,13 @@ import com.jui.html.tags.Table;
 import com.jui.html.tags.Text;
 import com.jui.html.tags.UnorderedList;
 import com.jui.html.tags.UnorderedListItem;
-import com.jui.html.tags.FormButton.ButtonType;
-import com.jui.html.tags.chart.ChartBar;
-import com.jui.html.tags.chart.ChartLines;
-import com.jui.html.tags.chart.ChartMap;
 import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.experimental.Delegate;
 import lombok.extern.java.Log;
-import lombok.AccessLevel;
 
 @Log
 @Getter
@@ -48,22 +50,31 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	WebContext context;
 	
 	Map<String, Object> attributes;
-	public final static String WIDTH_ATTRIBUTES = "width";
 	
-	enum ContainerType {
-		DIV,
-		ROW,
-		COL
-	};
 	
 	ContainerType type;
 	
-	@Getter(AccessLevel.NONE)
-	TextElements textApis;
+	@Delegate
+    private final TextElements textApis;
+	
+	@Delegate
+    private final ContainerElements containerApis;
+	
+	@Delegate 
+	private final ChartElements chartElements;
+	
+	@Delegate 
+	private final InputButtonElements inputButtonElements;
+	
+	@Delegate 
+	private final InputSelectionElements inputSelectionElements;
+	
+	@Delegate 
+	private final OtherElements otherElements;
+	
 	
 	public JuiContainer(String key) {  this(key, ContainerType.DIV, null); }
 	public JuiContainer(String key, ContainerType type) { this(key, type, null);}
-	
 	public JuiContainer(String key, ContainerType type, Map<String, Object> attributes) {
 		
 		log.fine("New JuiContainer:" + key);
@@ -75,8 +86,14 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		
 		context = new WebContext();
 		
-		//Apis
+		//Apis Delegates
 		textApis = new TextElements(context);
+		containerApis = new ContainerElements(context);
+		chartElements = new ChartElements(context);
+		inputButtonElements = new InputButtonElements(context);
+		inputSelectionElements = new InputSelectionElements(context);
+		otherElements = new OtherElements(context);
+		
 	}
 	
 	@Override
@@ -84,7 +101,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		
 		if ( type == ContainerType.COL ) {
 			
-			int width = (int) this.attributes.get(WIDTH_ATTRIBUTES);
+			int width = (int) this.attributes.get(ContainerElements.WIDTH_ATTRIBUTES);
 			return """
 					<div id="%s" class="col-%s" >{{content}}</div>
 				   """.formatted(this.clientId(), width);
@@ -165,43 +182,10 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		// TODO Auto-generated method stub
 		
 	}
-
-	public Collection<WebComponent> getComponents() {
-		
-		return this.context.getLinkedMapContext().values();
-	}
-
-	
-	
-	public JuiContainer addContainer(String key) {
-		
-		JuiContainer container = new JuiContainer(key, ContainerType.DIV, null);
-		context().add(container);
-		
-		return container;
-	}
-
-	public List<JuiContainer> columns(Map<String, Integer> of) {
-		
-		List<JuiContainer> cols = new ArrayList<JuiContainer>();
-		
-		JuiContainer row = new JuiContainer("", ContainerType.ROW, null);
-		
-		for (Entry<String, Integer> column : of.entrySet()) {
-			
-			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.COL, Map.of( WIDTH_ATTRIBUTES, column.getValue()));
-			row.context().add( col);
-			cols.add(col);
-			
-		}
-		this.context().add(row);
-		
-		return cols;
-	}
 	
 	public JuiContainer columns(String key) {
 		
-		return this.context().getLinkedMapContext().values().stream()
+		return this.context.getLinkedMapContext().values().stream()
 		        .filter(component -> component instanceof JuiContainer && ((JuiContainer) component).type == ContainerType.ROW)
 		        .map(component -> (JuiContainer) component)
 		        .flatMap(row -> row.context().getLinkedMapContext().values().stream())
@@ -213,74 +197,30 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		
 	}
 	
-	public Input input(String text, String value, String placeholder) { 
-		Input input = new Input(text, true, true, value, placeholder);
-		context.add(input);
-		return input;
-	}
-	
-	public Input input() {
-
-		Input input = new Input();
-		context.add(input);
-		return input;
-	}
-	
-	public FormButton formButton(String label, ButtonType type, String onClick) { return (FormButton) this.context.add(new FormButton(label, type, onClick));}
-	public FormButton submitbutton(String label, String onClick) { 
-		return (FormButton) this.context.add(new FormButton(label, ButtonType.Primary, onClick));}
-	
-	public Button button(String label, String type, String onClick, Runnable onServerSide) { return (Button) this.context.add(new Button(label, type, onClick, onServerSide));}
-	public Slider slider(String text, int min, int max, int value) {
+	public JuiContainer tabs(String key) {
 		
-		Slider slider = new Slider(text, min, max, value);
-		this.context.add(slider);
-		return slider;
+		return this.context.getLinkedMapContext().values().stream()
+		        .filter(component -> component instanceof JuiContainer && ((JuiContainer) component).type == ContainerType.TABS)
+		        .map(component -> (JuiContainer) component)
+		        .flatMap(row -> row.context().getLinkedMapContext().values().stream())
+		        .filter(component2 -> component2 instanceof JuiContainer && ((JuiContainer) component2).type == ContainerType.TAB)
+		        .map(component2 -> (JuiContainer) component2)
+		        .filter(col -> col.clientId().equals(key))
+		        .findFirst()
+		        .orElse(null);
+		
 	}
 
-	public Radio radio(String label, List<String> values ) { return (Radio) this.context.add(new Radio(label, values));}
-	public CheckBox checkbox(String label, List<String> values ) { return (CheckBox) this.context.add(new CheckBox(label, values));}
-	
-	//select
-	public Select select(String label, List<String> values ) { return (Select) this.context.add(new Select(label, values));}
-	//public Select select(String label, SimpleTable st) { return (Select) this.context.add(new Select(label, st));}
-	
-	public FileInput file_uploader(String label) { return (FileInput) this.context.add(new FileInput(label));}
-	public ColorPicker color_picker(String label) { return (ColorPicker) this.context.add(new ColorPicker(label));}
-	public DatePicker date_input(String label) { return (DatePicker) this.context.add(new DatePicker(label));}
-
-	//Text Elements APIs
-	public Text title(String text) { return textApis.title(text); }
-	public Text header(String text, boolean divider) { return textApis.header(text, divider); }
-	public Text header(String text, String dividerColor) { return textApis.header(text, dividerColor); }
-	public Text subHeader(String text) { return textApis.subHeader(text); }
-	public Text caption(String text) { return textApis.caption(text); }
-	public Text markdown(String... args) { return textApis.markdown(args); }
-	public String code(String text, String language, boolean line_numbers) { return textApis.code(text, language, line_numbers); }
-	
-	
-	public ChartLines lines() {
-
-		ChartLines lines = new ChartLines();
-		context.add(lines);
-
-		return lines;
+	public Collection<WebComponent> getComponents() {
 		
+		return this.context.getLinkedMapContext().values();
 	}
+
 	
-	public ChartBar bars() {
-		
-		ChartBar lines = new ChartBar();
-		context.add(lines);
-		
-		return lines;
-	}
 	
-	public ChartMap map() {
-		
-		ChartMap map = new ChartMap();
-		context.add(map);
-		
-		return map;
-	}
+	
+	
+	
+
+
 }

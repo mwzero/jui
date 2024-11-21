@@ -21,11 +21,11 @@ public class DefaultLayout {
         	log.info("Botton Clicked! Executing Server-side Code");
     	});
         
-        jui.addContainer("One").markdown("""
+        jui.container("One").markdown("""
         		# Container One
         		""");
         
-        jui.addContainer("Two").markdown("""
+        jui.container("Two").markdown("""
         		# Container Two
         		""");
         

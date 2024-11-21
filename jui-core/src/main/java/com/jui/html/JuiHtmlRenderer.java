@@ -32,7 +32,7 @@ public class JuiHtmlRenderer {
         }
     }
 	
-	public String render (WebComponent component) {
+	protected String renderWebComponent (WebComponent component) {
 		
 		StringBuilder html = new StringBuilder();
 		
@@ -55,7 +55,7 @@ public class JuiHtmlRenderer {
 		return html.toString();
 	}
 	
-	protected String render (JuiContainer container ) {
+	public String render (JuiContainer container ) {
 		
 		StringBuilder html = new StringBuilder();
 			
@@ -65,7 +65,7 @@ public class JuiHtmlRenderer {
 	
 			if ( component instanceof JuiContainer ) {
 				
-				String containerEnvelop = render(component);
+				String containerEnvelop = renderWebComponent(component);
 				String containerContents = render((JuiContainer) component);
 				containerEnvelop = containerEnvelop.replace("{{content}}", containerContents);
 				
@@ -73,7 +73,7 @@ public class JuiHtmlRenderer {
 				
 			}
 				
-			else html.append(render(component));
+			else html.append(renderWebComponent(component));
 				
 		}
 		

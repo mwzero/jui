@@ -5,15 +5,14 @@ import com.jui.html.WebContext;
 import com.jui.html.tags.Divider;
 import com.jui.html.tags.Text;
 
-public class TextElements {
-	
-	WebContext context;
+public class TextElements extends BaseElements {
 	
 	public TextElements(WebContext context) {
 		
-		this.context = context;
+		super(context);
 		
 	}
+	
 	public Text title(String text) {
 		return (Text) context.add(new Text(getMarkdown(text), true, true));
 	}
@@ -44,13 +43,15 @@ public class TextElements {
 		return (Text) this.context.add(new Text(getMarkdown(args), false, true));
 	}
 
-	public String code(String text, String language, boolean line_numbers) {
+	public void code(String text, String language, boolean line_numbers) {
 		
-		return """
+		String code = """
 				<pre><code>
 				%s
 				</code></pre>
 		""".formatted(text);
+		
+		this.context.add(new Text(code, false, true));
 	}
 	
 	protected String getMarkdown(String... args) {
