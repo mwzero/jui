@@ -32,7 +32,10 @@ public class WebContext {
 		
 		String uuid = "c"+ instanceCount.incrementAndGet();
 		component.setKey(uuid);
-		component.setWebContext(this);
+		
+		if ( component instanceof JuiContainer ) {
+			
+		} else component.setWebContext(this);
 		
 		this.context.put(uuid, component);
 		

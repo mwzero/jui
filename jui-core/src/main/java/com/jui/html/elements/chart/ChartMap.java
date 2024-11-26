@@ -1,4 +1,4 @@
-package com.jui.html.tags.chart;
+package com.jui.html.elements.chart;
 
 import com.jui.html.WebComponent;
 

@@ -1,6 +1,5 @@
-package com.jui.html.tags;
+package com.jui.html.elements;
 
-import com.jui.helpers.TemplateHelper;
 import com.jui.html.WebComponent;
 
 public class FormButton extends WebComponent {

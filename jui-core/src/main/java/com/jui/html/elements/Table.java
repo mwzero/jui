@@ -1,4 +1,4 @@
-package com.jui.html.tags;
+package com.jui.html.elements;
 
 import java.util.ArrayList;
 import java.util.List;

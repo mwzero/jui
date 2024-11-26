@@ -1,10 +1,7 @@
-package com.jui.html.tags;
+package com.jui.html.elements;
 
 import com.jui.html.WebComponent;
 
-import lombok.extern.java.Log;
-
-@Log
 public class DatePicker extends WebComponent {
 	
     private String label;

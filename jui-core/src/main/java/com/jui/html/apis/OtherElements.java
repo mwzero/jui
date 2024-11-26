@@ -3,14 +3,14 @@ package com.jui.html.apis;
 import java.util.List;
 
 import com.jui.html.WebContext;
-import com.jui.html.tags.CheckBox;
-import com.jui.html.tags.ColorPicker;
-import com.jui.html.tags.DatePicker;
-import com.jui.html.tags.FileInput;
-import com.jui.html.tags.Input;
-import com.jui.html.tags.Radio;
-import com.jui.html.tags.Select;
-import com.jui.html.tags.Slider;
+import com.jui.html.elements.CheckBox;
+import com.jui.html.elements.ColorPicker;
+import com.jui.html.elements.DatePicker;
+import com.jui.html.elements.FileInput;
+import com.jui.html.elements.Input;
+import com.jui.html.elements.Radio;
+import com.jui.html.elements.Select;
+import com.jui.html.elements.Slider;
 
 public class OtherElements extends BaseElements {
 

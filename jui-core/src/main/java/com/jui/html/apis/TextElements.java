@@ -1,9 +1,9 @@
 package com.jui.html.apis;
 
-import com.jui.helpers.MarkdownProcessor;
 import com.jui.html.WebContext;
-import com.jui.html.tags.Divider;
-import com.jui.html.tags.Text;
+import com.jui.html.elements.Divider;
+import com.jui.html.elements.Text;
+import com.jui.processors.MarkdownProcessor;
 
 public class TextElements extends BaseElements {
 	

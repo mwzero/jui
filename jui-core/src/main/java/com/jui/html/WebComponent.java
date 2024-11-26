@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jui.helpers.TemplateHelper;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
@@ -15,14 +13,24 @@ import lombok.extern.java.Log;
 @Log
 public abstract class WebComponent {
 	
-	//parent
+	//web context 
 	WebContext webContext;
 	
+	Map<String, Object> attributes;
+	
+	String clientId;
 	String Id;
 	String key;
 	String data;
 	
 	protected Runnable onServerSide;
+	
+	public WebComponent() {
+		
+		log.fine("New WebComponent");
+		attributes = new HashMap<String, Object>(); 
+		webContext = new WebContext();
+	}
 	
 	public void executeServerAction() {
 		onServerSide.run();	

@@ -1,8 +1,6 @@
-package com.jui.html.tags;
+package com.jui.html.elements;
 
 import com.jui.html.WebComponent;
-
-import lombok.extern.slf4j.Slf4j;
 
 public class Button extends WebComponent {
 	
@@ -11,6 +9,7 @@ public class Button extends WebComponent {
     String onClick;
 
     public Button(String label, String type, String onClick, Runnable onServerSide) {
+    	
         this.label = label;
         this.onClick = onClick;
         this.type = type;

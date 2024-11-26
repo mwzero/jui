@@ -5,8 +5,9 @@ import java.lang.reflect.Field;
 
 import com.jui.html.WebComponent;
 import com.jui.html.WebContext;
-import com.jui.html.tags.Slider;
-import com.jui.html.tags.Text;
+
+import com.jui.html.elements.Slider;
+import com.jui.html.elements.Text;
 
 import lombok.extern.java.Log;
 

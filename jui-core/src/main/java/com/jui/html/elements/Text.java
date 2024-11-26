@@ -1,9 +1,8 @@
-package com.jui.html.tags;
+package com.jui.html.elements;
 
 import com.jui.html.WebComponent;
 
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 public class Text extends WebComponent {

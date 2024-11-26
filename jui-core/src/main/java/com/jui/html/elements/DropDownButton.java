@@ -1,4 +1,4 @@
-package com.jui.html.tags;
+package com.jui.html.elements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class DropDownButton extends WebComponent {
     public  DropDownButton add(String label, String icon, JuiContainer link, JuiContainer content, boolean active) {
     	
     	UnorderedListItem item = new UnorderedListItem(label, icon, 
-    			link != null ? link.clientId() : null, content != null ? content.clientId() : null);
+    			link != null ? link.getClientId() : null, content != null ? content.getClientId() : null);
     	items.add(item);
     	
 		return this;

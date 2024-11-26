@@ -3,7 +3,6 @@ package com.jui;
 import java.util.LinkedHashMap;
 
 import com.jui.html.JuiContainer;
-import com.jui.html.JuiHtmlRenderer;
 import com.jui.html.WebComponent;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
@@ -15,13 +14,12 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 
 @Log
-@Getter
 public class JuiApp extends JuiContainer {
 	
 	public static final JuiApp jui = new JuiApp();
 	
-	//used onServerAction response
 	@Setter
+	@Getter
 	String juiResponse;
 	
 	public JuiContainer sidebar;
@@ -53,7 +51,7 @@ public class JuiApp extends JuiContainer {
 		JuiContent content = new JuiContent();
 		content.setMain( renderer.render(this));
 		
-		if ( sidebar.context().getLinkedMapContext() != null) {
+		if ( sidebar.getWebContext().getLinkedMapContext() != null) {
 			
 			content.setSidebar(renderer.render(sidebar));
 		} else
@@ -95,7 +93,7 @@ public class JuiApp extends JuiContainer {
 
 	public WebComponent executeServerAction(String id) throws Exception{
 		
-		WebComponent  component = this.context().getLinkedMapContext().get(id);
+		WebComponent  component = this.getWebContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
 		

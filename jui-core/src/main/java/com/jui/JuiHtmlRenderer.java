@@ -1,10 +1,12 @@
-package com.jui.html;
+package com.jui;
 
 import java.io.IOException;
 import java.util.Map;
 
-import com.jui.helpers.TemplateHelper;
+import com.jui.html.JuiContainer;
+import com.jui.html.WebComponent;
 import com.jui.model.JuiContent;
+import com.jui.processors.TemplateHelper;
 import com.jui.utils.Utils;
 
 import lombok.extern.java.Log;
@@ -84,8 +86,8 @@ public class JuiHtmlRenderer {
 	
 	private String buildScripts(JuiContainer container) {
 		
-        String elementMappingJson = Utils.buildJsonString(container.context().relations, "source", "commands");
-        String elementPostDataJson = Utils.buildJsonString(container.context().elementPostData, "source", "commands");
+        String elementMappingJson = Utils.buildJsonString(container.getWebContext().relations, "source", "commands");
+        String elementPostDataJson = Utils.buildJsonString(container.getWebContext().elementPostData, "source", "commands");
 
         return """
                 <script>

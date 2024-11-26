@@ -1,4 +1,4 @@
-package com.jui.helpers;
+package com.jui.processors;
 
 import lombok.Builder;
 

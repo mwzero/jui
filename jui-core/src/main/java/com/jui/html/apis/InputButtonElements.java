@@ -1,9 +1,9 @@
 package com.jui.html.apis;
 
 import com.jui.html.WebContext;
-import com.jui.html.tags.Button;
-import com.jui.html.tags.FormButton;
-import com.jui.html.tags.FormButton.ButtonType;
+import com.jui.html.elements.Button;
+import com.jui.html.elements.FormButton;
+import com.jui.html.elements.FormButton.ButtonType;
 
 public class InputButtonElements extends BaseElements {
 	
