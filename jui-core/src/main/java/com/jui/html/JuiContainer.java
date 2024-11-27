@@ -61,7 +61,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	public JuiContainer(String key, ContainerType type) { this(key, type, null);}
 	public JuiContainer(String key, ContainerType type, Map<String, Object> attributes) {
 		
-		super();
+		super("Div");
 		log.fine("New JuiContainer:" + key);
 		
 		this.clientId = key;
@@ -69,13 +69,24 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		if ( attributes != null ) this.attributes = attributes;
 		
 		//Apis Delegates
-		textApis = new TextElements(this.getWebContext());
-		containerApis = new ContainerElements(this.getWebContext());
-		chartElements = new ChartElements(this.getWebContext());
-		inputButtonElements = new InputButtonElements(this.getWebContext());
-		inputSelectionElements = new InputSelectionElements(this.getWebContext());
-		otherElements = new OtherElements(this.getWebContext());
+		textApis = new TextElements(this.webContext());
+		containerApis = new ContainerElements(this.webContext());
+		chartElements = new ChartElements(this.webContext());
+		inputButtonElements = new InputButtonElements(this.webContext());
+		inputSelectionElements = new InputSelectionElements(this.webContext());
+		otherElements = new OtherElements(this.webContext());
 		
+	}
+	
+	public WebComponent add(WebComponent component) {
+		
+		//add component to web context
+		//generate a key and assign to it
+		this.webContext().add(component);
+		
+		component.parent(this);
+		
+		return component;
 	}
 	
 	@Override
@@ -83,10 +94,10 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		
 		if ( type == ContainerType.COL ) {
 			
-			int width = (int) this.attributes.get(ContainerElements.WIDTH_ATTRIBUTES);
+			int width = (int) this.attributes.get(WebAttributes.WIDTH_ATTRIBUTES);
 			return """
 					<div id="%s" class="col-%s" >{{content}}</div>
-				   """.formatted(this.getClientId(), width);
+				   """.formatted(this.clientId(), width);
 		} else {
 			
 			return """
@@ -100,18 +111,18 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	public void write(String... args) {
 		 for (String arg : args) {
 			 String text = MarkdownProcessor.builder().build().render(arg);
-			 this.getWebContext().add(new Text(text, false, true));
+			 this.add(new Text(text, false, true));
 		 }
 	}
 	
 	public void write ( Object obj ) {
-		JuiAnnotationHelper.write(getWebContext(), obj);
+		JuiAnnotationHelper.write(webContext(), obj);
 	}
 	
 	public Divider divider() {
 		
 		Divider divider = new Divider();
-		this.getWebContext().add(divider);
+		this.add(divider);
 		return divider;
 		
 	}
@@ -119,7 +130,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	public UnorderedList ul(String label) {
 		UnorderedList ul = new UnorderedList();
 		ul.setLabel(label);
-		this.getWebContext().add(ul);
+		this.add(ul);
 		return ul;
 		
 	}
@@ -134,7 +145,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 			uiList.add(uiItem);
 		});
 		ul.setItems(uiList);
-		this.getWebContext().add(ul);
+		this.add(ul);
 		return ul;
 	}
 	
@@ -143,7 +154,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		Table table = new Table();
 		table.setDf(df);
 		table.setCaption(caption);
-		this.getWebContext().add(table);
+		this.add(table);
 		return table;
 	}
 
@@ -154,7 +165,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		table.setDf(df);
 		table.setCaption(caption);
 		
-		this.getWebContext().add(table);
+		this.add(table);
 		return table;
 	}
 	
@@ -173,7 +184,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		        .flatMap(row -> row.getComponents().stream())
 		        .filter(component2 -> component2 instanceof JuiContainer && ((JuiContainer) component2).type == ContainerType.COL)
 		        .map(component2 -> (JuiContainer) component2)
-		        .filter(col -> col.getClientId().equals(key))
+		        .filter(col -> col.clientId().equals(key))
 		        .findFirst()
 		        .orElse(null);
 		
@@ -187,7 +198,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 		        .flatMap(row -> row.getComponents().stream())
 		        .filter(component2 -> component2 instanceof JuiContainer && ((JuiContainer) component2).type == ContainerType.TAB)
 		        .map(component2 -> (JuiContainer) component2)
-		        .filter(col -> col.getClientId().equals(key))
+		        .filter(col -> col.clientId().equals(key))
 		        .findFirst()
 		        .orElse(null);
 		
@@ -195,7 +206,7 @@ public class JuiContainer extends WebComponent implements AutoCloseable {
 	
 	public Collection<WebComponent> getComponents() {
 		
-		return getWebContext().getLinkedMapContext().values();
+		return webContext().getLinkedMapContext().values();
 	}
 
 }

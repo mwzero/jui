@@ -6,11 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.jui.html.JuiContainer;
+import com.jui.html.WebAttributes;
 import com.jui.html.WebContext;
 
 public class ContainerElements extends BaseElements {
-	
-	public final static String WIDTH_ATTRIBUTES = "width";
 	
 	public enum ContainerType {
 		DIV,
@@ -53,8 +52,8 @@ public class ContainerElements extends BaseElements {
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
-			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.TAB, Map.of( WIDTH_ATTRIBUTES, column.getValue()));
-			row.getWebContext().add( col);
+			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.TAB, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
+			row.add( col);
 			cols.add(col);
 			
 		}
@@ -71,9 +70,9 @@ public class ContainerElements extends BaseElements {
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
-			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.COL, Map.of( WIDTH_ATTRIBUTES, column.getValue()));
+			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.COL, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
 			cols.add(col);
-			row.getWebContext().add( col);
+			row.add( col);
 			
 		}
 		

@@ -7,6 +7,7 @@ public class FileInput extends WebComponent {
     String label;
 
 	public FileInput(String label) {
+		super("FileInput");
 		
         this.label = label;
 	}

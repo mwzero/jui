@@ -62,7 +62,7 @@ public class JuiAnnotationHelper {
 			if ( component != null ) {
 				Jui[] jui = field.getAnnotationsByType(Jui.class);
 				if ( jui.length > 0 ) {
-					component.setKey(jui[0].key()); 
+					component.key(jui[0].key()); 
 				}
 			}
 			

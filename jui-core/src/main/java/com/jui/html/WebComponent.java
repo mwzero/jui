@@ -6,10 +6,12 @@ import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.java.Log;
 
 @Getter
 @Setter
+@Accessors(fluent = true)
 @Log
 public abstract class WebComponent {
 	
@@ -18,33 +20,28 @@ public abstract class WebComponent {
 	//web context 
 	WebContext webContext;
 	
+	
 	Map<String, Object> attributes;
 	
-	String clientId;
+	/**
+	 * Specify Html Element Id like: div, button, slider, etc..
+	 */
 	String Id;
+	String clientId;
 	String key;
 	String data;
 	
 	protected Runnable onServerSide;
 	
-	public WebComponent() {
+	public WebComponent(String id) {
 		
 		log.fine("New WebComponent");
 		attributes = new HashMap<String, Object>(); 
 		webContext = new WebContext();
+		
+		this.Id(id);
 	}
 	
-	public WebComponent add(WebComponent component) {
-		
-		//add component to web context
-		//generate a key and assign to it
-		this.getWebContext().add(component);
-		
-		component.setParent(this);
-		
-		return component;
-	}
-
 	public void executeServerAction() {
 		onServerSide.run();	
 	}
@@ -71,8 +68,8 @@ public abstract class WebComponent {
 	public Map<String, Object> getVariables() {
 		
 		Map<String, Object> variables = new HashMap<>();
-		variables.put("clientId", this.getKey());
-		variables.put("key", this.getKey());
+		variables.put("clientId", this.key());
+		variables.put("key", this.key());
 		variables.put("juiComponent", this);
 		if ( onServerSide != null ) {
 			variables.put("onServerSide", "server-side");

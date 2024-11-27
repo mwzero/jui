@@ -12,8 +12,7 @@ public class Text extends WebComponent {
     private boolean input = false;
 
 	public Text(String text, boolean input, boolean readonly) {
-		
-		this.setId("Text");
+		super("Text");
 		
         this.text = text;
         this.readonly = readonly;
@@ -23,7 +22,7 @@ public class Text extends WebComponent {
 	@Override
 	public String getHtml() {
 		
-		log.fine("Rendering [%s] [%s]".formatted(this.getId(), this.getKey()));
+		log.fine("Rendering [%s] [%s]".formatted(this.Id(), this.key()));
 		
 		if ( input ) {
 			
@@ -34,7 +33,7 @@ public class Text extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s">
 					    </div>		
-						""".formatted(this.getKey(),text,this.getKey(), this.getKey(), text);
+						""".formatted(this.key(),text,this.key(), this.key(), text);
 						
 			} else {
 				
@@ -43,7 +42,7 @@ public class Text extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s">
 					    </div>		
-						""".formatted(this.getKey(), text, this.getKey(), this.getKey(), text);
+						""".formatted(this.key(), text, this.key(), this.key(), text);
 				
 			}
 		} else {

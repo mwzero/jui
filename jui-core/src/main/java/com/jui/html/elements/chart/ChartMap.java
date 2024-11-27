@@ -33,36 +33,40 @@ public class ChartMap extends WebComponent {
 	
 	Double[] location;
 	
+	public ChartMap() {
+		super("ChartMap");
+	}
+	
 	@Override
 	public void preProcessBindingAndRelations() {
 		
 		if ( c_lat != null ) {
 			
 			lat(Double.parseDouble(c_lat.getValue()));
-			this.getWebContext().addRelations(this.getKey(), "document.getElementById('%s').value=value.lat;".formatted(c_lat.getKey()));
-			this.getWebContext().addRelations(c_lat.getKey(), """
+			this.webContext().addRelations(this.key(), "document.getElementById('%s').value=value.lat;".formatted(c_lat.key()));
+			this.webContext().addRelations(c_lat.key(), """
 					var center = %s.getCenter(); 
 					var latlng = L.latLng(value, center.lng); 
 					%s.panTo(latlng);
-					""".formatted(this.getKey(), this.getKey()));
+					""".formatted(this.key(), this.key()));
 		}
 		
 		if ( c_lng != null ) {
 			lng(Double.parseDouble(c_lng.getValue()));
-			this.getWebContext().addRelations(this.getKey(), "document.getElementById('%s').value=value.lng;".formatted(c_lng.getKey()));
-			this.getWebContext().addRelations(c_lng.getKey(), """
+			this.webContext().addRelations(this.key(), "document.getElementById('%s').value=value.lng;".formatted(c_lng.key()));
+			this.webContext().addRelations(c_lng.key(), """
 					var center = %s.getCenter(); 
 					var latlng = L.latLng(center.lat, value); 
 					%s.panTo(latlng);
-					""".formatted(getKey(), getKey()));
+					""".formatted(key(), key()));
 			
 		} 		
 		if ( c_zoom != null ) {
 			
 			zoom(c_zoom.getIntValue());
 			
-			this.getWebContext().addRelations(c_zoom.getKey(), "%s.setZoom(value);".formatted(this.getKey()));
-			this.getWebContext().addRelations(this.getKey(), "document.getElementById('%s').value=value.zoom;".formatted(c_zoom.getKey()));
+			this.webContext().addRelations(c_zoom.key(), "%s.setZoom(value);".formatted(this.key()));
+			this.webContext().addRelations(this.key(), "document.getElementById('%s').value=value.zoom;".formatted(c_zoom.key()));
 			
 		} 
 	}
@@ -70,7 +74,7 @@ public class ChartMap extends WebComponent {
 	@Override
 	public String getPostData() {
 		
-		return "postData%s();".formatted(this.getKey());
+		return "postData%s();".formatted(this.key());
 	}
 	
 }

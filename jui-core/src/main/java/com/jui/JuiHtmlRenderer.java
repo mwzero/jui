@@ -32,7 +32,7 @@ public class JuiHtmlRenderer {
 			
 		for (WebComponent component : container.getComponents()) {
 			
-			log.fine("Rendering [%s] [%s]".formatted(component.getId(), component.getKey()));
+			log.fine("Rendering [%s] [%s]".formatted(component.Id(), component.key()));
 	
 			if ( component instanceof JuiContainer ) {
 				
@@ -80,8 +80,8 @@ public class JuiHtmlRenderer {
 	
 	private String buildScripts(WebComponent container) {
 		
-        String elementMappingJson = Utils.buildJsonString(container.getWebContext().relations, "source", "commands");
-        String elementPostDataJson = Utils.buildJsonString(container.getWebContext().elementPostData, "source", "commands");
+        String elementMappingJson = Utils.buildJsonString(container.webContext().relations, "source", "commands");
+        String elementPostDataJson = Utils.buildJsonString(container.webContext().elementPostData, "source", "commands");
 
         return """
                 <script>

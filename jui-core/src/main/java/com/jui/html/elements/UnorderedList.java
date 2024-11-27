@@ -18,14 +18,14 @@ public class UnorderedList extends WebComponent {
 	
     public UnorderedList() {
     	
-    	this.setId("UL");
+    	super("UL");
     	items = new ArrayList<>();
     }
     
     public  UnorderedList add(String label, String icon, JuiContainer link, JuiContainer content, boolean active) {
     	
     	UnorderedListItem item = new UnorderedListItem(label, icon, 
-    			link != null ? link.getClientId() : null, content != null ? content.getClientId() : null);
+    			link != null ? link.clientId() : null, content != null ? content.clientId() : null);
     	items.add(item);
     	
 		return this;

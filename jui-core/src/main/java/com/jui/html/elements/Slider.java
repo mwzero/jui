@@ -3,7 +3,15 @@ package com.jui.html.elements;
 import com.jui.html.WebComponent;
 
 public class Slider extends WebComponent {
-	
+
+    public Slider ( String label, int min, int max, int value) {
+    	super("Slider");
+    	this.label = label;
+    	this.min = Integer.valueOf(min);
+    	this.max = Integer.valueOf(max);
+    	this.value = Integer.valueOf(value);
+    }
+    
 	public String getLabel() {
 		return label;
 	}
@@ -50,13 +58,7 @@ public class Slider extends WebComponent {
     private Integer max;
     private Integer value;
     
-    public Slider ( String label, int min, int max, int value) {
-    	
-    	this.label = label;
-    	this.min = Integer.valueOf(min);
-    	this.max = Integer.valueOf(max);
-    	this.value = Integer.valueOf(value);
-    }
+
     
     @Override
 	public String getHtml() {
@@ -67,6 +69,6 @@ public class Slider extends WebComponent {
 		    		<br>
 		    		<input type="range" class="form-range form-control" id="%s" name="%s" min="%d" max="%d" value="%d">
         		</div>
-				""".formatted(this.getKey(), label, this.getKey(), this.getKey(), min, max, value);
+				""".formatted(this.key(), label, this.key(), this.key(), min, max, value);
     }
 }

@@ -51,7 +51,7 @@ public class JuiApp extends JuiContainer {
 		JuiContent content = new JuiContent();
 		content.setMain( renderer.render(this));
 		
-		if ( sidebar.getWebContext().getLinkedMapContext() != null) {
+		if ( sidebar.webContext().getLinkedMapContext() != null) {
 			
 			content.setSidebar(renderer.render(sidebar));
 		} else
@@ -93,7 +93,7 @@ public class JuiApp extends JuiContainer {
 
 	public WebComponent executeServerAction(String id) throws Exception{
 		
-		WebComponent  component = this.getWebContext().getLinkedMapContext().get(id);
+		WebComponent  component = this.webContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
 		

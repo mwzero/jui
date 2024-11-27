@@ -7,6 +7,7 @@ public class DatePicker extends WebComponent {
     private String label;
 
 	public DatePicker(String label) {
+		super("DatePicker");
 		
         this.label = label;
 	}

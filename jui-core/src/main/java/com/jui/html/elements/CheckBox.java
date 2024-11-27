@@ -14,6 +14,8 @@ public class CheckBox extends WebComponent {
 
 	public CheckBox(String label, List<String> values) {
 		
+		super("CheckBox");
+		
         this.label = label;
         this.values = values;
 	}

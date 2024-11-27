@@ -12,13 +12,13 @@ public class Select extends WebComponent {
     DataFrame df;
 
 	public Select(String label, List<String> values) {
-		
+		super("Select");
         this.label = label;
         this.values = values;
 	}
 	
 	public Select(String label, DataFrame df) {
-		
+		super("Select");
         this.label = label;
         this.df = df;
 	}
@@ -66,7 +66,7 @@ public class Select extends WebComponent {
 		    		<label for="%s" class="form-label">%s</label>
 		    		<select id="%s" name="%s" class="form-select form-control" aria-label="Default select example">%s</select>
 				</div>
-				""".formatted(this.getKey(), this.label, this.getKey(), this.getKey(), html);
+				""".formatted(this.key(), this.label, this.key(), this.key(), html);
 		
 		
 	}

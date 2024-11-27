@@ -10,6 +10,8 @@ public class Button extends WebComponent {
 
     public Button(String label, String type, String onClick, Runnable onServerSide) {
     	
+    	super("Button");
+    	
         this.label = label;
         this.onClick = onClick;
         this.type = type;

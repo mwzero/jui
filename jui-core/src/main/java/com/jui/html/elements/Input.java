@@ -27,9 +27,12 @@ public class Input extends WebComponent {
 
     
     public Input() {
+    	super("Input");
 	}
 
 	public Input(String label, boolean input, boolean readonly, String value, String placeholder) {
+		
+		this();
 		
         this.label = label;
         this.readonly = readonly;
@@ -50,13 +53,13 @@ public class Input extends WebComponent {
 		
 		if ( c_label != null ) {
 			//context.addRelations(mapChart.getKey(), "document.getElementById('%s').value=value.lat".formatted(builder.c_lat.getKey()));
-			this.getWebContext().addRelations(getKey(), "document.getElementById('%s').value=value".formatted(c_label.getKey()));
+			this.webContext().addRelations(key(), "document.getElementById('%s').value=value".formatted(c_label.key()));
 		} 
 		
 		if ( c_value != null ) {
 			value(c_value.getValue());
 			//context.addRelations(mapChart.getKey(), "document.getElementById('%s').value=value.lat".formatted(builder.c_lat.getKey()));
-			this.getWebContext().addRelations(c_value.getKey(), "document.getElementById('%s').value=value".formatted(getKey()));
+			this.webContext().addRelations(c_value.key(), "document.getElementById('%s').value=value".formatted(key()));
 		} 
 	}
 	
@@ -72,7 +75,7 @@ public class Input extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s" value="%s"></input>
 					    </div>		
-						""".formatted(this.getKey(),label,this.getKey(), this.getKey(), placeholder, value);
+						""".formatted(key(),label,key(), key(), placeholder, value);
 						
 			} else {
 				
@@ -81,7 +84,7 @@ public class Input extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s" value="%s"></input>
 					    </div>		
-						""".formatted(this.getKey(), label, this.getKey(), this.getKey(), placeholder, value);
+						""".formatted(key(), label, key(), key(), placeholder, value);
 				
 			}
 		} else {

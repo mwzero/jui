@@ -14,10 +14,16 @@ import lombok.extern.java.Log;
 @Setter
 public class ChartBar extends WebComponent {
 	
+	
+
 	DataFrame df;
 	
 	int max_height;
 	int max_width;
+
+	public ChartBar() {
+		super("ChartBar");
+	}
 	
 	@Override
 	public String getHtml() {
@@ -27,7 +33,7 @@ public class ChartBar extends WebComponent {
 		String html = """
 				<div id="%s" style="max-width: %s; max_height=%s; display: inline-block">
 				</div>		
-				""".formatted(this.getKey(), max_width == 0 ? "100%" : max_width + "px", max_height + "px");
+				""".formatted(this.key(), max_width == 0 ? "100%" : max_width + "px", max_height + "px");
 		
 		String series = "";
 		String xasis = "";
@@ -64,7 +70,7 @@ public class ChartBar extends WebComponent {
 
 					chart.render();
 				</script>
-				""".formatted(series, xasis, this.getKey());
+				""".formatted(series, xasis, this.key());
 		
 		return html + js;
 

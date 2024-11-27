@@ -20,6 +20,10 @@ public class ChartLines extends WebComponent {
 	int height;
 	int width;
 	
+	public ChartLines() {
+		super("ChartLines");
+	}
+	
 	@Override
 	public String getHtml() {
 		
@@ -28,7 +32,7 @@ public class ChartLines extends WebComponent {
 		String html = """
 				<div id="%s" style="width: %s; height=%s; display: inline-block">
 				</div>		
-				""".formatted(this.getKey(), width == 0 ? "100%" : width + "px", height + "px");
+				""".formatted(this.key(), width == 0 ? "100%" : width + "px", height + "px");
 		
 		Object [] xasis = new Object [df.getDs().rowCount()];
 		Object  series[][] = new Object [df.getDs().columnCount() - 1][df.getDs().rowCount()];
@@ -85,7 +89,7 @@ public class ChartLines extends WebComponent {
 
 					chart.render();
 				</script>
-				""".formatted(jsSeries, Utils.buildString (xasis), this.getKey());
+				""".formatted(jsSeries, Utils.buildString (xasis), this.key());
 		
 		
 		return html + js;

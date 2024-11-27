@@ -14,11 +14,11 @@ public class Divider extends WebComponent {
 	String color;
 	
     public Divider() {
-    	this.setId("Divider");
+    	super("Divider");
     }
     
     public Divider(String color) {
-    	super();
+    	this();
     	this.color = color;
     }
 }

@@ -21,6 +21,9 @@ public class FormButton extends WebComponent {
     }
 
     public FormButton(String label, ButtonType type, String onClick) {
+    	
+    	super("FormButton");
+    	
         this.label = label;
         this.onClick = onClick;
         this.type = type;

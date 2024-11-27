@@ -20,7 +20,7 @@ public class Table extends WebComponent  {
 	
     public Table() {
     	
-    	this.setId("Table");
+    	super("Table");
     	styles = new ArrayList<>();
     }
     

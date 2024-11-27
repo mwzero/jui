@@ -10,6 +10,7 @@ public class Radio extends WebComponent {
     List<String> values;
 
 	public Radio(String label, List<String> values) {
+		super("Radio");
 		
         this.label = label;
         this.values = values;
@@ -30,7 +31,7 @@ public class Radio extends WebComponent {
 			    %s
 			  </label>
 			</div>
-			""".formatted(this.getKey(), this.getKey() + "_" + i, this.getKey() + "_" + i, value);
+			""".formatted(this.key(), this.key() + "_" + i, this.key() + "_" + i, value);
 			
 			html+=oneCheck;
 				

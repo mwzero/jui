@@ -48,7 +48,7 @@ public class WebContext {
 	public WebComponent add(WebComponent component) {
 		
 		String uuid = "c"+ instanceCount.incrementAndGet();
-		component.setKey(uuid);
+		component.key(uuid);
 		
 		this.context.put(uuid, component);
 		
