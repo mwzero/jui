@@ -91,10 +91,4 @@ public class ChartLines extends WebComponent {
 		return html + js;
 
 	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -11,12 +11,4 @@ public class ColorPicker extends WebComponent {
 		
         this.label = label;
 	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-		
-	
 }

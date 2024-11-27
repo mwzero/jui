@@ -15,11 +15,4 @@ public class Button extends WebComponent {
         this.type = type;
         this.onServerSide = onServerSide;
     }
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

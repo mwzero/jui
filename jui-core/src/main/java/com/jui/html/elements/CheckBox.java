@@ -18,13 +18,4 @@ public class CheckBox extends WebComponent {
         this.values = values;
 	}
 
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
-		
-	
 }

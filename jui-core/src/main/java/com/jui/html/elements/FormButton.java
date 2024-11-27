@@ -33,11 +33,4 @@ public class FormButton extends WebComponent {
 				<button class="btn btn-%s">%s</button>
 			   """.formatted(type.name().toLowerCase(), label);
 	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

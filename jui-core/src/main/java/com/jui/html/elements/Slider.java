@@ -69,10 +69,4 @@ public class Slider extends WebComponent {
         		</div>
 				""".formatted(this.getKey(), label, this.getKey(), this.getKey(), min, max, value);
     }
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

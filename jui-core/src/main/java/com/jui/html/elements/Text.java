@@ -51,11 +51,4 @@ public class Text extends WebComponent {
 		}
 		
 	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

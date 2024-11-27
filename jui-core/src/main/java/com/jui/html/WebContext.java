@@ -10,11 +10,10 @@ import lombok.Builder;
 
 public class WebContext {
 	
-	//contains webcomponent 
 	LinkedHashMap<String, WebComponent> context;
 	
-	
 	public LinkedHashMap<String, ArrayList<String>> relations;
+	
 	public LinkedHashMap<String, String> elementPostData;
 	
 	private static AtomicInteger instanceCount = new AtomicInteger(0);
@@ -26,24 +25,6 @@ public class WebContext {
 		this.relations = new LinkedHashMap<>();
 		this.elementPostData = new LinkedHashMap<>();
 		
-	}
-	
-	public WebComponent add(WebComponent component) {
-		
-		String uuid = "c"+ instanceCount.incrementAndGet();
-		component.setKey(uuid);
-		
-		if ( component instanceof JuiContainer ) {
-			
-		} else component.setWebContext(this);
-		
-		this.context.put(uuid, component);
-		
-		String postDataElement = component.getPostData();
-		if ( postDataElement != null)
-			this.elementPostData.put(uuid, component.getPostData());
-		
-		return component;
 	}
 	
 	public LinkedHashMap<String, WebComponent> getLinkedMapContext() { 
@@ -64,5 +45,19 @@ public class WebContext {
 			relations.put(key, new ArrayList<String>(Arrays.asList(command)));
 	}
 
+	public WebComponent add(WebComponent component) {
+		
+		String uuid = "c"+ instanceCount.incrementAndGet();
+		component.setKey(uuid);
+		
+		this.context.put(uuid, component);
+		
+		String postDataElement = component.getPostData();
+		if ( postDataElement != null)
+			this.elementPostData.put(uuid, component.getPostData());
+		
+		return component;
+		
+	}
 
 }

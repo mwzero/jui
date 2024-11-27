@@ -38,12 +38,4 @@ public class Radio extends WebComponent {
 		
 		return html;
 	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-		
-	
 }

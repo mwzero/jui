@@ -13,6 +13,8 @@ import lombok.extern.java.Log;
 @Log
 public abstract class WebComponent {
 	
+	WebComponent parent;
+	
 	//web context 
 	WebContext webContext;
 	
@@ -32,6 +34,17 @@ public abstract class WebComponent {
 		webContext = new WebContext();
 	}
 	
+	public WebComponent add(WebComponent component) {
+		
+		//add component to web context
+		//generate a key and assign to it
+		this.getWebContext().add(component);
+		
+		component.setParent(this);
+		
+		return component;
+	}
+
 	public void executeServerAction() {
 		onServerSide.run();	
 	}
@@ -45,6 +58,7 @@ public abstract class WebComponent {
 	}
 	
 	public void preProcessBindingAndRelations() {;}
+	
 	public String getHtml() { return null;}
 	
 	public String getTemplateName() {
@@ -100,10 +114,6 @@ public abstract class WebComponent {
 		}
 		return variables;
 	}
-
-	public String getPostData() {
-		return null;
-		//return "postData%s();".formatted(this.getKey());
-	}
 	
+	public String getPostData() {return null;}
 }

@@ -14,11 +14,4 @@ public class TextArea extends WebComponent {
         this.readonly = readonly;
         this.rows = rows;
 	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

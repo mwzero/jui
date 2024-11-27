@@ -88,12 +88,5 @@ public class Input extends WebComponent {
 			return "<p>" + label + "</p>";		
 		}
 		
-	}
-
-	@Override
-	public String getPostData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+	}	
 }
