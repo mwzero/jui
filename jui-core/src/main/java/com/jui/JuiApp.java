@@ -2,8 +2,9 @@ package com.jui;
 
 import java.util.LinkedHashMap;
 
-import com.jui.html.JuiContainer;
-import com.jui.html.WebComponent;
+import com.jui.html.WebContainer;
+import com.jui.html.JuiHtmlRenderer;
+import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
 import com.jui.net.handlers.HandlerJuiRequest;
@@ -14,7 +15,7 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 
 @Log
-public class JuiApp extends JuiContainer {
+public class JuiApp extends WebContainer {
 	
 	public static final JuiApp jui = new JuiApp();
 	
@@ -22,7 +23,7 @@ public class JuiApp extends JuiContainer {
 	@Getter
 	String juiResponse;
 	
-	public JuiContainer sidebar;
+	public WebContainer sidebar;
 
 	//
 	JuiAppAttributes attributes;
@@ -36,7 +37,7 @@ public class JuiApp extends JuiContainer {
 		
 		log.info("JUI App: Start Initialization");
 		renderer = new JuiHtmlRenderer();
-		sidebar = new JuiContainer("sidebar");
+		sidebar = new WebContainer("sidebar");
 	}
 	
 	public JuiAppAttributes set_page_config() {
@@ -91,9 +92,9 @@ public class JuiApp extends JuiContainer {
 		.start();
 	}
 
-	public WebComponent executeServerAction(String id) throws Exception{
+	public WebElement executeServerAction(String id) throws Exception{
 		
-		WebComponent  component = this.webContext().getLinkedMapContext().get(id);
+		WebElement  component = this.webContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
 		

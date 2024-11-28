@@ -1,13 +1,16 @@
 package com.jui.html.apis;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.jui.html.JuiContainer;
+import com.jui.html.WebContainer;
+import com.jui.html.WebElement;
 import com.jui.html.WebAttributes;
-import com.jui.html.WebContext;
+import com.jui.html.WebElementContext;
+import com.jui.html.apis.ContainerElements.ContainerType;
 
 public class ContainerElements extends BaseElements {
 	
@@ -24,35 +27,35 @@ public class ContainerElements extends BaseElements {
 		
 	};
 	
-	public ContainerElements(WebContext context) {
+	public ContainerElements(WebElementContext context) {
 		super(context);
 		
 	}
 	
 	//Layouts and Containers
-	protected JuiContainer addContainer(String key, ContainerType type, Map<String, Object> attributes) {
+	protected WebContainer addContainer(String key, ContainerType type, Map<String, Object> attributes) {
 		
-		JuiContainer container = new JuiContainer(key, ContainerType.DIV, null);
+		WebContainer container = new WebContainer(key, ContainerType.DIV, null);
 		context.add(container);
 		
 		return container;	
 	}
 	
-	public JuiContainer container(String key) { return this.addContainer(key, ContainerType.DIV, null);}
-	public JuiContainer dialog(String key, String Title) { return this.addContainer(key, ContainerType.DIALOG, null);}
-	public JuiContainer expander(String key, String Title) { return this.addContainer(key, ContainerType.EXPANDER, null);}
-	public JuiContainer popover(String key, String Title) { return this.addContainer(key, ContainerType.POPOVER, null);}
-	public JuiContainer empty(String key) { return this.addContainer(key, ContainerType.POPOVER, null);}
+	public WebContainer container(String key) { return this.addContainer(key, ContainerType.DIV, null);}
+	public WebContainer dialog(String key, String Title) { return this.addContainer(key, ContainerType.DIALOG, null);}
+	public WebContainer expander(String key, String Title) { return this.addContainer(key, ContainerType.EXPANDER, null);}
+	public WebContainer popover(String key, String Title) { return this.addContainer(key, ContainerType.POPOVER, null);}
+	public WebContainer empty(String key) { return this.addContainer(key, ContainerType.POPOVER, null);}
 	
-	public List<JuiContainer> tabs(Map<String, Integer> of) {
+	public List<WebContainer> tabs(Map<String, Integer> of) {
 		
-		List<JuiContainer> cols = new ArrayList<JuiContainer>();
+		List<WebContainer> cols = new ArrayList<WebContainer>();
 		
-		JuiContainer row = new JuiContainer("", ContainerType.TABS, null);
+		WebContainer row = new WebContainer("", ContainerType.TABS, null);
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
-			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.TAB, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
+			WebContainer col = new WebContainer(column.getKey(), ContainerType.TAB, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
 			row.add( col);
 			cols.add(col);
 			
@@ -62,15 +65,15 @@ public class ContainerElements extends BaseElements {
 		return cols;
 	}
 
-	public List<JuiContainer> columns(Map<String, Integer> of) {
+	public List<WebContainer> columns(Map<String, Integer> of) {
 		
-		List<JuiContainer> cols = new ArrayList<JuiContainer>();
+		List<WebContainer> cols = new ArrayList<WebContainer>();
 		
-		JuiContainer row = new JuiContainer("", ContainerType.ROW, null);
+		WebContainer row = new WebContainer("", ContainerType.ROW, null);
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
-			JuiContainer col = new JuiContainer(column.getKey(), ContainerType.COL, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
+			WebContainer col = new WebContainer(column.getKey(), ContainerType.COL, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
 			cols.add(col);
 			row.add( col);
 			
@@ -79,5 +82,38 @@ public class ContainerElements extends BaseElements {
 		this.context.add(row);
 		
 		return cols;
+	}
+	
+	public WebContainer columns(String key) {
+		
+		return getComponents().stream()
+		        .filter(component -> component instanceof WebContainer && ((WebContainer) component).type() == ContainerType.ROW)
+		        .map(component -> (WebContainer) component)
+		        .flatMap(row -> row.getComponents().stream())
+		        .filter(component2 -> component2 instanceof WebContainer && ((WebContainer) component2).type() == ContainerType.COL)
+		        .map(component2 -> (WebContainer) component2)
+		        .filter(col -> col.clientId().equals(key))
+		        .findFirst()
+		        .orElse(null);
+		
+	}
+	
+	public WebContainer tabs(String key) {
+		
+		return getComponents().stream()
+		        .filter(component -> component instanceof WebContainer && ((WebContainer) component).type() == ContainerType.TABS)
+		        .map(component -> (WebContainer) component)
+		        .flatMap(row -> row.getComponents().stream())
+		        .filter(component2 -> component2 instanceof WebContainer && ((WebContainer) component2).type() == ContainerType.TAB)
+		        .map(component2 -> (WebContainer) component2)
+		        .filter(col -> col.clientId().equals(key))
+		        .findFirst()
+		        .orElse(null);
+		
+	}
+	
+	public Collection<WebElement> getComponents() {
+		
+		return context.getLinkedMapContext().values();
 	}
 }

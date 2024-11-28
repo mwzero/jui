@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Jui {
 	
-	 public String key() default "";
+	 public String clientId() default "";
 }

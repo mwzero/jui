@@ -1,6 +1,6 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public class Divider extends WebComponent {
+public class Divider extends WebElement {
 	
 	String color;
 	

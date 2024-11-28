@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class FormButton extends WebComponent {
+public class FormButton extends WebElement {
 	
     private final String label;
     private final ButtonType type;

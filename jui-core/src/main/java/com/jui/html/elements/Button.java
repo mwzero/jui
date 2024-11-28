@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class Button extends WebComponent {
+public class Button extends WebElement {
 	
     String label;
     String type;

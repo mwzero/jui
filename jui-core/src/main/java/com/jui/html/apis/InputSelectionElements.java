@@ -2,7 +2,7 @@ package com.jui.html.apis;
 
 import java.util.List;
 
-import com.jui.html.WebContext;
+import com.jui.html.WebElementContext;
 import com.jui.html.elements.CheckBox;
 import com.jui.html.elements.ColorPicker;
 import com.jui.html.elements.DatePicker;
@@ -14,7 +14,7 @@ import com.jui.html.elements.Slider;
 
 public class InputSelectionElements extends BaseElements {
 
-	public InputSelectionElements(WebContext context) {
+	public InputSelectionElements(WebElementContext context) {
 		super(context);
 	}
 

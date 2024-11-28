@@ -1,6 +1,6 @@
 package com.jui.html.apis;
 
-import com.jui.html.WebContext;
+import com.jui.html.WebElementContext;
 import com.jui.html.elements.Divider;
 import com.jui.html.elements.Text;
 import com.jui.html.elements.chart.ChartBar;
@@ -10,7 +10,7 @@ import com.jui.processors.MarkdownProcessor;
 
 public class ChartElements extends BaseElements {
 	
-	public ChartElements(WebContext context) {
+	public ChartElements(WebElementContext context) {
 		
 		super(context);
 		

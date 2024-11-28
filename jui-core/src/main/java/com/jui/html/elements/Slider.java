@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class Slider extends WebComponent {
+public class Slider extends WebElement {
 
     public Slider ( String label, int min, int max, int value) {
     	super("Slider");
@@ -69,6 +69,6 @@ public class Slider extends WebComponent {
 		    		<br>
 		    		<input type="range" class="form-range form-control" id="%s" name="%s" min="%d" max="%d" value="%d">
         		</div>
-				""".formatted(this.key(), label, this.key(), this.key(), min, max, value);
+				""".formatted(this.clientId(), label, this.clientId(), this.clientId(), min, max, value);
     }
 }

@@ -22,16 +22,16 @@ public class JuiAnnotations {
 			this.slider2 = slider2;
 		}
 		
-		@Jui(key="slider1")
+		@Jui(clientId="slider1")
 		@JuiSlider(min=1, max=10)
 		int slider;
 		
-		@Jui(key="slider2")
+		@Jui(clientId="slider2")
 		@JuiSlider(min=1, max=10)
 		int slider2;
 		
 		
-		@Jui(key="text1")
+		@Jui(clientId="text1")
 		@JuiText(text="esempio",input=true, readonly=false)
 		int int1;
 		

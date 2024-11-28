@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class FileInput extends WebComponent {
+public class FileInput extends WebElement {
 	
     String label;
 

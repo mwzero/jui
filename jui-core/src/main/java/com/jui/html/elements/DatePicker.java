@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class DatePicker extends WebComponent {
+public class DatePicker extends WebElement {
 	
     private String label;
 

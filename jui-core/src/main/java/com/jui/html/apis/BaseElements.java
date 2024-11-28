@@ -1,12 +1,12 @@
 package com.jui.html.apis;
 
-import com.jui.html.WebContext;
+import com.jui.html.WebElementContext;
 
 public class BaseElements {
 	
-	WebContext context;
+	WebElementContext context;
 	
-	public BaseElements(WebContext context) {
+	public BaseElements(WebElementContext context) {
 		
 		this.context = context;
 		

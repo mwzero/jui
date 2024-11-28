@@ -2,10 +2,10 @@ package com.jui.html.elements;
 
 import java.util.List;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 import com.st.DataFrame;
 
-public class Select extends WebComponent {
+public class Select extends WebElement {
 	
     private String label;
     List<String> values;
@@ -66,7 +66,7 @@ public class Select extends WebComponent {
 		    		<label for="%s" class="form-label">%s</label>
 		    		<select id="%s" name="%s" class="form-select form-control" aria-label="Default select example">%s</select>
 				</div>
-				""".formatted(this.key(), this.label, this.key(), this.key(), html);
+				""".formatted(this.clientId(), this.label, this.clientId(), this.clientId(), html);
 		
 		
 	}

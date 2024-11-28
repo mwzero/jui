@@ -3,7 +3,7 @@ package com.jui.html.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 import com.st.DataFrame;
 
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Table extends WebComponent  {
+public class Table extends WebElement  {
 	
 	String caption;
 	DataFrame df;

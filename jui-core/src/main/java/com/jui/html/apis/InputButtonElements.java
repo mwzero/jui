@@ -1,13 +1,13 @@
 package com.jui.html.apis;
 
-import com.jui.html.WebContext;
+import com.jui.html.WebElementContext;
 import com.jui.html.elements.Button;
 import com.jui.html.elements.FormButton;
 import com.jui.html.elements.FormButton.ButtonType;
 
 public class InputButtonElements extends BaseElements {
 	
-	public InputButtonElements(WebContext context) {
+	public InputButtonElements(WebElementContext context) {
 		
 		super(context);
 		

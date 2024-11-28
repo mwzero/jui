@@ -10,7 +10,7 @@ import java.util.List;
 
 import org.h2.tools.DeleteDbFiles;
 
-import com.jui.html.JuiContainer;
+import com.jui.html.WebContainer;
 import com.st.DB;
 
 
@@ -44,7 +44,7 @@ public class Expenses {
 		}
 		*/
 		
-		try ( JuiContainer col = jui.columns("right") ) {
+		try ( WebContainer col = jui.columns("right") ) {
 			/*
 		    col.download_button(
 		        label="Download data as CSV",

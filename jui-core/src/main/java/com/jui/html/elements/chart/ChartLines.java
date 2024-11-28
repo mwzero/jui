@@ -1,6 +1,6 @@
 package com.jui.html.elements.chart;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 import com.jui.utils.Utils;
 import com.st.DataFrame;
 
@@ -13,7 +13,7 @@ import lombok.extern.java.Log;
 @Accessors(fluent = true)
 @Getter
 @Setter
-public class ChartLines extends WebComponent {
+public class ChartLines extends WebElement {
 	
 	DataFrame df;
 	
@@ -32,7 +32,7 @@ public class ChartLines extends WebComponent {
 		String html = """
 				<div id="%s" style="width: %s; height=%s; display: inline-block">
 				</div>		
-				""".formatted(this.key(), width == 0 ? "100%" : width + "px", height + "px");
+				""".formatted(this.clientId(), width == 0 ? "100%" : width + "px", height + "px");
 		
 		Object [] xasis = new Object [df.getDs().rowCount()];
 		Object  series[][] = new Object [df.getDs().columnCount() - 1][df.getDs().rowCount()];
@@ -89,7 +89,7 @@ public class ChartLines extends WebComponent {
 
 					chart.render();
 				</script>
-				""".formatted(jsSeries, Utils.buildString (xasis), this.key());
+				""".formatted(jsSeries, Utils.buildString (xasis), this.clientId());
 		
 		
 		return html + js;

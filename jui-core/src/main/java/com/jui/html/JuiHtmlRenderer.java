@@ -1,10 +1,8 @@
-package com.jui;
+package com.jui.html;
 
 import java.io.IOException;
 import java.util.Map;
 
-import com.jui.html.JuiContainer;
-import com.jui.html.WebComponent;
 import com.jui.processors.TemplateHelper;
 import com.jui.utils.Utils;
 
@@ -26,18 +24,18 @@ public class JuiHtmlRenderer {
         }
     }
 	
-	public String render (JuiContainer container ) {
+	public String render (WebContainer container ) {
 		
 		StringBuilder html = new StringBuilder();
 			
-		for (WebComponent component : container.getComponents()) {
+		for (WebElement component : container.getComponents()) {
 			
-			log.fine("Rendering [%s] [%s]".formatted(component.Id(), component.key()));
+			log.fine("Rendering [%s] [%s]".formatted(component.Id(), component.clientId()));
 	
-			if ( component instanceof JuiContainer ) {
+			if ( component instanceof WebContainer ) {
 				
 				String containerEnvelop = renderWebComponent(component);
-				String containerContents = render((JuiContainer) component);
+				String containerContents = render((WebContainer) component);
 				containerEnvelop = containerEnvelop.replace("{{content}}", containerContents);
 				
 				html.append(containerEnvelop);
@@ -53,7 +51,7 @@ public class JuiHtmlRenderer {
 		return html.toString();
 	}
 	
-	protected String renderWebComponent (WebComponent component) {
+	protected String renderWebComponent (WebElement component) {
 		
 		StringBuilder html = new StringBuilder();
 		
@@ -78,7 +76,7 @@ public class JuiHtmlRenderer {
 		return html.toString();
 	}
 	
-	private String buildScripts(WebComponent container) {
+	private String buildScripts(WebElement container) {
 		
         String elementMappingJson = Utils.buildJsonString(container.webContext().relations, "source", "commands");
         String elementPostDataJson = Utils.buildJsonString(container.webContext().elementPostData, "source", "commands");

@@ -1,6 +1,6 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import lombok.extern.java.Log;
 @Setter
 @Accessors(fluent = true)
 @Log
-public class Input extends WebComponent {
+public class Input extends WebElement {
 	
     String label;
     boolean readonly = true;
@@ -21,9 +21,9 @@ public class Input extends WebComponent {
     String placeholder;
     
     //
-	WebComponent c_label;
-	WebComponent c_value;
-	WebComponent c_placeholder;
+	WebElement c_label;
+	WebElement c_value;
+	WebElement c_placeholder;
 
     
     public Input() {
@@ -53,13 +53,13 @@ public class Input extends WebComponent {
 		
 		if ( c_label != null ) {
 			//context.addRelations(mapChart.getKey(), "document.getElementById('%s').value=value.lat".formatted(builder.c_lat.getKey()));
-			this.webContext().addRelations(key(), "document.getElementById('%s').value=value".formatted(c_label.key()));
+			this.webContext().addRelations(clientId(), "document.getElementById('%s').value=value".formatted(c_label.clientId()));
 		} 
 		
 		if ( c_value != null ) {
 			value(c_value.getValue());
 			//context.addRelations(mapChart.getKey(), "document.getElementById('%s').value=value.lat".formatted(builder.c_lat.getKey()));
-			this.webContext().addRelations(c_value.key(), "document.getElementById('%s').value=value".formatted(key()));
+			this.webContext().addRelations(c_value.clientId(), "document.getElementById('%s').value=value".formatted(clientId()));
 		} 
 	}
 	
@@ -75,7 +75,7 @@ public class Input extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s" value="%s"></input>
 					    </div>		
-						""".formatted(key(),label,key(), key(), placeholder, value);
+						""".formatted(clientId(),label,clientId(), clientId(), placeholder, value);
 						
 			} else {
 				
@@ -84,7 +84,7 @@ public class Input extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s" value="%s"></input>
 					    </div>		
-						""".formatted(key(), label, key(), key(), placeholder, value);
+						""".formatted(clientId(), label, clientId(), clientId(), placeholder, value);
 				
 			}
 		} else {

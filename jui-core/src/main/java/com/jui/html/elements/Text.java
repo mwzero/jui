@@ -1,11 +1,11 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
 import lombok.extern.java.Log;
 
 @Log
-public class Text extends WebComponent {
+public class Text extends WebElement {
 	
     private String text;
     private boolean readonly = true;
@@ -22,7 +22,7 @@ public class Text extends WebComponent {
 	@Override
 	public String getHtml() {
 		
-		log.fine("Rendering [%s] [%s]".formatted(this.Id(), this.key()));
+		log.fine("Rendering [%s] [%s]".formatted(this.Id(), this.clientId()));
 		
 		if ( input ) {
 			
@@ -33,7 +33,7 @@ public class Text extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s">
 					    </div>		
-						""".formatted(this.key(),text,this.key(), this.key(), text);
+						""".formatted(this.clientId(),text,this.clientId(), this.clientId(), text);
 						
 			} else {
 				
@@ -42,7 +42,7 @@ public class Text extends WebComponent {
 					      <label for="%s" class="form-label">%s</label>
 					      <input type="text" id="%s" name="%s" class="form-control" placeholder="%s">
 					    </div>		
-						""".formatted(this.key(), text, this.key(), this.key(), text);
+						""".formatted(this.clientId(), text, this.clientId(), this.clientId(), text);
 				
 			}
 		} else {

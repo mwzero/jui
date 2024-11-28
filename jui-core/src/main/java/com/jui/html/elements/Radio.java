@@ -2,9 +2,9 @@ package com.jui.html.elements;
 
 import java.util.List;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class Radio extends WebComponent {
+public class Radio extends WebElement {
 	
     private String label;
     List<String> values;
@@ -31,7 +31,7 @@ public class Radio extends WebComponent {
 			    %s
 			  </label>
 			</div>
-			""".formatted(this.key(), this.key() + "_" + i, this.key() + "_" + i, value);
+			""".formatted(this.clientId(), this.clientId() + "_" + i, this.clientId() + "_" + i, value);
 			
 			html+=oneCheck;
 				

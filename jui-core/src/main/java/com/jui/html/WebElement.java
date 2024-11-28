@@ -13,12 +13,10 @@ import lombok.extern.java.Log;
 @Setter
 @Accessors(fluent = true)
 @Log
-public abstract class WebComponent {
-	
-	WebComponent parent;
+public abstract class WebElement {
 	
 	//web context 
-	WebContext webContext;
+	WebElementContext webContext;
 	
 	
 	Map<String, Object> attributes;
@@ -27,19 +25,31 @@ public abstract class WebComponent {
 	 * Specify Html Element Id like: div, button, slider, etc..
 	 */
 	String Id;
+	
+	/**
+	 * Specify Html Id attribute
+	 */
 	String clientId;
-	String key;
-	String data;
 	
 	protected Runnable onServerSide;
 	
-	public WebComponent(String id) {
+	public WebElement(String id) {
 		
-		log.fine("New WebComponent");
-		attributes = new HashMap<String, Object>(); 
-		webContext = new WebContext();
-		
+		log.fine("New WebComponent:" + id);
 		this.Id(id);
+		
+		attributes = new HashMap<String, Object>(); 
+		webContext = new WebElementContext();
+		
+		
+	}
+	
+	public WebElement(String id, String clientId, Map<String, Object> attributes) {
+		
+		this(id);
+		this.clientId = clientId;
+		if ( attributes != null ) this.attributes = attributes;
+		
 	}
 	
 	public void executeServerAction() {
@@ -68,8 +78,7 @@ public abstract class WebComponent {
 	public Map<String, Object> getVariables() {
 		
 		Map<String, Object> variables = new HashMap<>();
-		variables.put("clientId", this.key());
-		variables.put("key", this.key());
+		variables.put("clientId", this.clientId());
 		variables.put("juiComponent", this);
 		if ( onServerSide != null ) {
 			variables.put("onServerSide", "server-side");
@@ -113,4 +122,13 @@ public abstract class WebComponent {
 	}
 	
 	public String getPostData() {return null;}
+	
+	public WebElement add(WebElement component) {
+		
+		//add component to web context
+		//generate a key and assign to it
+		this.webContext().add(component);
+		
+		return component;
+	}
 }

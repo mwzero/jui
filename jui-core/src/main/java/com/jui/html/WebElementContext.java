@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import lombok.Builder;
 
-public class WebContext {
+public class WebElementContext {
 	
-	LinkedHashMap<String, WebComponent> context;
+	LinkedHashMap<String, WebElement> childrens;
 	
 	public LinkedHashMap<String, ArrayList<String>> relations;
 	
@@ -19,16 +19,16 @@ public class WebContext {
 	private static AtomicInteger instanceCount = new AtomicInteger(0);
 	
 	@Builder
-	public WebContext() {
+	public WebElementContext() {
 	
-		this.context = new LinkedHashMap<>();
+		this.childrens = new LinkedHashMap<>();
 		this.relations = new LinkedHashMap<>();
 		this.elementPostData = new LinkedHashMap<>();
 		
 	}
 	
-	public LinkedHashMap<String, WebComponent> getLinkedMapContext() { 
-		if ( instanceCount.get() >0 ) return context;
+	public LinkedHashMap<String, WebElement> getLinkedMapContext() { 
+		if ( instanceCount.get() >0 ) return childrens;
 		else return null;
 	}
 	
@@ -45,18 +45,18 @@ public class WebContext {
 			relations.put(key, new ArrayList<String>(Arrays.asList(command)));
 	}
 
-	public WebComponent add(WebComponent component) {
+	public WebElement add(WebElement child) {
 		
 		String uuid = "c"+ instanceCount.incrementAndGet();
-		component.key(uuid);
+		child.clientId(uuid);
 		
-		this.context.put(uuid, component);
+		this.childrens.put(uuid, child);
 		
-		String postDataElement = component.getPostData();
+		String postDataElement = child.getPostData();
 		if ( postDataElement != null)
-			this.elementPostData.put(uuid, component.getPostData());
+			this.elementPostData.put(uuid, child.getPostData());
 		
-		return component;
+		return child;
 		
 	}
 

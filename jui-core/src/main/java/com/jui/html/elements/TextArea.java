@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class TextArea extends WebComponent {
+public class TextArea extends WebElement {
 	
     String text;
     boolean readonly = true;

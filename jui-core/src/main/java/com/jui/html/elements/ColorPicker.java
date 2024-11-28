@@ -1,8 +1,8 @@
 package com.jui.html.elements;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 
-public class ColorPicker extends WebComponent {
+public class ColorPicker extends WebElement {
 	
     String label;
 

@@ -1,6 +1,6 @@
 package com.jui.html.elements.chart;
 
-import com.jui.html.WebComponent;
+import com.jui.html.WebElement;
 import com.st.DataFrame;
 
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.extern.java.Log;
 @Accessors(fluent = true)
 @Getter
 @Setter
-public class ChartBar extends WebComponent {
+public class ChartBar extends WebElement {
 	
 	
 
@@ -33,7 +33,7 @@ public class ChartBar extends WebComponent {
 		String html = """
 				<div id="%s" style="max-width: %s; max_height=%s; display: inline-block">
 				</div>		
-				""".formatted(this.key(), max_width == 0 ? "100%" : max_width + "px", max_height + "px");
+				""".formatted(this.clientId(), max_width == 0 ? "100%" : max_width + "px", max_height + "px");
 		
 		String series = "";
 		String xasis = "";
@@ -70,7 +70,7 @@ public class ChartBar extends WebComponent {
 
 					chart.render();
 				</script>
-				""".formatted(series, xasis, this.key());
+				""".formatted(series, xasis, this.clientId());
 		
 		return html + js;
 
