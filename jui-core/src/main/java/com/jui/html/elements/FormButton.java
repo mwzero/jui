@@ -4,9 +4,9 @@ import com.jui.html.WebElement;
 
 public class FormButton extends WebElement {
 	
-    private final String label;
-    private final ButtonType type;
-    private final String onClick;
+    final String label;
+    final ButtonType type;
+    final String onClick;
     
     public enum ButtonType {
     	Primary,

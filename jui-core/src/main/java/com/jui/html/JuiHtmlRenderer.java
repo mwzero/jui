@@ -77,15 +77,24 @@ public class JuiHtmlRenderer {
 	}
 	
 	private String buildScripts(WebElement container) {
-		
-        String elementMappingJson = Utils.buildJsonString(container.webContext().relations, "source", "commands");
-        String elementPostDataJson = Utils.buildJsonString(container.webContext().elementPostData, "source", "commands");
 
-        return """
-                <script>
-                    elementMapping=elementMapping.concat(%s);
-                    elementPostData=elementPostData.concat(%s);
-                </script>
-                """.formatted(elementMappingJson, elementPostDataJson);
+		if ( ( container.webContext().relations.size() == 0 ) && (container.webContext().elementPostData.size() == 0 ) )
+			return "";
+        
+        StringBuffer script = new StringBuffer();
+        script.append("<script>");
+        if ( container.webContext().relations.size() > 0 ) {
+        	String elementMappingJson = Utils.buildJsonString(container.webContext().relations, "source", "commands");
+        	script.append("elementMapping=elementMapping.concat(%s)".formatted(elementMappingJson));
+        }
+        
+        if ( container.webContext().elementPostData.size() > 0 ) {
+        	String elementPostDataJson = Utils.buildJsonString(container.webContext().elementPostData, "source", "commands");
+        	script.append("elementPostData = elementPostData.concat(%s)".formatted(elementPostDataJson));
+        }
+        
+        script.append("</script>");
+        
+        return script.toString();
     }
 }

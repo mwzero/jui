@@ -5,12 +5,10 @@ import com.jui.html.WebElement;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.java.Log;
 
 @Getter
 @Setter
 @Accessors(fluent = true)
-@Log
 public class Input extends WebElement {
 	
     String label;

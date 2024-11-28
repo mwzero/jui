@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.jui.html.WebElement;
 
-import lombok.extern.java.Log;
-
-@Log
 public class CheckBox extends WebElement {
 	
     String label;
