@@ -60,6 +60,10 @@ public class DefaultLayout {
         		# Container Tab2
         		""");
         
+        jui.tabs("tab3").markdown("""
+        		# Container Tab3
+        		""");
+        
         jui.start();
 
 	}

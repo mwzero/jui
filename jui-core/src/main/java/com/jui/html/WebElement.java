@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.experimental.Delegate;
 import lombok.extern.java.Log;
 
 @Getter
@@ -19,7 +20,8 @@ public abstract class WebElement {
 	WebElementContext webContext;
 	
 	
-	Map<String, Object> attributes;
+	@Delegate
+	WebAttributes attributes;
 	
 	/**
 	 * Specify Html Element Id like: div, button, slider, etc..
@@ -44,7 +46,7 @@ public abstract class WebElement {
 		log.fine("New WebComponent:" + id);
 		this.Id(id);
 		
-		attributes = new HashMap<String, Object>(); 
+		attributes = new WebAttributes(); 
 		webContext = new WebElementContext();
 		
 		
@@ -54,9 +56,12 @@ public abstract class WebElement {
 		
 		this(id);
 		this.key = key;
-		if ( attributes != null ) this.attributes = attributes;
+		
+		if ( attributes != null)
+			this.attributes.attributes = attributes;
 		
 	}
+	
 	
 	public void executeServerAction() {
 		onServerSide.run();	

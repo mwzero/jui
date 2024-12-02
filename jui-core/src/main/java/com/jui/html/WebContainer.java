@@ -65,7 +65,7 @@ public class WebContainer extends WebElement implements AutoCloseable {
 		
 		if ( type == ContainerType.COL ) {
 			
-			int width = (int) this.attributes.get(WebAttributes.WIDTH_ATTRIBUTES);
+			int width = this.getAttributeAsInt(WebAttributes.WIDTH_ATTRIBUTES);
 			return """
 					<div id="%s" class="col-%s" >{{content-%s}}</div>
 				   """.formatted(this.clientId(), width, this.clientId());
@@ -99,9 +99,17 @@ public class WebContainer extends WebElement implements AutoCloseable {
 				
 				WebElement we = this.webContext.childrens.get(child);
 				
-				sb.append("""
+				if ( we.isActive()) {
+					
+					sb.append(""" 
+							 <button class="nav-link active" id="nav-%s-tab" data-bs-toggle="tab" data-bs-target="#nav-%s" type="button" role="tab" aria-controls="nav-%s" aria-selected="false">%s</button>
+							""".formatted(clientId, we.clientId, we.clientId, we.key));
+					
+				} else {
+					sb.append("""
 						 <button class="nav-link" id="nav-%s-tab" data-bs-toggle="tab" data-bs-target="#nav-%s" type="button" role="tab" aria-controls="nav-%s" aria-selected="false">%s</button>
 						""".formatted(clientId, we.clientId, we.clientId, we.key));
+				}
 			}
 			
 			return html.replace("{{child}}", sb.toString());
@@ -109,11 +117,20 @@ public class WebContainer extends WebElement implements AutoCloseable {
 			
 		} else if ( type == ContainerType.TAB ) { 
 			
-			return """
-				<div class="tab-pane fade" id="nav-%s" role="tabpanel" aria-labelledby="nav-%s-tab">
-						{{content-%s}}
-				</div>
-			""".formatted(clientId, clientId, clientId);
+			if ( isActive()) {
+				return """
+						<div class="tab-pane fade show active" id="nav-%s" role="tabpanel" aria-labelledby="nav-%s-tab">
+								{{content-%s}}
+						</div>
+					""".formatted(clientId, clientId, clientId);
+				
+			} else {
+				return """
+					<div class="tab-pane fade" id="nav-%s" role="tabpanel" aria-labelledby="nav-%s-tab">
+							{{content-%s}}
+					</div>
+				""".formatted(clientId, clientId, clientId);
+			}
 			
 			
 		} else { 

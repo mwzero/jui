@@ -51,13 +51,17 @@ public class ContainerElements extends BaseElements {
 		
 		List<WebContainer> tabs = new ArrayList<WebContainer>();
 		
-		WebContainer row = new WebContainer("", ContainerType.TABS, null);
+		WebContainer row = new WebContainer("", ContainerType.TABS);
+		boolean isActive = true;
 		
 		for (String tab : of) {
 			
-			WebContainer col = new WebContainer(tab, ContainerType.TAB, null);
+			WebContainer col = new WebContainer(tab, ContainerType.TAB);
+			col.addAttribute(WebAttributes.ACTIVE_ATTRIBUTES, isActive);
 			row.add( col);
 			tabs.add(col);
+			
+			isActive = false;
 			
 		}
 		this.context.add(row);
