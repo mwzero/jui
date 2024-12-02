@@ -66,19 +66,10 @@ try to navigate to http://localhost:8000/index.html
 
 ## Roadmap
 
-- **GeoJson & D3 Integration**: Add components for geographic data and advanced visualizations.
-- **WebComponent Enhancements**: Implementing feature-rich builders
-- **Html Elements**: Complete and expand statement support
-- **UI Consistency**: Ensure uniformity across HTML/CSS/JS layouts.
-- **Method Improvements**: Revise and optimize `JuiServer` start method.
-
-## 👨‍💻‍ Contributors
-
-<a href="https://github.com/mwzero/jui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mwzero/jui" />
-</a>
-
-Made with [contrib.rocks](https://contrib.rocks).
+-**GeoJSON & D3 Integration**: Introduce components for geographic data handling and advanced visualizations.
+-**HTML Elements**: Implement feature-rich and intuitive APIs for enhanced functionality.
+-**UI Consistency**: Ensure uniformity and alignment across HTML, CSS, and JavaScript layouts.
+-**Use Cases**: Expand the number of use cases leveraging open data effectively.
 
 ## License
 JUI is completely free and open-source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
