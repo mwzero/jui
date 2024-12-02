@@ -42,11 +42,12 @@ public class WebContainer extends WebElement implements AutoCloseable {
 	private final OtherElements otherElements;
 	
 	
-	public WebContainer(String clientId) {  this(clientId, ContainerType.DIV, null); }
-	public WebContainer(String clientId, ContainerType type) { this(clientId, type, null);}
-	public WebContainer(String clientId, ContainerType type, Map<String, Object> attributes) {
+	public WebContainer(String key) {  this(key, ContainerType.DIV, null); }
+	public WebContainer(String key, ContainerType type) { this(key, type, null);}
+	
+	public WebContainer(String key, ContainerType type, Map<String, Object> attributes) {
 		
-		super("Div", clientId, attributes);
+		super("Div", key, attributes);
 		this.type = type;
 		
 		
@@ -66,14 +67,61 @@ public class WebContainer extends WebElement implements AutoCloseable {
 			
 			int width = (int) this.attributes.get(WebAttributes.WIDTH_ATTRIBUTES);
 			return """
-					<div id="%s" class="col-%s" >{{content}}</div>
-				   """.formatted(this.clientId(), width);
-		} else {
+					<div id="%s" class="col-%s" >{{content-%s}}</div>
+				   """.formatted(this.clientId(), width, this.clientId());
+		} else if ( type == ContainerType.DIV ) {
 			
 			return """
-					<div class="row" id="%s">{{content}}</div>
-				   """.formatted(clientId);
+					<div id="%s">{{content-%s}}</div>
+				   """.formatted(clientId, clientId);
 			
+		} else if ( type == ContainerType.ROW ) { 
+			
+			return """
+					<div class="row" id="%s">{{content-%s}}</div>
+				   """.formatted(clientId, clientId);
+			
+		} else if ( type == ContainerType.TABS ) { 
+			
+			String html = """
+					<nav>
+					  <div class="nav nav-tabs" id="%s" role="tablist">
+					  {{child}}
+					  </div>
+					</nav>
+					<div class="tab-content" id="nav-tabContent">
+					{{content-%s}}
+					</div>
+					""".formatted(clientId, clientId);
+			
+			StringBuffer sb = new StringBuffer();
+			for ( String child : this.webContext.childrens.keySet()) {
+				
+				WebElement we = this.webContext.childrens.get(child);
+				
+				sb.append("""
+						 <button class="nav-link" id="nav-%s-tab" data-bs-toggle="tab" data-bs-target="#nav-%s" type="button" role="tab" aria-controls="nav-%s" aria-selected="false">%s</button>
+						""".formatted(clientId, we.clientId, we.clientId, we.key));
+			}
+			
+			return html.replace("{{child}}", sb.toString());
+			
+			
+		} else if ( type == ContainerType.TAB ) { 
+			
+			return """
+				<div class="tab-pane fade" id="nav-%s" role="tabpanel" aria-labelledby="nav-%s-tab">
+						{{content-%s}}
+				</div>
+			""".formatted(clientId, clientId, clientId);
+			
+			
+		} else { 
+		
+			return """
+				<div class="row" id="%s">{{content-%s}}</div>
+			   """.formatted(clientId, clientId);
+		
 		}
 		
 	}

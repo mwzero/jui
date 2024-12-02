@@ -47,22 +47,22 @@ public class ContainerElements extends BaseElements {
 	public WebContainer popover(String key, String Title) { return this.addContainer(key, ContainerType.POPOVER, null);}
 	public WebContainer empty(String key) { return this.addContainer(key, ContainerType.POPOVER, null);}
 	
-	public List<WebContainer> tabs(Map<String, Integer> of) {
+	public List<WebContainer> tabs(List<String> of) {
 		
-		List<WebContainer> cols = new ArrayList<WebContainer>();
+		List<WebContainer> tabs = new ArrayList<WebContainer>();
 		
 		WebContainer row = new WebContainer("", ContainerType.TABS, null);
 		
-		for (Entry<String, Integer> column : of.entrySet()) {
+		for (String tab : of) {
 			
-			WebContainer col = new WebContainer(column.getKey(), ContainerType.TAB, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
+			WebContainer col = new WebContainer(tab, ContainerType.TAB, null);
 			row.add( col);
-			cols.add(col);
+			tabs.add(col);
 			
 		}
 		this.context.add(row);
 		
-		return cols;
+		return tabs;
 	}
 
 	public List<WebContainer> columns(Map<String, Integer> of) {
@@ -92,7 +92,7 @@ public class ContainerElements extends BaseElements {
 		        .flatMap(row -> row.getComponents().stream())
 		        .filter(component2 -> component2 instanceof WebContainer && ((WebContainer) component2).type() == ContainerType.COL)
 		        .map(component2 -> (WebContainer) component2)
-		        .filter(col -> col.clientId().equals(key))
+		        .filter(col -> col.key().equals(key))
 		        .findFirst()
 		        .orElse(null);
 		
@@ -106,7 +106,7 @@ public class ContainerElements extends BaseElements {
 		        .flatMap(row -> row.getComponents().stream())
 		        .filter(component2 -> component2 instanceof WebContainer && ((WebContainer) component2).type() == ContainerType.TAB)
 		        .map(component2 -> (WebContainer) component2)
-		        .filter(col -> col.clientId().equals(key))
+		        .filter(col -> col.key().equals(key))
 		        .findFirst()
 		        .orElse(null);
 		

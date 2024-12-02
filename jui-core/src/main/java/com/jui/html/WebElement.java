@@ -27,9 +27,15 @@ public abstract class WebElement {
 	String Id;
 	
 	/**
-	 * Specify Html Id attribute
+	 * Specify the HTML id attribute, calculated by the web context when a new element is added.
 	 */
 	String clientId;
+	
+	
+	/**
+	 * Specify Key assigned by the user. Used for cols, tabs, etc..
+	 */
+	String key;
 	
 	protected Runnable onServerSide;
 	
@@ -44,10 +50,10 @@ public abstract class WebElement {
 		
 	}
 	
-	public WebElement(String id, String clientId, Map<String, Object> attributes) {
+	public WebElement(String id, String key, Map<String, Object> attributes) {
 		
 		this(id);
-		this.clientId = clientId;
+		this.key = key;
 		if ( attributes != null ) this.attributes = attributes;
 		
 	}

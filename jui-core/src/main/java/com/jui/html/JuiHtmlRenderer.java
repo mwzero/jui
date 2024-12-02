@@ -36,7 +36,7 @@ public class JuiHtmlRenderer {
 				
 				String containerEnvelop = renderWebComponent(component);
 				String containerContents = render((WebContainer) component);
-				containerEnvelop = containerEnvelop.replace("{{content}}", containerContents);
+				containerEnvelop = containerEnvelop.replace("{{content-%s}}".formatted(component.clientId), containerContents);
 				
 				html.append(containerEnvelop);
 				

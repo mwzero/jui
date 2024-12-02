@@ -3,6 +3,8 @@ package com.jui.apis.layouts;
 import static com.jui.JuiApp.jui;
 import static com.jui.JuiApp.linkedMapOf;
 
+import java.util.List;
+
 import lombok.extern.java.Log;
 
 @Log
@@ -37,6 +39,25 @@ public class DefaultLayout {
         
         jui.columns("right").markdown("""
         		# Container Right
+        		""");
+        
+        /*
+        jui.dialog("", "");
+        
+        jui.expander("", "");
+        
+        jui.popover("", "");
+        
+        jui.empty("");
+        */
+        
+        jui.tabs(List.of("tab1", "tab2", "tab3"));
+        jui.tabs("tab1").markdown("""
+        		# Container Tab1
+        		""");
+        
+        jui.tabs("tab2").markdown("""
+        		# Container Tab2
         		""");
         
         jui.start();
