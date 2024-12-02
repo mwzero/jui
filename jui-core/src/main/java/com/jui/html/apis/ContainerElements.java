@@ -35,7 +35,7 @@ public class ContainerElements extends BaseElements {
 	//Layouts and Containers
 	protected WebContainer addContainer(String key, ContainerType type, Map<String, Object> attributes) {
 		
-		WebContainer container = new WebContainer(key, ContainerType.DIV, null);
+		WebContainer container = new WebContainer(key,type, attributes);
 		context.add(container);
 		
 		return container;	

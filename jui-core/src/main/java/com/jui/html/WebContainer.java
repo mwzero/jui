@@ -133,7 +133,29 @@ public class WebContainer extends WebElement implements AutoCloseable {
 			}
 			
 			
-		} else { 
+		} else if ( type == ContainerType.EXPANDER ) {
+			
+			StringBuffer sb = new StringBuffer();
+			sb.append("""
+					<p>
+					  <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapse%s" role="button" aria-expanded="false" aria-controls="collapse%s">
+					    %s
+					  </a>
+					</p>
+					""".formatted(clientId, clientId, key));
+					
+			sb.append("""
+					<div class="collapse" id="collapse%s">
+					  <div class="card card-body">
+					    {{content-%s}}
+					  </div>
+					</div>
+					""".formatted(clientId, clientId));
+					
+			return sb.toString();
+			
+		}else { 
+		
 		
 			return """
 				<div class="row" id="%s">{{content-%s}}</div>
