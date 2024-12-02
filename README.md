@@ -66,13 +66,13 @@ try to navigate to http://localhost:8000/index.html
 
 ## Roadmap
 
--**GeoJSON & D3 Integration**: Introduce components for geographic data handling and advanced visualizations.
--**HTML Elements**: Implement feature-rich and intuitive APIs for enhanced functionality.
--**UI Consistency**: Ensure uniformity and alignment across HTML, CSS, and JavaScript layouts.
--**Use Cases**: Expand the number of use cases leveraging open data effectively.
+- **GeoJSON & D3 Integration**: Introduce components for geographic data handling and advanced visualizations.
+- **HTML Elements**: Implement feature-rich and intuitive APIs for enhanced functionality.
+- **UI Consistency**: Ensure uniformity and alignment across HTML, CSS, and JavaScript layouts.
+- **Use Cases**: Expand the number of use cases leveraging open data effectively.
 
 ## License
-JUI is completely free and open-source and licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
+JUI is fully free, open-source, and distributed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
 
 ## 📬 Contact
 
