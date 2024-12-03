@@ -7,6 +7,7 @@ import com.jui.html.apis.ContainerElements;
 import com.jui.html.apis.ContainerElements.ContainerType;
 import com.jui.html.apis.InputButtonElements;
 import com.jui.html.apis.InputSelectionElements;
+import com.jui.html.apis.MediaElements;
 import com.jui.html.apis.OtherElements;
 import com.jui.html.apis.TextElements;
 
@@ -41,6 +42,9 @@ public class WebContainer extends WebElement implements AutoCloseable {
 	@Delegate 
 	private final OtherElements otherElements;
 	
+	@Delegate
+	private final MediaElements mediaElements;
+	
 	
 	public WebContainer(String key) {  this(key, ContainerType.DIV, null); }
 	public WebContainer(String key, ContainerType type) { this(key, type, null);}
@@ -57,6 +61,7 @@ public class WebContainer extends WebElement implements AutoCloseable {
 		inputButtonElements = new InputButtonElements(this.webContext());
 		inputSelectionElements = new InputSelectionElements(this.webContext());
 		otherElements = new OtherElements(this.webContext());
+		mediaElements = new MediaElements(this.webContext());
 		
 	}
 	
