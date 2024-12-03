@@ -5,9 +5,6 @@ import static com.jui.JuiApp.linkedMapOf;
 
 import java.util.List;
 
-import com.jui.html.WebContainer;
-import com.jui.html.elements.Button;
-
 import lombok.extern.java.Log;
 
 @Log
@@ -44,9 +41,10 @@ public class DefaultLayout {
         		# Container Right
         		""");
         
-        /*
-        jui.dialog("", "");
-        */
+        jui.dialog("modal1", "title modal").markdown("""
+        		# Container Modal
+        		""");
+        
         jui.expander("exp1", "Expander").markdown("""
         		# Container Exapander
         		""");
@@ -54,10 +52,6 @@ public class DefaultLayout {
         jui.popover("pop1", "title popover").markdown("""
         		# Container Popover
         		""");
-        
-        /*
-        jui.empty("");
-        */
         
         jui.tabs(List.of("tab1", "tab2", "tab3"));
         jui.tabs("tab1").markdown("""

@@ -187,6 +187,36 @@ public class WebContainer extends WebElement implements AutoCloseable {
 					
 			return sb.toString();
 			
+		} else if ( type == ContainerType.DIALOG ) {
+			
+			StringBuffer sb = new StringBuffer();
+			sb.append("""
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-%s">
+				  %s
+				</button>
+				
+				<!-- Modal -->
+				<div class="modal fade" id="modal-%s" tabindex="-1" aria-labelledby="modalLabel-%s" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="modalLabel-%s">Modal title</h5>
+				        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				      </div>
+				      <div class="modal-body">
+				        {{content-%s}}
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				        <button type="button" class="btn btn-primary">Save changes</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+					""".formatted(clientId, key,clientId, clientId, clientId,clientId));
+					
+			return sb.toString();
+			
 		} else { 
 		
 		

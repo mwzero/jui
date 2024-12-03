@@ -22,8 +22,7 @@ public class ContainerElements extends BaseElements {
 		EXPANDER,
 		POPOVER,
 		TABS,
-		TAB,
-		EMPTY
+		TAB
 		
 	};
 	
@@ -45,7 +44,6 @@ public class ContainerElements extends BaseElements {
 	public WebContainer dialog(String key, String Title) { return this.addContainer(key, ContainerType.DIALOG, null);}
 	public WebContainer expander(String key, String Title) { return this.addContainer(key, ContainerType.EXPANDER, null);}
 	public WebContainer popover(String key, String Title) { return this.addContainer(key, ContainerType.POPOVER, null);}
-	public WebContainer empty(String key) { return this.addContainer(key, ContainerType.POPOVER, null);}
 	
 	public List<WebContainer> tabs(List<String> of) {
 		
