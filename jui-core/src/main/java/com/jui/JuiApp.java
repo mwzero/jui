@@ -2,9 +2,9 @@ package com.jui;
 
 import java.util.LinkedHashMap;
 
-import com.jui.html.JuiContainer;
 import com.jui.html.JuiHtmlRenderer;
-import com.jui.html.WebComponent;
+import com.jui.html.WebContainer;
+import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
 import com.jui.net.handlers.HandlerJuiRequest;
@@ -15,19 +15,18 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 
 @Log
-@Getter
-public class JuiApp extends JuiContainer {
+public class JuiApp extends WebContainer {
 	
 	public static final JuiApp jui = new JuiApp();
 	
-	//used onServerAction response
 	@Setter
+	@Getter
 	String juiResponse;
 	
-	public JuiContainer sidebar;
+	public WebContainer sidebar;
 
-	//
-	JuiAppAttributes attributes;
+	//page settings
+	public JuiPageSettings page;
 	
 	//
 	JuiHtmlRenderer renderer;
@@ -38,22 +37,16 @@ public class JuiApp extends JuiContainer {
 		
 		log.info("JUI App: Start Initialization");
 		renderer = new JuiHtmlRenderer();
-		sidebar = new JuiContainer("sidebar");
+		sidebar = new WebContainer("sidebar");
+		page =  new JuiPageSettings();
 	}
 	
-	public JuiAppAttributes set_page_config() {
-		
-		attributes =  new JuiAppAttributes();
-		return attributes;
-		
-	}
-
 	public JuiContent render() {
 			
 		JuiContent content = new JuiContent();
 		content.setMain( renderer.render(this));
 		
-		if ( sidebar.context().getLinkedMapContext() != null) {
+		if ( sidebar.webContext().getLinkedMapContext() != null) {
 			
 			content.setSidebar(renderer.render(sidebar));
 		} else
@@ -69,11 +62,8 @@ public class JuiApp extends JuiContainer {
 		String host = "0.0.0.0";
 		int port = 8080;
 		
-		if ( attributes != null ) {
-			
-			if ( attributes.layout != null)
-				rootDoc = "html-" + attributes.layout + "/";
-		}
+		if ( page.layout != null)
+			rootDoc = "html-" + page.layout + "/";
 		
 		this.start(rootDoc, classLoading, host, port);
 	}
@@ -93,9 +83,9 @@ public class JuiApp extends JuiContainer {
 		.start();
 	}
 
-	public WebComponent executeServerAction(String id) throws Exception{
+	public WebElement executeServerAction(String id) throws Exception{
 		
-		WebComponent  component = this.context().getLinkedMapContext().get(id);
+		WebElement  component = this.webContext().getLinkedMapContext().get(id);
 		if ( component != null )
 			component.executeServerAction();
 		
@@ -103,8 +93,6 @@ public class JuiApp extends JuiContainer {
 		
 	}
 
-	
-	
 	public static <K, V> LinkedHashMap<K, V> linkedMapOf(K key1, V value1, Object... moreKeysAndValues) {
 	    LinkedHashMap<K, V> map = new LinkedHashMap<>();
 	    map.put(key1, value1);

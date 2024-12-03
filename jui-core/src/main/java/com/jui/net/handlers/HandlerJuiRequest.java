@@ -55,17 +55,7 @@ public class HandlerJuiRequest extends HandlerBase {
 				 
 			 }
 			
-			/*
-			Map<String, Object> variables = new HashMap<String, Object>();
 			
-			variables.put("main_context", application.getMain().getContext().getLinkedMapContext());
-			variables.put("sidebar_context", application.getSidebar().getContext().getLinkedMapContext());
-			variables.put("header_context", application.getHeader().getContext().getLinkedMapContext());
-			
-			variables.put("elementMapping", application.getContext().elementMapping());
-			variables.put("elementPostData", application.getContext().elementPostData);
-			variables.put("queryParams", this.queryToMap(exchange));
-			*/
 			
 		} catch (Exception e) {
 			

@@ -3,16 +3,14 @@ package com.jui.recipes.extra;
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Map;
 
 import org.h2.tools.DeleteDbFiles;
 
-import com.jui.html.JuiContainer;
+import com.jui.html.WebContainer;
 import com.st.DB;
 
 
@@ -24,7 +22,7 @@ public class Expenses {
 		
 		Connection  connection = DB.getConnection("org.h2.Driver","jdbc:h2:~/expensesDB", "", "");
 		
-		jui.set_page_config().layout("sidebar");
+		jui.page.layout("sidebar");
 		
 		// Sidebar with instructions
 		jui.sidebar.markdown("""
@@ -46,7 +44,7 @@ public class Expenses {
 		}
 		*/
 		
-		try ( JuiContainer col = jui.columns("right") ) {
+		try ( WebContainer col = jui.columns("right") ) {
 			/*
 		    col.download_button(
 		        label="Download data as CSV",

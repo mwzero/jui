@@ -2,7 +2,7 @@ package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
 
-import com.jui.html.JuiContainer;
+import com.jui.html.WebContainer;
 
 public class SideBarRecipe {
 	
@@ -16,9 +16,9 @@ public class SideBarRecipe {
     	jui.start();
 	}
 	
-	static JuiContainer mapZoomer() {
+	static WebContainer mapZoomer() {
 		
-		JuiContainer page = jui.addContainer("mapZoomer");
+		WebContainer page = jui.container("mapZoomer");
 		
 		page.markdown("## Map Chart Example");
 		page.divider().color("blue");
@@ -36,9 +36,9 @@ public class SideBarRecipe {
     	
 	}
 	
-	static JuiContainer markdownTrials() {
+	static WebContainer markdownTrials() {
 		
-		JuiContainer page = jui.addContainer("markdown");
+		WebContainer page = jui.container("markdown");
 		
 		page.markdown("# Header 1");
 		page.markdown("## Header 2");

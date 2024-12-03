@@ -5,7 +5,7 @@ import static com.st.ST.st;
 
 import java.util.Arrays;
 
-import com.jui.html.tags.FormButton.ButtonType;
+import com.jui.html.elements.FormButton.ButtonType;
 
 public class AllYouCanEat {
 	

@@ -3,21 +3,22 @@ package com.jui.annotations;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import com.jui.html.WebComponent;
-import com.jui.html.WebContext;
-import com.jui.html.tags.Slider;
-import com.jui.html.tags.Text;
+import com.jui.html.WebElement;
+import com.jui.html.WebElementContext;
+
+import com.jui.html.elements.Slider;
+import com.jui.html.elements.Text;
 
 import lombok.extern.java.Log;
 
 @Log
 public class JuiAnnotationHelper {
 	
-	public static void write ( WebContext context, Object obj ) {
+	public static void write ( WebElementContext context, Object obj ) {
 		
 		for ( Field field : obj.getClass().getDeclaredFields()) {
 			
-			WebComponent component = null;
+			WebElement component = null;
 			if (field.getAnnotations().length > 0) {
 				
 				Annotation[] annotations = field.getAnnotations();
@@ -61,7 +62,7 @@ public class JuiAnnotationHelper {
 			if ( component != null ) {
 				Jui[] jui = field.getAnnotationsByType(Jui.class);
 				if ( jui.length > 0 ) {
-					component.setKey(jui[0].key()); 
+					component.clientId(jui[0].clientId()); 
 				}
 			}
 			
