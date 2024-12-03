@@ -2,8 +2,8 @@ package com.jui;
 
 import java.util.LinkedHashMap;
 
-import com.jui.html.WebContainer;
 import com.jui.html.JuiHtmlRenderer;
+import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
@@ -25,8 +25,8 @@ public class JuiApp extends WebContainer {
 	
 	public WebContainer sidebar;
 
-	//
-	JuiAppAttributes attributes;
+	//page settings
+	public JuiPageSettings page;
 	
 	//
 	JuiHtmlRenderer renderer;
@@ -38,15 +38,9 @@ public class JuiApp extends WebContainer {
 		log.info("JUI App: Start Initialization");
 		renderer = new JuiHtmlRenderer();
 		sidebar = new WebContainer("sidebar");
+		page =  new JuiPageSettings();
 	}
 	
-	public JuiAppAttributes set_page_config() {
-		
-		attributes =  new JuiAppAttributes();
-		return attributes;
-		
-	}
-
 	public JuiContent render() {
 			
 		JuiContent content = new JuiContent();
@@ -68,11 +62,8 @@ public class JuiApp extends WebContainer {
 		String host = "0.0.0.0";
 		int port = 8080;
 		
-		if ( attributes != null ) {
-			
-			if ( attributes.layout != null)
-				rootDoc = "html-" + attributes.layout + "/";
-		}
+		if ( page.layout != null)
+			rootDoc = "html-" + page.layout + "/";
 		
 		this.start(rootDoc, classLoading, host, port);
 	}
@@ -102,8 +93,6 @@ public class JuiApp extends WebContainer {
 		
 	}
 
-	
-	
 	public static <K, V> LinkedHashMap<K, V> linkedMapOf(K key1, V value1, Object... moreKeysAndValues) {
 	    LinkedHashMap<K, V> map = new LinkedHashMap<>();
 	    map.put(key1, value1);

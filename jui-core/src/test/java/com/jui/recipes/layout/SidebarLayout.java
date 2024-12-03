@@ -11,8 +11,7 @@ public class SidebarLayout {
 
 	public static void main(String[] args)  {
 
-		jui.set_page_config()
-			.layout("sidebar");
+		jui.page.layout("sidebar");
 		
 		jui.sidebar.markdown("""
  				# App

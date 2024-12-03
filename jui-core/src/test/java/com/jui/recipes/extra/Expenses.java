@@ -22,7 +22,7 @@ public class Expenses {
 		
 		Connection  connection = DB.getConnection("org.h2.Driver","jdbc:h2:~/expensesDB", "", "");
 		
-		jui.set_page_config().layout("sidebar");
+		jui.page.layout("sidebar");
 		
 		// Sidebar with instructions
 		jui.sidebar.markdown("""

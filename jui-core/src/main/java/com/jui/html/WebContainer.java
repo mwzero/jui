@@ -154,7 +154,40 @@ public class WebContainer extends WebElement implements AutoCloseable {
 					
 			return sb.toString();
 			
-		}else { 
+		} else if ( type == ContainerType.POPOVER ) {
+			
+			StringBuffer sb = new StringBuffer();
+			sb.append("""
+					<div hidden >
+		                <div data-name="popover-content-%s">
+					        {{content-%s}}
+		                </div>
+		            </div>
+            
+					<a id="%s" tabindex="0" class="btn btn-lg btn-danger" role="button" data-bs-toggle="popover" title="%s" >Html inside popover</a>
+					""".formatted(clientId, clientId, clientId, key));
+					
+			sb.append("""
+					<script>
+						var options = {
+						        html: true,
+						        title: "Optional: HELLO(Will overide the default-the inline title)",
+						        //html element
+						        //content: $("#popover-content-%s")
+						        content: document.querySelector('[data-name="popover-content-%s"]')
+						        //content: $('[data-name="popover-content-%s"]')
+						        //Doing below won't work. Shows title only
+						        //content: $("#popover-content-%s").html()
+						
+						    };
+					    var exampleEl = document.getElementById('%s');
+					    var popover = new bootstrap.Popover(exampleEl, options);
+					</script>
+					""".formatted(clientId, clientId,clientId, clientId, clientId));
+					
+			return sb.toString();
+			
+		} else { 
 		
 		
 			return """
