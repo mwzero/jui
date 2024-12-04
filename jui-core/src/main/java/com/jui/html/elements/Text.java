@@ -46,7 +46,7 @@ public class Text extends WebElement {
 				
 			}
 		} else {
-			return "<p>" + text + "</p>";		
+			return text;		
 		}
 		
 	}

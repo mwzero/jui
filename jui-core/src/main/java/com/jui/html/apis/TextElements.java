@@ -3,6 +3,7 @@ package com.jui.html.apis;
 import com.jui.html.WebElementContext;
 import com.jui.html.elements.Divider;
 import com.jui.html.elements.Text;
+import com.jui.processors.HtmlProcessor;
 import com.jui.processors.MarkdownProcessor;
 
 public class TextElements extends BaseElements {
@@ -14,29 +15,66 @@ public class TextElements extends BaseElements {
 	}
 	
 	public Text title(String text) {
-		return (Text) context.add(new Text(getMarkdown(text), true, true));
+		
+		String html = "<h1>%s</h1>".formatted(HtmlProcessor.convertTextToHtml(text));
+		return (Text) context.add(new Text(html, false, true));
 	}
-
-	public Text header(String text, boolean divider) {
-		Text web = new Text(getMarkdown(text), false, true);
+	
+	public Text header(String text) {
+		
+		String html = "<h2>%s</h2>".formatted(HtmlProcessor.convertTextToHtml(text));
+		Text web = new Text(html, false, true);
 		context.add(web);
+		return web;
+	}
+	
+	public Text header(String text, boolean divider) {
+		Text web = header(text);
 		context.add(this.context.add(new Divider()));
 		return web;
 	}
 	
 	public Text header(String text, String dividerColor) {
-		
-		Text web = (Text) context.add(new Text(text, false, true));
+		Text web = header(text);
 		context.add(new Divider(dividerColor));
 		return web;
 	}
 
-	public Text subHeader(String text) {
-		return (Text) context.add(new Text(getMarkdown(text), false, true));
+	public Text subheader(String text) {
+		String html = "<h3>%s</h3>".formatted(HtmlProcessor.convertTextToHtml(text));
+		Text web = new Text(html, false, true);
+		context.add(web);
+		return web;
+	}
+	
+	public Text subheader(String text, boolean divider) {
+		Text web = subheader(text);
+		context.add(this.context.add(new Divider()));
+		return web;
+	}
+	
+	public Text subheader(String text, String dividerColor) {
+		Text web = subheader(text);
+		context.add(new Divider(dividerColor));
+		return web;
+	}
+	
+	
+	public Text html(String html) {
+		
+		return (Text) context.add(new Text(html, false, true));
 	}
 
+	public Text text(String text) {
+		
+		return (Text) context.add(new Text(HtmlProcessor.convertTextToHtml(text), false, true));
+	}
+	
 	public Text caption(String text) {
-		return (Text) context.add(new Text(getMarkdown(text), false, true));
+		String html = "<p>%s</p>".formatted(HtmlProcessor.convertTextToHtml(text));
+		Text web = new Text(html, false, true);
+		context.add(web);
+		return web;
 	}
 
 	public Text markdown(String... args) {
@@ -54,11 +92,19 @@ public class TextElements extends BaseElements {
 		this.context.add(new Text(code, false, true));
 	}
 	
+	public Divider divider() {
+		
+		Divider divider = new Divider();
+		context.add(divider);
+		return divider;
+		
+	}
+	
 	protected String getMarkdown(String... args) {
 
 		StringBuilder sb = new StringBuilder();
 		for (String arg : args) {
-			sb.append(MarkdownProcessor.builder().build().render(arg));
+			sb.append(MarkdownProcessor.render(arg));
 		}
 		return sb.toString();
 	}
