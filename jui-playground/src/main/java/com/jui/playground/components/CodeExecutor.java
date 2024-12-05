@@ -3,7 +3,6 @@ package com.jui.playground.components;
 import javax.tools.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import com.jui.playground.config.WebSocketConfig;
@@ -14,8 +13,7 @@ import java.util.*;
 @Component
 public class CodeExecutor {
 	
-	@Autowired
-    private WebSocketConfig webSocketConfig;
+	@Autowired WebSocketConfig webSocketConfig;
 
 	public void compileAndRunJavaCode(String fileName) throws IOException {
 	    File sourceFile = new File(fileName);
@@ -32,7 +30,8 @@ public class CodeExecutor {
 	    StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
 
 	    // Configura il classpath per includere la libreria esterna
-	    Iterable<String> options = Arrays.asList("-classpath", libPath + File.pathSeparator + "src");
+	    //Iterable<String> options = Arrays.asList("-classpath", libPath + File.pathSeparator + "src");
+	    Iterable<String> options = Arrays.asList("-classpath", libPath );
 	    Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
 	    JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null, compilationUnits);
 	    boolean success = task.call();
@@ -51,7 +50,8 @@ public class CodeExecutor {
 	        // Esegui la classe compilata utilizzando il nome completo del pacchetto
 	    	ProcessBuilder processBuilder = new ProcessBuilder(
 	    		    //"..\\\\..\\\\..\\\\res\\\\jbr-17.0.11-windows-x64-b1207.30\\\\bin\\\\java.exe", 
-	    			"java",
+	    		    "..\\\\..\\\\..\\\\_resources\\\\jdk-17.0.2\\\\bin\\\\java.exe",
+	    			//"java",
 	    		    "-cp", 
 	    		    "libs/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar;", 
 	    		    "-Dlogging.level.root=INFO",

@@ -1,28 +1,46 @@
 package com.jui.html.apis;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.Map;
+
 import com.jui.html.WebElementContext;
 import com.jui.html.elements.Divider;
 import com.jui.html.elements.Text;
 import com.jui.processors.HtmlProcessor;
 import com.jui.processors.MarkdownProcessor;
+import com.jui.utils.FS;
 
+import lombok.extern.java.Log;
+
+@Log
 public class TextElements extends BaseElements {
+	
+	HtmlProcessor htmlProcessor;
 	
 	public TextElements(WebElementContext context) {
 		
 		super(context);
+		try {
+			Path filePath = FS.getFilePath("emoji.properties", Map.of("classLoading","True"));
+			System.out.println("FILE:" + filePath.toString());
+			htmlProcessor = new HtmlProcessor(filePath.toString());
+		} catch (IOException | URISyntaxException e) {
+			log.severe("emoji properties file not loaded. Err:" + e.getLocalizedMessage());
+		}
 		
 	}
 	
 	public Text title(String text) {
 		
-		String html = "<h1>%s</h1>".formatted(HtmlProcessor.convertTextToHtml(text));
+		String html = "<h1>%s</h1>".formatted(htmlProcessor.convertTextToHtml(text));
 		return (Text) context.add(new Text(html, false, true));
 	}
 	
 	public Text header(String text) {
 		
-		String html = "<h2>%s</h2>".formatted(HtmlProcessor.convertTextToHtml(text));
+		String html = "<h2>%s</h2>".formatted(htmlProcessor.convertTextToHtml(text));
 		Text web = new Text(html, false, true);
 		context.add(web);
 		return web;
@@ -41,7 +59,7 @@ public class TextElements extends BaseElements {
 	}
 
 	public Text subheader(String text) {
-		String html = "<h3>%s</h3>".formatted(HtmlProcessor.convertTextToHtml(text));
+		String html = "<h3>%s</h3>".formatted(htmlProcessor.convertTextToHtml(text));
 		Text web = new Text(html, false, true);
 		context.add(web);
 		return web;
@@ -67,11 +85,11 @@ public class TextElements extends BaseElements {
 
 	public Text text(String text) {
 		
-		return (Text) context.add(new Text(HtmlProcessor.convertTextToHtml(text), false, true));
+		return (Text) context.add(new Text(htmlProcessor.convertTextToHtml(text), false, true));
 	}
 	
 	public Text caption(String text) {
-		String html = "<p>%s</p>".formatted(HtmlProcessor.convertTextToHtml(text));
+		String html = "<p>%s</p>".formatted(htmlProcessor.convertTextToHtml(text));
 		Text web = new Text(html, false, true);
 		context.add(web);
 		return web;

@@ -1,16 +1,11 @@
-package com.jui.apis;
+package examples;
 
 import static com.jui.JuiApp.jui;
 
-import lombok.extern.java.Log;
-
-@Log
 public class TextElements {
 
 	public static void main(String[] args)  {
 	
-		log.info("Text Elements API");
-		
 		jui.title("This is a title text");
 		
 		jui.header("this is a header text");
@@ -46,6 +41,5 @@ public class TextElements {
         
         
         jui.start();
-
 	}
 }

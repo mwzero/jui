@@ -1,16 +1,47 @@
 package com.jui.processors;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HtmlProcessor {
 
-	public static String convertTextToHtml(String text) {
-        if (text == null) {
+	private Properties emojiProperties;
+	
+	public HtmlProcessor(String propertiesFilePath) throws IOException {
+    	
+        emojiProperties = new Properties();
+        try (FileInputStream fis = new FileInputStream(propertiesFilePath)) {
+            emojiProperties.load(fis);
+        }
+    }
+	
+	protected String replaceEmojis(String input) {
+		
+		Pattern emojiPattern = Pattern.compile(":(\\w+):");
+        
+		Matcher matcher = emojiPattern.matcher(input);
+        StringBuffer result = new StringBuffer();
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            String emoji = emojiProperties.getProperty(key, key);
+            matcher.appendReplacement(result, Matcher.quoteReplacement(emoji));
+        }
+        matcher.appendTail(result);
+        
+        return result.toString();
+    }
+	
+	public String convertTextToHtml(String input) {
+        
+		if (input == null || input.isEmpty()) {
             return "";
         }
 
-        String html = text
+        String html = input
                 .replace("&", "&amp;")  
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
@@ -19,23 +50,10 @@ public class HtmlProcessor {
                 .replace("\n", "<br>")
                 .replace("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
 
-        html = convert(html);
-        
-        return html;
-    }
-	
-    protected static String convert(String input) {
-    	
-        if (input == null || input.isEmpty()) {
-            return "";
-        }
-
-        // Pattern per il colore in formato :blue[text]
         String colorPattern = ":([a-zA-Z]+)\\[([^\\]]+)]";
         Pattern pattern = Pattern.compile(colorPattern);
-        Matcher matcher = pattern.matcher(input);
+        Matcher matcher = pattern.matcher(html);
 
-        // Sostituzione del colore
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String color = matcher.group(1);  // Es. "blue"
@@ -45,10 +63,15 @@ public class HtmlProcessor {
         }
         matcher.appendTail(sb);
 
-        // Sostituzione dell'emoji :sunglasses:
-        String result = sb.toString().replace(":sunglasses:", "&#128526;");
+        String result = replaceEmojis(sb.toString());
 
         return result;
     }
+    
+    
+
+    
+
+   
 
 }

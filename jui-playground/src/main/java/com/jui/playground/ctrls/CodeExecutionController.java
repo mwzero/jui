@@ -35,7 +35,7 @@ public class CodeExecutionController {
 	@Autowired
 	CodeExecutor codeExecutor;
 	
-	private static final String EXAMPLES_DIR = "src" + File.separator + "examples" + File.separator;
+	private static final String EXAMPLES_DIR = "examples" + File.separator;
 
 	@PostMapping("/compile")
 	public ResponseEntity<String> compileCode(@RequestBody Map<String, String> requestBody) {

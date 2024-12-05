@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,15 +49,30 @@ public class FS {
 		Path pathFile;
 		if ( isClassLoading(options)) {
 			
-			
-			URI uri = FS.class.getClassLoader().getResource(endpoint).toURI();
-			pathFile = Paths.get(uri);
+			InputStream resourceStream = FS.class.getClassLoader().getResourceAsStream(endpoint);
+	        if (resourceStream == null) {
+	            throw new IOException("Resource not found: " + endpoint);
+	        }
+
+	        // Scrive la risorsa in un file temporaneo
+	        Path tempDir = Files.createTempDirectory("resource_temp");
+	        Path tempFile = tempDir.resolve(endpoint.substring(endpoint.lastIndexOf("/") + 1));
+	        try (OutputStream out = Files.newOutputStream(tempFile)) {
+	            byte[] buffer = new byte[8192];
+	            int bytesRead;
+	            while ((bytesRead = resourceStream.read(buffer)) != -1) {
+	                out.write(buffer, 0, bytesRead);
+	            }
+	        }
+
+	        return tempFile;
 	    	
 		} else {
 			
 			pathFile = Paths.get(endpoint);
 		}
 		
+		log.info("loading file:" + pathFile.toString());
 		return pathFile;
 		
 	}
