@@ -9,7 +9,7 @@ public class TextElements {
 
 	public static void main(String[] args)  {
 	
-		log.info("Text Elements API");
+		log.info("Status Elements API");
 		
 		jui.title("This is a title text");
 		

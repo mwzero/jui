@@ -2,20 +2,35 @@ package com.jui.processors;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.jui.utils.FS;
+
+import lombok.extern.java.Log;
+
+@Log
 public class HtmlProcessor {
 
 	private Properties emojiProperties;
 	
-	public HtmlProcessor(String propertiesFilePath) throws IOException {
+	public HtmlProcessor() {
     	
         emojiProperties = new Properties();
-        try (FileInputStream fis = new FileInputStream(propertiesFilePath)) {
+        try {
+        	Path filePath = FS.getFilePath("emoji.properties", Map.of("classLoading","True"));
+        	FileInputStream fis = new FileInputStream(filePath.toString());
+        	System.out.println("FILE:" + filePath.toString());
+    		
             emojiProperties.load(fis);
-        }
+            
+        } catch (IOException | URISyntaxException e) {
+			log.severe("emoji properties file not loaded. Err:" + e.getLocalizedMessage());
+		}
     }
 	
 	protected String replaceEmojis(String input) {
