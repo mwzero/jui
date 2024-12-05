@@ -25,6 +25,20 @@ public class ProgressBarTest {
 
 		//st.button("Rerun")
 		
+		
+		// Esempio di Runnable
+        Runnable task = () -> {
+            System.out.println("Esecuzione del task...");
+            try {
+                Thread.sleep(20000); 
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("Task interrotto!");
+            }
+        };
+
+        jui.spinner("Task in esecuzione").executeTask(task);
+        
         jui.start();
 
 	}

@@ -4,6 +4,7 @@ import com.jui.html.WebElementContext;
 import com.jui.html.elements.Callout;
 import com.jui.html.elements.Callout.CalloutStatus;
 import com.jui.html.elements.ProgressBar;
+import com.jui.html.elements.Spinner;
 import com.jui.processors.HtmlProcessor;
 
 public class StatusElements extends BaseElements {
@@ -38,6 +39,15 @@ public class StatusElements extends BaseElements {
 		context.add(progressBar);
 
 		return progressBar;
+	}
+	
+	
+	public Spinner spinner(String text) {
+		
+		Spinner spinner = new Spinner(htmlProcessor.convertTextToHtml(text));
+		context.add(spinner);
+
+		return spinner;
 	}
 	
 	

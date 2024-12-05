@@ -87,6 +87,17 @@
 	    
 	    <script>    
 	    
+	    	function removeDiv(id) {
+    			const divToRemove = document.getElementById(id);
+
+			    if (divToRemove) {
+        			divToRemove.remove(); // Rimuove il div dalla pagina
+			    } else {
+        			console.log('Div non trovato!');
+    			}
+			}
+	    	
+	    
 	    	function sendClick(id) {
 	    		fetch('/jui', {
 			        method: 'POST',
