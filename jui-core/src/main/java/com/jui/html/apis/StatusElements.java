@@ -3,6 +3,7 @@ package com.jui.html.apis;
 import com.jui.html.WebElementContext;
 import com.jui.html.elements.Callout;
 import com.jui.html.elements.Callout.CalloutStatus;
+import com.jui.html.elements.ProgressBar;
 import com.jui.processors.HtmlProcessor;
 
 public class StatusElements extends BaseElements {
@@ -15,6 +16,7 @@ public class StatusElements extends BaseElements {
 		
 	}
 	
+	//callout
 	protected Callout addCallout(CalloutStatus status, String title, String text) {
 		
 		Callout callout = new Callout(status, title, htmlProcessor.convertTextToHtml(text));
@@ -27,6 +29,17 @@ public class StatusElements extends BaseElements {
 	public Callout info(String title, String text) { return this.addCallout(CalloutStatus.INFO, title, text);}
 	public Callout warning(String title, String text) { return this.addCallout(CalloutStatus.WARNING, title, text);}
 	public Callout error(String title, String text) { return this.addCallout(CalloutStatus.ERROR, title, text);}
+
+	
+	//other
+	public ProgressBar progress(int value, String text) {
+		
+		ProgressBar progressBar = new ProgressBar(value, htmlProcessor.convertTextToHtml(text));
+		context.add(progressBar);
+
+		return progressBar;
+	}
+	
 	
 	
 }
