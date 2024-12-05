@@ -17,18 +17,11 @@ import lombok.extern.java.Log;
 @Log
 public class TextElements extends BaseElements {
 	
-	HtmlProcessor htmlProcessor;
+	HtmlProcessor htmlProcessor = new HtmlProcessor();
 	
 	public TextElements(WebElementContext context) {
 		
 		super(context);
-		try {
-			Path filePath = FS.getFilePath("emoji.properties", Map.of("classLoading","True"));
-			System.out.println("FILE:" + filePath.toString());
-			htmlProcessor = new HtmlProcessor(filePath.toString());
-		} catch (IOException | URISyntaxException e) {
-			log.severe("emoji properties file not loaded. Err:" + e.getLocalizedMessage());
-		}
 		
 	}
 	
