@@ -8,6 +8,8 @@
 		
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+		
 		<!--leaflet -->
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -23,15 +25,78 @@
 	        };
 
 	        ws.onmessage = function(event) {
-	            setInnerHTML(document.getElementById("jui-form"), event.data);
+	            //setInnerHTML(document.getElementById("jui-form"), event.data);
 	        };
 	
 			function sendClick(id) {
 	            ws.send(JSON.stringify({action: "click", id: id}));
 	        }
 		</script>
+		
+		<style>
+			.callout {
+			  padding: 20px;
+			  margin: 20px 0;
+			  border: 1px solid #eee;
+			  border-left-width: 5px;
+			  border-radius: 3px;
+			  h4 {
+			    margin-top: 0;
+			    margin-bottom: 5px;
+			  }
+			  p:last-child {
+			    margin-bottom: 0;
+			  }
+			  code {
+			    border-radius: 3px;
+			  }
+			  & + .bs-callout {
+			    margin-top: -5px;
+			  }
+			}
+	
+			.callout-success {
+			    border-left-color: #5cb85c;
+			    h4 {
+			      color: #5cb85c;
+			    }
+			  }
+			  
+			  .callout-error {
+			    border-left-color: #d9534f;
+			    h4 {
+			      color: #d9534f;
+			    }
+			  }
+			  
+			  .callout-warning {
+			    border-left-color: #f0ad4e;
+			    h4 {
+			      color: #f0ad4e;
+			    }
+			  }
+			  
+			  .callout-info {
+			    border-left-color: #5bc0de;
+			    h4 {
+			      color: #5bc0de;
+			    }
+			  }
+			  
+		</style>
 	    
 	    <script>    
+	    
+	    	function removeDiv(id) {
+    			const divToRemove = document.getElementById(id);
+
+			    if (divToRemove) {
+        			divToRemove.remove(); // Rimuove il div dalla pagina
+			    } else {
+        			console.log('Div non trovato!');
+    			}
+			}
+	    	
 	    
 	    	function sendClick(id) {
 	    		fetch('/jui', {

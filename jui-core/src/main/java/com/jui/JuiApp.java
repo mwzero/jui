@@ -1,5 +1,6 @@
 package com.jui;
 
+import java.net.Socket;
 import java.util.LinkedHashMap;
 
 import com.jui.html.JuiHtmlRenderer;
@@ -30,6 +31,9 @@ public class JuiApp extends WebContainer {
 	
 	//
 	JuiHtmlRenderer renderer;
+	
+	//
+	public Socket clientSocket;
 	
 	protected JuiApp() {
 		

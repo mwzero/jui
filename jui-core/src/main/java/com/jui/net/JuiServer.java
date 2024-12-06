@@ -6,8 +6,7 @@ import java.net.InetSocketAddress;
 import com.jui.net.handlers.HandlerBase;
 import com.jui.net.handlers.HandlerFile;
 import com.jui.net.handlers.HandlerRequest;
-import com.jui.net.handlers.HandlerWebSocket;
-import com.jui.net.handlers.HandlerWebSocketEcho;
+import com.jui.net.handlers.IHandlerWebSocket;
 import com.sun.net.httpserver.HttpServer;
 
 import lombok.Builder;
@@ -18,7 +17,7 @@ import lombok.extern.java.Log;
 public class JuiServer {
 	
 	HandlerBase juiHttpHandler;
-	HandlerWebSocket juiWebSocketHandler;
+	IHandlerWebSocket juiWebSocketHandler;
 	
 	String docRoot;
 	boolean classLoading;
@@ -49,7 +48,6 @@ public class JuiServer {
 
 	        	
 		        JuiSimpleWebSocketServer wss = JuiSimpleWebSocketServer.create(new InetSocketAddress(wssPort), 8025);
-				wss.createContext("/echo", new HandlerWebSocketEcho());
 				wss.createContext("/ws/jui", juiWebSocketHandler);
 		        wss.start();    
 		        log.info("WSS listening on port[%d]".formatted(wssPort));

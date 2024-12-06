@@ -43,21 +43,13 @@ public class OtherElements extends BaseElements {
 	
 	public void write(String... args) {
 		 for (String arg : args) {
-			 String text = MarkdownProcessor.builder().build().render(arg);
+			 String text = MarkdownProcessor.render(arg);
 			 context.add(new Text(text, false, true));
 		 }
 	}
 	
 	public void write ( Object obj ) {
 		JuiAnnotationHelper.write(context, obj);
-	}
-	
-	public Divider divider() {
-		
-		Divider divider = new Divider();
-		context.add(divider);
-		return divider;
-		
 	}
 	
 	public UnorderedList ul(String label) {

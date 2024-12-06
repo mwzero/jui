@@ -8,7 +8,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jui.net.handlers.HandlerWebSocket;
+import com.jui.JuiApp;
+import com.jui.net.handlers.IHandlerWebSocket;
 
 import lombok.Setter;
 import lombok.extern.java.Log;
@@ -17,7 +18,7 @@ import lombok.extern.java.Log;
 @Log
 public class JuiSimpleWebSocketServer {
 	
-	private Map<String, HandlerWebSocket> handlers = new HashMap<>();
+	private Map<String, IHandlerWebSocket> handlers = new HashMap<>();
 	
 	int port = 8025;
 	
@@ -32,7 +33,7 @@ public class JuiSimpleWebSocketServer {
 		
 	}
 	
-	public void createContext(String path, HandlerWebSocket webSocketHandler) {
+	public void createContext(String path, IHandlerWebSocket webSocketHandler) {
 		
 		handlers.put(path, webSocketHandler);
 	}
@@ -52,7 +53,10 @@ public class JuiSimpleWebSocketServer {
                     String path = performHandshake(clientSocket);
                     if (path != null) {
                         log.info("Handshake WebSocket completato con successo per il path: " + path);
+                        
+                        JuiApp.jui.clientSocket = clientSocket;
                         handleWebSocketCommunication(clientSocket, path);
+                        
                     } else {
                     	log.severe("Handshake WebSocket failed, closing ws connection");
                         clientSocket.close();
@@ -124,10 +128,11 @@ public class JuiSimpleWebSocketServer {
     }
 
     private void handleWebSocketCommunication(Socket clientSocket, String path) throws IOException {
+    	
         InputStream in = clientSocket.getInputStream();
         OutputStream out = clientSocket.getOutputStream();
         
-        HandlerWebSocket handler = handlers.get(path);
+        IHandlerWebSocket handler = handlers.get(path);
         if (handler == null) {
         	log.warning("Path [%s] not reconized.".formatted(path));
             clientSocket.close();
@@ -153,11 +158,7 @@ public class JuiSimpleWebSocketServer {
         	log.severe("SocketException: Client connection interrupted: " + e.getMessage());
         } catch (IOException e) {
         	log.severe("Socket IO error: " + e.getMessage());
-        } finally {
-            if (clientSocket != null && !clientSocket.isClosed()) {
-                clientSocket.close();
-            }
-        }
+        } 
     }
 
     private static String decodeWebSocketFrame(byte[] buffer, int length) {

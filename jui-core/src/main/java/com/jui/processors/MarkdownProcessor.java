@@ -1,11 +1,8 @@
 package com.jui.processors;
 
-import lombok.Builder;
-
-@Builder
 public class MarkdownProcessor {
 
-    public String render(String markdown) {
+    public static String render(String markdown) {
         if (markdown == null || markdown.isEmpty()) {
             return "";
         }
@@ -21,7 +18,7 @@ public class MarkdownProcessor {
         return html.toString().trim();
     }
 
-    private String renderLine(String line) {
+    private static String renderLine(String line) {
         line = line.trim();
 
         if (line.startsWith("# ")) {
@@ -48,7 +45,7 @@ public class MarkdownProcessor {
         }
     }
 
-    private String renderInline(String text) {
+    private static String renderInline(String text) {
         // Bold
         text = text.replaceAll("\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
         text = text.replaceAll("__(.*?)__", "<strong>$1</strong>");
