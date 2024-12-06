@@ -50,8 +50,8 @@ public class CodeExecutor {
 	        // Esegui la classe compilata utilizzando il nome completo del pacchetto
 	    	ProcessBuilder processBuilder = new ProcessBuilder(
 	    		    //"..\\\\..\\\\..\\\\res\\\\jbr-17.0.11-windows-x64-b1207.30\\\\bin\\\\java.exe", 
-	    		    "..\\\\..\\\\..\\\\_resources\\\\jdk-17.0.2\\\\bin\\\\java.exe",
-	    			//"java",
+	    		    //"..\\\\..\\\\..\\\\_resources\\\\jdk-17.0.2\\\\bin\\\\java.exe",
+	    			"java",
 	    		    "-cp", 
 	    		    "libs/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar;", 
 	    		    "-Dlogging.level.root=INFO",

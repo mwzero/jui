@@ -1,6 +1,5 @@
 package com.jui;
 
-import java.net.Socket;
 import java.util.LinkedHashMap;
 
 import com.jui.html.JuiHtmlRenderer;
@@ -26,14 +25,10 @@ public class JuiApp extends WebContainer {
 	
 	public WebContainer sidebar;
 
-	//page settings
-	public JuiPageSettings page;
+	public JuiAppSettings page;
 	
 	//
 	JuiHtmlRenderer renderer;
-	
-	//
-	public Socket clientSocket;
 	
 	protected JuiApp() {
 		
@@ -42,7 +37,7 @@ public class JuiApp extends WebContainer {
 		log.info("JUI App: Start Initialization");
 		renderer = new JuiHtmlRenderer();
 		sidebar = new WebContainer("sidebar");
-		page =  new JuiPageSettings();
+		page =  new JuiAppSettings();
 	}
 	
 	public JuiContent render() {
@@ -109,8 +104,5 @@ public class JuiApp extends WebContainer {
 	    }
 	    return map;
 	}
-
-
-
 
 }

@@ -1,6 +1,9 @@
 package com.jui.html.elements;
 
+import java.util.Map;
+
 import com.jui.html.WebElement;
+import com.jui.model.JuiNotification;
 
 import lombok.extern.java.Log;
 
@@ -12,7 +15,7 @@ public class ProgressBar extends WebElement {
 	
 	
 	public ProgressBar(int value, String text) {
-		super("CallOut");
+		super("ProgressBar");
 		
 		this.text = text;
 		this.value = value;
@@ -20,8 +23,22 @@ public class ProgressBar extends WebElement {
 	
 	public void progress(int value, String text) {
 		
-		//socket comunication
+		this.text = text;
+		this.value = value;
 		
+		JuiNotification notification = new JuiNotification(this, "change");
+		notification.setCommand("""
+				var progressBar = document.getElementById("%s-progress-bar");
+				progressBar.style.width = "%d%%";
+				progressBar.setAttribute("aria-valuenow", "%d");
+				""".formatted(this.clientId(), this.value, this.value));
+		com.jui.JuiNotifier.notifier.onAttributeChanged(notification);
+		
+	}
+	
+	@Override
+	public Map<String, Object> getMapValue() {
+		return Map.of("value", value);
 	}
 
 	@Override
@@ -32,9 +49,9 @@ public class ProgressBar extends WebElement {
 		
 		return """
 				<div id="%s" class="progress">
-					<div class="progress-bar" role="progressbar" style="width: %d%%" aria-valuenow="%d" aria-valuemin="0" aria-valuemax="100"></div>
+					<div id="%s-progress-bar" class="progress-bar" role="progressbar" style="width: %d%%" aria-valuenow="%d" aria-valuemin="0" aria-valuemax="100"></div>
 				</div>
-				""".formatted(this.clientId(), this.value, this.value);
+				""".formatted(this.clientId(), this.clientId(), this.value, this.value);
 						
 	}
 }

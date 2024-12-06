@@ -11,5 +11,4 @@ public class BaseElements {
 		this.context = context;
 		
 	}
-
 }

@@ -25,6 +25,12 @@
 	        };
 
 	        ws.onmessage = function(event) {
+	        	const notification = JSON.parse(event.data);
+	        	console.log(notification.action);
+	        	if ( notification.action == "change") {
+	        		console.log(notification.command);
+	        		eval(notification.command);
+	        	}
 	            //setInnerHTML(document.getElementById("jui-form"), event.data);
 	        };
 	

@@ -11,6 +11,8 @@ import java.util.Map;
 import com.jui.JuiApp;
 import com.jui.net.handlers.IHandlerWebSocket;
 
+import static com.jui.JuiNotifier.notifier;
+
 import lombok.Setter;
 import lombok.extern.java.Log;
 
@@ -54,7 +56,7 @@ public class JuiSimpleWebSocketServer {
                     if (path != null) {
                         log.info("Handshake WebSocket completato con successo per il path: " + path);
                         
-                        JuiApp.jui.clientSocket = clientSocket;
+                        notifier.setClientSocket(clientSocket);
                         handleWebSocketCommunication(clientSocket, path);
                         
                     } else {

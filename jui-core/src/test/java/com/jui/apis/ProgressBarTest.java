@@ -11,14 +11,27 @@ public class ProgressBarTest {
 	
 		log.info("WS Channel Test");
 		
-		var my_bar = jui.progress(50, "Operation in progress. Please wait.");
+		var my_bar = jui.progress(0, "Operation in progress. Please wait.");
+		
+		jui.button("Click-me", "primary", "alert('Button clicked!')", () -> {
+			
+            System.out.println("Esecuzione del task...");
+            for ( int i=1; i<=100; i++) {
+    			try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    			my_bar.progress(i, "progress_text");
+    		}
+        	my_bar.progress(0, "progress_text");
+            
+    	});
+		
+		
 
 		/*
-		for ( int i=51; i<=100; i++) {
-			Thread.sleep(1000);
-			my_bar.progress(i, "progress_text");
-		}
-		
 		Thread.sleep(1000);
 		*/
 		//my_bar.empty();
@@ -26,18 +39,7 @@ public class ProgressBarTest {
 		//st.button("Rerun")
 		
 		
-		// Esempio di Runnable
-        Runnable task = () -> {
-            System.out.println("Esecuzione del task...");
-            try {
-                Thread.sleep(20000); 
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.err.println("Task interrotto!");
-            }
-        };
-
-        jui.spinner("Task in esecuzione").executeTask(task);
+        //jui.spinner("Task in esecuzione").executeTask(task);
         
         jui.start();
 

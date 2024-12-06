@@ -8,6 +8,8 @@ public class SideBarRecipe {
 	
 	public static void main(String... args) {
 		
+		jui.page.layout("sidebar");
+
     	jui.sidebar
     		.ul("JUI Example")
 	    		.add("MapZoomer", "compass", null, mapZoomer(), true)

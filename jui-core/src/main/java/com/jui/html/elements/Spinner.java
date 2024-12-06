@@ -1,11 +1,6 @@
 package com.jui.html.elements;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import com.jui.JuiApp;
 import com.jui.html.WebElement;
-import com.jui.utils.WS;
 
 import lombok.extern.java.Log;
 
@@ -19,38 +14,6 @@ public class Spinner extends WebElement {
 		
 		this.text = text;
 	}
-	
-	private void onTaskComplete() {
-		
-		
-		try {
-			OutputStream out;
-			out = JuiApp.jui.clientSocket.getOutputStream();
-			String response = "finito";
-			out.write(WS.encodeWebSocketFrame(response));
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        System.out.println("Task completato!");
-    }
-	
-	public void executeTask(Runnable task) {
-		
-        Thread thread = new Thread(() -> {
-            try {
-                // Esecuzione del Runnable
-                task.run();
-            } finally {
-                // Eseguire il metodo al termine
-                onTaskComplete();
-            }
-        });
-        thread.start();
-    }
-	
 	
 	@Override
 	public String getHtml() {

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(fluent = true)
-public class JuiPageSettings {
+public class JuiAppSettings {
 
 	String layout;
 	

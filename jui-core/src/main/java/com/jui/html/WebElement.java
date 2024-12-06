@@ -1,8 +1,12 @@
 package com.jui.html;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.jui.model.JuiNotification;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -62,7 +66,24 @@ public abstract class WebElement {
 		
 	}
 	
+	public void executeTask(Runnable task) {
+		
+        Thread thread = new Thread(() -> {
+            try {
+                task.run();
+            } finally {
+            	
+            	com.jui.JuiNotifier.notifier.onAttributeChanged(this);
+                onTaskComplete();
+            }
+        });
+        thread.start();
+    }
+
 	
+	protected void onTaskComplete() {
+	}
+
 	public void executeServerAction() {
 		onServerSide.run();	
 	}
@@ -141,5 +162,9 @@ public abstract class WebElement {
 		this.webContext().add(component);
 		
 		return component;
+	}
+
+	public Map<String, Object> getMapValue() {
+		return Map.of("clientId", this.clientId);
 	}
 }
