@@ -8,7 +8,7 @@ public class HandlerJuiWebSocket implements IHandlerWebSocket {
     public String handleMessage(String message) throws IOException {
     	
     	//here arrive all ws message
-        String response = "Jui: " + message;
+        String response = message;
         return response;
         
         

@@ -75,7 +75,7 @@ public class WebContainer extends WebElement implements AutoCloseable {
 		
 		if ( type == ContainerType.COL ) {
 			
-			int width = this.getAttributeAsInt(WebAttributes.WIDTH_ATTRIBUTES);
+			int width = this.getAttributeAsInt(WebElementAttributes.WIDTH_ATTRIBUTES);
 			return """
 					<div id="%s" class="col-%s" >{{content-%s}}</div>
 				   """.formatted(this.clientId(), width, this.clientId());

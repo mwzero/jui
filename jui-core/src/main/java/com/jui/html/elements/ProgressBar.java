@@ -26,13 +26,14 @@ public class ProgressBar extends WebElement {
 		this.text = text;
 		this.value = value;
 		
-		JuiNotification notification = new JuiNotification(this, "change");
-		notification.setCommand("""
+		String command = """
 				var progressBar = document.getElementById("%s-progress-bar");
 				progressBar.style.width = "%d%%";
 				progressBar.setAttribute("aria-valuenow", "%d");
-				""".formatted(this.clientId(), this.value, this.value));
-		com.jui.JuiNotifier.notifier.onAttributeChanged(notification);
+				""".formatted(this.clientId(), this.value, this.value);
+		
+		this.backEndEvents().onServerUpdate(this, "change", command);
+		
 		
 	}
 	

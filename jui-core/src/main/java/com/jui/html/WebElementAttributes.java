@@ -6,7 +6,7 @@ import java.util.Map;
 import lombok.experimental.Accessors;
 
 @Accessors(fluent = true)
-public class WebAttributes {
+public class WebElementAttributes {
 	
 	Map<String, Object> attributes;
 	
@@ -17,7 +17,7 @@ public class WebAttributes {
 	//
 	public final static String ACTIVE_ATTRIBUTES = "active";
 	
-	public WebAttributes() {
+	public WebElementAttributes() {
 		
 		attributes = new HashMap<String, Object>();
 		

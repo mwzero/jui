@@ -25,7 +25,10 @@ public abstract class WebElement {
 	
 	
 	@Delegate
-	WebAttributes attributes;
+	WebElementAttributes attributes;
+	
+	final FrontEndEvents frontEndEvents = new FrontEndEvents();
+    final BackEndEvents backEndEvents = new BackEndEvents();
 	
 	/**
 	 * Specify Html Element Id like: div, button, slider, etc..
@@ -50,7 +53,7 @@ public abstract class WebElement {
 		log.fine("New WebComponent:" + id);
 		this.Id(id);
 		
-		attributes = new WebAttributes(); 
+		attributes = new WebElementAttributes(); 
 		webContext = new WebElementContext();
 		
 		
@@ -66,24 +69,6 @@ public abstract class WebElement {
 		
 	}
 	
-	public void executeTask(Runnable task) {
-		
-        Thread thread = new Thread(() -> {
-            try {
-                task.run();
-            } finally {
-            	
-            	com.jui.JuiNotifier.notifier.onAttributeChanged(this);
-                onTaskComplete();
-            }
-        });
-        thread.start();
-    }
-
-	
-	protected void onTaskComplete() {
-	}
-
 	public void executeServerAction() {
 		onServerSide.run();	
 	}

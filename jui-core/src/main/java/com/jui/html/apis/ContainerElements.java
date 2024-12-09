@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
-import com.jui.html.WebAttributes;
+import com.jui.html.WebElementAttributes;
 import com.jui.html.WebElementContext;
 import com.jui.html.apis.ContainerElements.ContainerType;
 
@@ -55,7 +55,7 @@ public class ContainerElements extends BaseElements {
 		for (String tab : of) {
 			
 			WebContainer col = new WebContainer(tab, ContainerType.TAB);
-			col.addAttribute(WebAttributes.ACTIVE_ATTRIBUTES, isActive);
+			col.addAttribute(WebElementAttributes.ACTIVE_ATTRIBUTES, isActive);
 			row.add( col);
 			tabs.add(col);
 			
@@ -75,7 +75,7 @@ public class ContainerElements extends BaseElements {
 		
 		for (Entry<String, Integer> column : of.entrySet()) {
 			
-			WebContainer col = new WebContainer(column.getKey(), ContainerType.COL, Map.of( WebAttributes.WIDTH_ATTRIBUTES, column.getValue()));
+			WebContainer col = new WebContainer(column.getKey(), ContainerType.COL, Map.of( WebElementAttributes.WIDTH_ATTRIBUTES, column.getValue()));
 			cols.add(col);
 			row.add( col);
 			

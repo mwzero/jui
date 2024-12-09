@@ -19,7 +19,10 @@ public class Button extends WebElement {
     WebContainer container;
 
     public Button(String label, String type) {
-    	super("Button");
+    	super("Button"); 
+    	this.label=label;
+    	this.type=type;
+    	this.onClick = "";   
     }
     		
     public Button(String label, String type, String onClick, Runnable onServerSide) {
@@ -32,4 +35,27 @@ public class Button extends WebElement {
         this.onServerSide = onServerSide;
 
     }
+    
+	public void disable() {
+		
+		String command = """
+				const button = document.getElementById("%s");
+				button.disabled = true;
+				button.classList.add("disabled");
+				""".formatted(this.clientId());
+		
+		this.backEndEvents().onServerUpdate(this, "change", command);
+		
+	}
+	
+	public void enable() {
+		String command = """
+				const button = document.getElementById("%s");
+				button.disabled = false;
+				button.classList.remove("disabled");
+				""".formatted(this.clientId());
+		
+		this.backEndEvents().onServerUpdate(this, "change", command);
+	}
+	
 }
