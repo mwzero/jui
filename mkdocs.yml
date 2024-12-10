@@ -1,1 +1,5 @@
 site_name: Jui
+
+nav:
+  - index.md
+  - about.md
