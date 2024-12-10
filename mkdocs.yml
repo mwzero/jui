@@ -1,5 +1,4 @@
-site_name: Jui
+site_name: Jui Framework
 
 nav:
   - index.md
-  - about.md
