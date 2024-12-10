@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "StatusElementstTest",
+            "request": "launch",
+            "mainClass": "com.jui.apis.StatusElementstTest",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
