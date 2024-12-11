@@ -2,8 +2,6 @@ package com.jui.apis;
 
 import static com.jui.JuiApp.jui;
 
-import com.jui.html.elements.Button;
-
 import lombok.extern.java.Log;
 
 @Log
@@ -27,8 +25,7 @@ public class ProgressBarTest {
     			try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.severe(e.getLocalizedMessage());
 				}
     			my_bar.progress(i, "progress_text");
     		}
@@ -37,15 +34,12 @@ public class ProgressBarTest {
             
     	});
 		
-		
-
 		/*
 		Thread.sleep(1000);
 		*/
 		//my_bar.empty();
 
 		//st.button("Rerun")
-		
 		
         //jui.spinner("Task in esecuzione").executeTask(task);
         
