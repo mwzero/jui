@@ -50,6 +50,4 @@ public class StatusElements extends BaseElements {
 		return spinner;
 	}
 	
-	
-	
 }
