@@ -67,7 +67,7 @@ public abstract class WebElement {
 	
 	public void executeServerAction(String action, Map<String, Object> payload) {
 		
-		this.frontEndEvents.onUpdate.accept(action, payload);
+		this.frontEndEvents.onUpdate(action, payload);
 	}
 	
 	public String getValue() {
@@ -95,7 +95,7 @@ public abstract class WebElement {
 		variables.put("clientId", this.clientId());
 		variables.put("juiComponent", this);
 		
-		if ( this.frontEndEvents.onUpdate != null ) {
+		if ( this.frontEndEvents.isOnUpdateDefined() ) {
 			variables.put("onServerSide", "server-side");
 		}
 		

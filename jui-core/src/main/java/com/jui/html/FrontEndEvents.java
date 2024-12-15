@@ -2,6 +2,7 @@ package com.jui.html;
 
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,10 +15,14 @@ import lombok.extern.java.Log;
  */
 @Getter
 @Setter
-@Accessors(fluent = true)
 @Log
 public class FrontEndEvents {
 
+	
+	BiConsumer<String, Map<String, Object>> onUpdateActionBi;
+	Consumer<Map<String, Object>> onUpdateActionSingle;
+	Runnable onUpdateAction;
+	
     /**
      * Triggered when the element is loaded into the DOM.
      */
@@ -28,7 +33,21 @@ public class FrontEndEvents {
     /**
      * Triggered when the element is updated asynchronously.
      */
-    public BiConsumer<String, Map<String, Object> > onUpdate;
+    public void onUpdateAction(BiConsumer<String, Map<String, Object>> runnable) {onUpdateActionBi=runnable;}
+    public void onUpdateAction(Consumer<Map<String, Object>> runnable) {onUpdateActionSingle=runnable;}
+    public void onUpdateAction(Runnable runnable) {onUpdateAction=runnable;}
+    public void onUpdate(String action, Map<String, Object> payload) {
+    	if ( onUpdateActionBi != null )
+    		onUpdateActionBi.accept(action, payload);
+    	else if ( onUpdateActionSingle != null )
+    		onUpdateActionSingle.accept(payload);
+    	else 
+    		onUpdateAction.run();
+    }
+    public boolean isOnUpdateDefined() {
+    	if ( ( onUpdateActionBi != null ) || ( onUpdateActionSingle != null ) || (onUpdateAction!= null)) return true;
+    	return false;
+    }
 
     /**
      * Triggered when an asynchronous operation is completed.

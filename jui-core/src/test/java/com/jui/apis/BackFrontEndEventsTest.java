@@ -34,6 +34,11 @@ public class BackFrontEndEventsTest {
         	btn.enable();
         } );
 		
+		var btn2 = jui.button("Click-me 2", "primary");
+		btn2.onClick( () -> {
+            System.out.println("Clicked!!");
+        } );
+		
 		/*
 		Thread.sleep(1000);
 		*/
