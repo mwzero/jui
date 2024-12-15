@@ -36,3 +36,5 @@ swa/.$jui.drawio.bkp
 /jui-server/target
 /jui-recipes/target
 /jui-toolkits/target
+assets/.$jui.drawio.bkp
+*.bkp

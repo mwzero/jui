@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.jui.html.WebElement;
 
+import lombok.extern.java.Log;
+
+@Log
 public class Radio extends WebElement {
 	
     private String label;
@@ -18,7 +21,9 @@ public class Radio extends WebElement {
 
 	@Override
 	public String getHtml() {
-		
+	
+		log.info("label is never used" + label);
+
 		String html = "";
 		
 		int i=0;

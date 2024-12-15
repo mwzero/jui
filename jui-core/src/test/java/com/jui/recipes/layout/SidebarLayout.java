@@ -30,9 +30,7 @@ public class SidebarLayout {
 
         jui.divider();
         
-        jui.button("Cliccami", "primary", "alert('Button clicked!')", () -> {
-        	log.info("Bottone cliccato! Esegui codice Server-side");
-    	});
+        jui.button("Cliccami", "primary", "alert('Button clicked!')");
         
         jui.start();
 

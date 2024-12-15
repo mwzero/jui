@@ -1,12 +1,9 @@
 package com.jui.html.apis;
 
 import com.jui.html.WebElementContext;
-import com.jui.html.elements.Divider;
-import com.jui.html.elements.Text;
 import com.jui.html.elements.chart.ChartBar;
 import com.jui.html.elements.chart.ChartLines;
 import com.jui.html.elements.chart.ChartMap;
-import com.jui.processors.MarkdownProcessor;
 
 public class ChartElements extends BaseElements {
 	

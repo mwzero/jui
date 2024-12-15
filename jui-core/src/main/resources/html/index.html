@@ -104,13 +104,13 @@
 			}
 	    	
 	    
-	    	function sendClick(id) {
+	    	function sendEvent(id, action, payload) {
 	    		fetch('/jui', {
 			        method: 'POST',
 			        headers: {
 			            'Content-Type': 'application/json',
 			        },
-			        body: JSON.stringify({action: "click", id: id}),
+			        body: JSON.stringify({id: id, action: action, payload: payload}),
 			    })
 			    .then(response => {
                     if (!response.ok) {

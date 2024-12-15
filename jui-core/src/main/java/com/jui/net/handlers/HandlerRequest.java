@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class HandlerRequest extends HandlerBase implements HttpHandler {
+public class HandlerRequest extends HandlerBase  {
 
     public HandlerRequest() {
 	}

@@ -37,7 +37,7 @@ public class JuiGrizzlyRequestHandler extends HttpHandler {
             if ("click".compareTo(msg.getAction()) == 0 ) {
             	
             	response.setContentType("text/html");
-            	JuiApp.jui.executeServerAction(msg.getId());
+            	JuiApp.jui.executeServerAction(msg.getId(), null);
             	
             } else if ("init".equals(msg.getAction())) {
             	

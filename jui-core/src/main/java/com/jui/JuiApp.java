@@ -1,6 +1,7 @@
 package com.jui;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.jui.html.JuiHtmlRenderer;
 import com.jui.html.WebContainer;
@@ -48,6 +49,7 @@ public class JuiApp extends WebContainer {
 		if ( sidebar.webContext().getLinkedMapContext() != null) {
 			
 			content.setSidebar(renderer.render(sidebar));
+			
 		} else
 			content.setSidebar("");
 		
@@ -82,13 +84,16 @@ public class JuiApp extends WebContainer {
 		.start();
 	}
 
-	public WebElement executeServerAction(String id) throws Exception{
+	public WebElement executeServerAction(String id, String action, Map<String, Object> payload) throws Exception{
 		
 		WebElement  component = this.webContext().getLinkedMapContext().get(id);
-		if ( component != null )
-			component.executeServerAction();
+		if ( component != null ) {
+
+			component.executeServerAction(action, payload);
+			return component;
+		}
 		
-		return component;
+		return null;
 		
 	}
 

@@ -9,7 +9,6 @@ import java.util.Map;
 import com.st.DataFrame;
 
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 public class DashboardApp {
@@ -18,7 +17,7 @@ public class DashboardApp {
     	
     	log.info("Starting Dashboard APP");
     	
-    	jui.set_page_config().layout("sidebar");
+    	jui.page.layout("sidebar");
     	
     	jui.markdown("""
     			# Dashboard: Covid 19

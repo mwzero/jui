@@ -9,8 +9,10 @@ import com.jui.html.WebElement;
 import com.jui.model.JuiNotification;
 
 import lombok.Setter;
+import lombok.extern.java.Log;
 
 @Setter
+@Log
 public class JuiNotifier {
 	
 	//
@@ -18,41 +20,33 @@ public class JuiNotifier {
 	
 	public static final JuiNotifier notifier = new JuiNotifier();
 	
-	public void onAttributeChanged(JuiNotification notification) {
+	public synchronized void onAttributeChanged(JuiNotification notification) {
 		
 		try {
+
 			OutputStream out = clientSocket.getOutputStream();
 			out.write(encodeWebSocketFrame(notification.toJsonString()));
 			out.flush();
+
+			log.fine("Socket message sent");
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+			log.severe("Error sendiing socket message. Err:" + e.getLocalizedMessage());
 		}
-        
-        System.out.println("Change sent!");
-		// TODO Auto-generated method stub
-		
 	}
 	
 	public void onAttributeChanged(WebElement webelement) {
+
 		JuiNotification notification = new JuiNotification(webelement,"change");
-		
-		try {
-			OutputStream out = clientSocket.getOutputStream();
-			out.write(encodeWebSocketFrame(notification.toJsonString()));
-			out.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        System.out.println("Change sent!");
-		// TODO Auto-generated method stub
+
+		this.onAttributeChanged(notification);
 		
 	}
 	
 	
 	protected static byte[] encodeWebSocketFrame(String message) {
+
 	    byte[] rawData = message.getBytes(StandardCharsets.UTF_8);
 	    int rawDataLength = rawData.length;
 

@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "BackFrontEndEventsTest",
+            "request": "launch",
+            "mainClass": "com.jui.apis.BackFrontEndEventsTest",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
             "name": "ProgressBarTest",
             "request": "launch",
             "mainClass": "com.jui.apis.ProgressBarTest",

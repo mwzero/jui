@@ -10,7 +10,6 @@ import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 import com.jui.html.WebElementAttributes;
 import com.jui.html.WebElementContext;
-import com.jui.html.apis.ContainerElements.ContainerType;
 
 public class ContainerElements extends BaseElements {
 	

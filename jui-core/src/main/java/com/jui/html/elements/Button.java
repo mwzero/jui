@@ -25,17 +25,15 @@ public class Button extends WebElement {
     	this.onClick = "";   
     }
     		
-    public Button(String label, String type, String onClick, Runnable onServerSide) {
+    public Button(String label, String type, String onClick) {
     	
     	super("Button");
     	
         this.label = label;
         this.onClick = onClick;
         this.type = type;
-        this.onServerSide = onServerSide;
-
     }
-    
+
 	public void disable() {
 		
 		String command = """
@@ -49,6 +47,7 @@ public class Button extends WebElement {
 	}
 	
 	public void enable() {
+
 		String command = """
 				const button = document.getElementById("%s");
 				button.disabled = false;
@@ -57,5 +56,5 @@ public class Button extends WebElement {
 		
 		this.backEndEvents().onServerUpdate(this, "change", command);
 	}
-	
+
 }

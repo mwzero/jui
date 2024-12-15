@@ -5,16 +5,8 @@ import java.util.List;
 
 import com.jui.annotations.JuiAnnotationHelper;
 import com.jui.html.WebElementContext;
-import com.jui.html.elements.CheckBox;
-import com.jui.html.elements.ColorPicker;
-import com.jui.html.elements.DatePicker;
-import com.jui.html.elements.Divider;
 import com.jui.html.elements.DropDownButton;
-import com.jui.html.elements.FileInput;
 import com.jui.html.elements.Input;
-import com.jui.html.elements.Radio;
-import com.jui.html.elements.Select;
-import com.jui.html.elements.Slider;
 import com.jui.html.elements.Table;
 import com.jui.html.elements.Text;
 import com.jui.html.elements.UnorderedList;

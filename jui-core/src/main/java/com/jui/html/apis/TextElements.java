@@ -1,16 +1,10 @@
 package com.jui.html.apis;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.util.Map;
-
 import com.jui.html.WebElementContext;
 import com.jui.html.elements.Divider;
 import com.jui.html.elements.Text;
 import com.jui.processors.HtmlProcessor;
 import com.jui.processors.MarkdownProcessor;
-import com.jui.utils.FS;
 
 import lombok.extern.java.Log;
 

@@ -2,7 +2,7 @@ package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
-import com.st.DB;
+
 import com.st.DataFrame;
 
 public class CsvRecipe {

@@ -43,8 +43,9 @@ public class HandlerJuiRequest extends HandlerBase {
 				 
 				 response = JuiApp.jui.render().toJsonString();
 				 
-			 } else if ("click".equals(msg.getAction())) {
-				 JuiApp.jui.executeServerAction(msg.getId());
+			 } else {
+
+				 JuiApp.jui.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
 				 
 				 if (JuiApp.jui.getJuiResponse() == null ) {
 						response = JuiContent.builder("OK","OK").toJsonString();

@@ -29,7 +29,7 @@ public class WebSocketEndpoint {
         if ("click".compareTo(msg.getAction()) == 0 ) {
         	
         	try {
-				JuiApp.jui.executeServerAction(msg.getId());
+				JuiApp.jui.executeServerAction(msg.getId(), null);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

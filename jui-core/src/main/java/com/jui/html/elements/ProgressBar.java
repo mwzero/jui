@@ -3,7 +3,6 @@ package com.jui.html.elements;
 import java.util.Map;
 
 import com.jui.html.WebElement;
-import com.jui.model.JuiNotification;
 
 import lombok.extern.java.Log;
 
@@ -33,7 +32,6 @@ public class ProgressBar extends WebElement {
 				""".formatted(this.clientId(), this.value, this.value);
 		
 		this.backEndEvents().onServerUpdate(this, "change", command);
-		
 		
 	}
 	

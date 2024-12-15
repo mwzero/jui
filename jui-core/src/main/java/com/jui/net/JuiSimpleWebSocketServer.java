@@ -8,7 +8,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.jui.JuiApp;
 import com.jui.net.handlers.IHandlerWebSocket;
 
 import static com.jui.JuiNotifier.notifier;

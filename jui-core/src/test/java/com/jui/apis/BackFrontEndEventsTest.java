@@ -5,7 +5,7 @@ import static com.jui.JuiApp.jui;
 import lombok.extern.java.Log;
 
 @Log
-public class ProgressBarTest {
+public class BackFrontEndEventsTest {
 
 	public static void main(String[] args) throws InterruptedException  { 
 	
@@ -16,14 +16,18 @@ public class ProgressBarTest {
 		var btn = jui.button("Click-me", "primary");
 		btn.onClick("alert('click me')");
 		
-		btn.onServerSide( () -> {
-			
-			System.out.println("Esecuzione del task...");
+
+
+		btn.onServerSide  ( (action, payload ) -> {
+
+            log.info("Action: " + action + " payload: " + payload);
             btn.disable();
 			
 			for ( int i=1; i<=100; i++) {
+
     			try {
 					Thread.sleep(100);
+
 				} catch (InterruptedException e) {
 					log.severe(e.getLocalizedMessage());
 				}
@@ -31,8 +35,7 @@ public class ProgressBarTest {
     		}
         	my_bar.progress(0, "progress_text");
         	btn.enable();
-            
-    	});
+        } );
 		
 		/*
 		Thread.sleep(1000);

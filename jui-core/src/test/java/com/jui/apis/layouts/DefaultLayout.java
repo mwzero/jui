@@ -19,9 +19,7 @@ public class DefaultLayout {
 
         jui.divider().color("blue");
         
-        jui.button("Click Me!!", "primary", "alert('Button clicked!')", () -> {
-        	log.info("Botton Clicked! Executing Server-side Code");
-    	});
+        jui.button("Click Me!!", "primary", "alert('Button clicked!')");
         
         jui.container("One").markdown("""
         		# Container One

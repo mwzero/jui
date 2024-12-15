@@ -1,12 +1,10 @@
 package com.jui.html;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import com.jui.model.JuiNotification;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.BiConsumer;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,13 +21,16 @@ public abstract class WebElement {
 	//web context 
 	WebElementContext webContext;
 	
-	
 	@Delegate
 	WebElementAttributes attributes;
 	
+	//events
 	final FrontEndEvents frontEndEvents = new FrontEndEvents();
     final BackEndEvents backEndEvents = new BackEndEvents();
 	
+    //
+    protected BiConsumer<String, Map<String, Object> > onServerSide;
+    
 	/**
 	 * Specify Html Element Id like: div, button, slider, etc..
 	 */
@@ -46,7 +47,7 @@ public abstract class WebElement {
 	 */
 	String key;
 	
-	protected Runnable onServerSide;
+	
 	
 	public WebElement(String id) {
 		
@@ -69,8 +70,8 @@ public abstract class WebElement {
 		
 	}
 	
-	public void executeServerAction() {
-		onServerSide.run();	
+	public void executeServerAction(String action, Map<String, Object> payload) {
+		onServerSide.accept(action, payload);
 	}
 	
 	public String getValue() {
@@ -127,11 +128,11 @@ public abstract class WebElement {
 	                variables.put(field.getName(), value);
 	            }
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.severe("Error: "+ e.getLocalizedMessage());
+				
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+				log.severe("Error: "+ e.getLocalizedMessage());
 			}
 			
 		}

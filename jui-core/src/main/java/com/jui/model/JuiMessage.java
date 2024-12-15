@@ -1,5 +1,7 @@
 package com.jui.model;
 
+import java.util.Map;
+
 import com.google.gson.Gson;
 
 import lombok.Getter;
@@ -16,6 +18,7 @@ public class JuiMessage {
 	
 	 String action;
      String id;
+     Map<String, Object> payload;
      
      public static JuiMessage parseOf(String message) {
     	 
