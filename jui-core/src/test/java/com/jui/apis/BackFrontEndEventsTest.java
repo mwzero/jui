@@ -15,10 +15,7 @@ public class BackFrontEndEventsTest {
 		
 		var btn = jui.button("Click-me", "primary");
 		btn.onClick("alert('click me')");
-		
-
-
-		btn.onServerSide  ( (action, payload ) -> {
+		btn.onClick( (action, payload ) -> {
 
             log.info("Action: " + action + " payload: " + payload);
             btn.disable();

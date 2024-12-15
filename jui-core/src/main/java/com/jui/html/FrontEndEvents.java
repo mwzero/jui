@@ -1,8 +1,21 @@
 package com.jui.html;
 
+import java.util.Map;
+import java.util.function.BiConsumer;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.Delegate;
+import lombok.extern.java.Log;
+
 /**
  * Handles client-side (front-end) events for WebElements.
  */
+@Getter
+@Setter
+@Accessors(fluent = true)
+@Log
 public class FrontEndEvents {
 
     /**
@@ -15,9 +28,7 @@ public class FrontEndEvents {
     /**
      * Triggered when the element is updated asynchronously.
      */
-    public void onUpdate() {
-        // Implement logic for element update
-    }
+    public BiConsumer<String, Map<String, Object> > onUpdate;
 
     /**
      * Triggered when an asynchronous operation is completed.

@@ -1,5 +1,5 @@
 <button id="{{clientId}}"
-  onclick="{{#onServerSide}}{{onClick}};sendEvent('{{clientId}}', 'click', {}){{/onServerSide}}{{^onServerSide}}{{onClick}}{{/onServerSide}};return false;" 
+  onclick="{{#onServerSide}}{{clientClick}};sendEvent('{{clientId}}', 'click', {}){{/onServerSide}}{{^onServerSide}}{{clientClick}}{{/onServerSide}};return false;" 
   class="btn btn-{{type}} ms-1">
   {{label}}
 </button>

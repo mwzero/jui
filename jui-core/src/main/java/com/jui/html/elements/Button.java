@@ -1,5 +1,8 @@
 package com.jui.html.elements;
 
+import java.util.Map;
+import java.util.function.BiConsumer;
+
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 
@@ -14,7 +17,8 @@ public class Button extends WebElement {
 	
     String label;
     String type;
-    String onClick;
+    
+    String clientClick;
     
     WebContainer container;
 
@@ -22,7 +26,7 @@ public class Button extends WebElement {
     	super("Button"); 
     	this.label=label;
     	this.type=type;
-    	this.onClick = "";   
+    	this.clientClick = "";   
     }
     		
     public Button(String label, String type, String onClick) {
@@ -30,8 +34,16 @@ public class Button extends WebElement {
     	super("Button");
     	
         this.label = label;
-        this.onClick = onClick;
+        this.clientClick = onClick;
         this.type = type;
+    }
+
+    public void onClick(String jsAction) {
+    	this.clientClick = jsAction;
+	}
+    
+    public void onClick(BiConsumer<String, Map<String, Object> > serverAction) {
+    	this.frontEndEvents().onUpdate ( serverAction);
     }
 
 	public void disable() {
