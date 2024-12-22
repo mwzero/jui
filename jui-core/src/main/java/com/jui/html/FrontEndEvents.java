@@ -4,21 +4,15 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-import lombok.experimental.Delegate;
 import lombok.extern.java.Log;
 
 /**
  * Handles client-side (front-end) events for WebElements.
  */
-@Getter
-@Setter
 @Log
 public class FrontEndEvents {
 
-	
+	//onUpdateAction to run 
 	BiConsumer<String, Map<String, Object>> onUpdateActionBi;
 	Consumer<Map<String, Object>> onUpdateActionSingle;
 	Runnable onUpdateAction;
@@ -29,20 +23,25 @@ public class FrontEndEvents {
     public void onLoad() {
         // Implement logic for element load
     }
-
+    
     /**
      * Triggered when the element is updated asynchronously.
      */
-    public void onUpdateAction(BiConsumer<String, Map<String, Object>> runnable) {onUpdateActionBi=runnable;}
-    public void onUpdateAction(Consumer<Map<String, Object>> runnable) {onUpdateActionSingle=runnable;}
-    public void onUpdateAction(Runnable runnable) {onUpdateAction=runnable;}
+    public void onClick(BiConsumer<String, Map<String, Object>> runnable) {onUpdateActionBi=runnable;}
+    public void onClick(Consumer<Map<String, Object>> runnable) {onUpdateActionSingle=runnable;}
+    public void onClick(Runnable runnable) {onUpdateAction=runnable;}
+    
     public void onUpdate(String action, Map<String, Object> payload) {
-    	if ( onUpdateActionBi != null )
+    	
+    	log.fine("Performing action %s".formatted(action));
+    	
+    	if ( onUpdateActionBi != null ) 
     		onUpdateActionBi.accept(action, payload);
-    	else if ( onUpdateActionSingle != null )
+        else if ( onUpdateActionSingle != null ) 
     		onUpdateActionSingle.accept(payload);
     	else 
     		onUpdateAction.run();
+        
     }
     public boolean isOnUpdateDefined() {
     	if ( ( onUpdateActionBi != null ) || ( onUpdateActionSingle != null ) || (onUpdateAction!= null)) return true;

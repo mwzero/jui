@@ -3,7 +3,6 @@ package com.jui;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.jui.html.JuiHtmlRenderer;
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
@@ -28,34 +27,15 @@ public class JuiApp extends WebContainer {
 
 	public JuiAppSettings page;
 	
-	//
-	JuiHtmlRenderer renderer;
-	
 	protected JuiApp() {
 		
 		super("core");
 		
 		log.info("JUI App: Start Initialization");
-		renderer = new JuiHtmlRenderer();
 		sidebar = new WebContainer("sidebar");
 		page =  new JuiAppSettings();
 	}
 	
-	public JuiContent render() {
-			
-		JuiContent content = new JuiContent();
-		content.setMain( renderer.render(this));
-		
-		if ( sidebar.webContext().getLinkedMapContext() != null) {
-			
-			content.setSidebar(renderer.render(sidebar));
-			
-		} else
-			content.setSidebar("");
-		
-		return content;
-	}
-
 	public void start() {
 		
 		String rootDoc = "html/";
@@ -82,19 +62,6 @@ public class JuiApp extends WebContainer {
 			.wssPort(8025)
 		.build()
 		.start();
-	}
-
-	public WebElement executeServerAction(String id, String action, Map<String, Object> payload) throws Exception{
-		
-		WebElement  component = this.webContext().getLinkedMapContext().get(id);
-		if ( component != null ) {
-
-			component.executeServerAction(action, payload);
-			return component;
-		}
-		
-		return null;
-		
 	}
 
 	public static <K, V> LinkedHashMap<K, V> linkedMapOf(K key1, V value1, Object... moreKeysAndValues) {

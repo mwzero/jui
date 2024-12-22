@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 import lombok.experimental.Delegate;
 import lombok.extern.java.Log;
 
+@Log
 @Getter
 @Setter
 @Accessors(fluent = true)
-@Log
 public abstract class WebElement {
 	
 	//web context 
@@ -23,12 +23,12 @@ public abstract class WebElement {
 	@Delegate
 	WebElementAttributes attributes;
 	
-	//events
-	final FrontEndEvents frontEndEvents = new FrontEndEvents();
-    final BackEndEvents backEndEvents = new BackEndEvents();
+	@Delegate
+	FrontEndEvents frontEndEvents;
+
+	@Delegate
+    BackEndEvents backEndEvents;
 	
-    //
-    
 	/**
 	 * Specify Html Element Id like: div, button, slider, etc..
 	 */
@@ -52,6 +52,8 @@ public abstract class WebElement {
 		
 		attributes = new WebElementAttributes(); 
 		webContext = new WebElementContext();
+		frontEndEvents = new FrontEndEvents();
+		backEndEvents = new BackEndEvents();
 		
 	}
 	
@@ -63,11 +65,6 @@ public abstract class WebElement {
 		if ( attributes != null)
 			this.attributes.attributes = attributes;
 		
-	}
-	
-	public void executeServerAction(String action, Map<String, Object> payload) {
-		
-		this.frontEndEvents.onUpdate(action, payload);
 	}
 	
 	public String getValue() {
@@ -95,6 +92,7 @@ public abstract class WebElement {
 		variables.put("clientId", this.clientId());
 		variables.put("juiComponent", this);
 		
+		//front-end events
 		if ( this.frontEndEvents.isOnUpdateDefined() ) {
 			variables.put("onServerSide", "server-side");
 		}

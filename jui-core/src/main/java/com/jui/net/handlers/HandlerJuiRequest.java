@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 import com.jui.JuiApp;
+import com.jui.JuiHtmlRenderer;
+import com.jui.JuiListener;
 import com.jui.model.JuiContent;
 import com.jui.model.JuiMessage;
 import com.sun.net.httpserver.HttpExchange;
@@ -17,6 +19,8 @@ import lombok.extern.java.Log;
 @Log
 public class HandlerJuiRequest extends HandlerBase {
 	
+	JuiHtmlRenderer renderer = new JuiHtmlRenderer();
+
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		
@@ -41,11 +45,11 @@ public class HandlerJuiRequest extends HandlerBase {
 			
 			 if ("init".compareTo(msg.getAction()) == 0 ) {
 				 
-				 response = JuiApp.jui.render().toJsonString();
+				response = renderer.render().toJsonString();
 				 
 			 } else {
 
-				 JuiApp.jui.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
+				 JuiListener.listener.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
 				 
 				 if (JuiApp.jui.getJuiResponse() == null ) {
 						response = JuiContent.builder("OK","OK").toJsonString();

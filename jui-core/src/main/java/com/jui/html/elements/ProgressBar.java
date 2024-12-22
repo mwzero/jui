@@ -31,7 +31,7 @@ public class ProgressBar extends WebElement {
 				progressBar.setAttribute("aria-valuenow", "%d");
 				""".formatted(this.clientId(), this.value, this.value);
 		
-		this.backEndEvents().onServerUpdate(this, "change", command);
+		this.onServerUpdate(this, "change", command);
 		
 	}
 	

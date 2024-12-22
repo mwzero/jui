@@ -1,8 +1,12 @@
-package com.jui.html;
+package com.jui;
 
 import java.io.IOException;
 import java.util.Map;
 
+import com.jui.annotations.Jui;
+import com.jui.html.WebContainer;
+import com.jui.html.WebElement;
+import com.jui.model.JuiContent;
 import com.jui.processors.TemplateHelper;
 import com.jui.utils.Utils;
 
@@ -24,7 +28,22 @@ public class JuiHtmlRenderer {
         }
     }
 	
-	public String render (WebContainer container ) {
+	public JuiContent render() {
+			
+		JuiContent content = new JuiContent();
+		content.setMain( renderWebContainer(JuiApp.jui));
+		
+		if ( JuiApp.jui.sidebar.webContext().getLinkedMapContext() != null) {
+			
+			content.setSidebar(renderWebContainer(JuiApp.jui.sidebar));
+			
+		} else
+			content.setSidebar("");
+		
+		return content;
+	}
+
+	private String renderWebContainer (WebContainer container ) {
 		
 		StringBuilder html = new StringBuilder();
 			
@@ -35,8 +54,8 @@ public class JuiHtmlRenderer {
 			if ( component instanceof WebContainer ) {
 				
 				String containerEnvelop = renderWebComponent(component);
-				String containerContents = render((WebContainer) component);
-				containerEnvelop = containerEnvelop.replace("{{content-%s}}".formatted(component.clientId), containerContents);
+				String containerContents = renderWebContainer((WebContainer) component);
+				containerEnvelop = containerEnvelop.replace("{{content-%s}}".formatted(component.clientId()), containerContents);
 				
 				html.append(containerEnvelop);
 				
@@ -51,7 +70,7 @@ public class JuiHtmlRenderer {
 		return html.toString();
 	}
 	
-	protected String renderWebComponent (WebElement component) {
+	private String renderWebComponent (WebElement component) {
 		
 		StringBuilder html = new StringBuilder();
 		

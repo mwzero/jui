@@ -15,9 +15,9 @@ public class BackFrontEndEventsTest {
 		
 		var btn = jui.button("Click-me", "primary");
 		btn.onClick("alert('click me')");
-		btn.onClick( (action, payload ) -> {
+		btn.onClick( (payload ) -> {
 
-            log.info("Action: " + action + " payload: " + payload);
+            log.info("Payload: " + payload);
             btn.disable();
 			
 			for ( int i=1; i<=100; i++) {
@@ -34,10 +34,12 @@ public class BackFrontEndEventsTest {
         	btn.enable();
         } );
 		
+		/*
 		var btn2 = jui.button("Click-me 2", "primary");
 		btn2.onClick( () -> {
             System.out.println("Clicked!!");
         } );
+        */
 		
 		/*
 		Thread.sleep(1000);

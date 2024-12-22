@@ -1,9 +1,5 @@
 package com.jui.html.elements;
 
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 
@@ -43,22 +39,6 @@ public class Button extends WebElement {
     	this.clientClick = jsAction;
 	}
     
-    public void onClick(BiConsumer<String, Map<String, Object> > serverAction) {
-    	
-    	this.frontEndEvents().setOnUpdateActionBi(serverAction);
-    }
-    
-    public void onClick(Consumer<Map<String, Object> > serverAction) {
-    	
-    	this.frontEndEvents().setOnUpdateActionSingle(serverAction);
-    }
-    
-    public void onClick(Runnable runnable ) {
-    	
-    	this.frontEndEvents().setOnUpdateAction(runnable);
-    }
-    
-
 	public void disable() {
 		
 		String command = """
