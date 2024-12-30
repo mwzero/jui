@@ -94,7 +94,7 @@ public abstract class WebElement {
 		
 		//front-end events
 		if ( this.frontEndEvents.isOnUpdateDefined() ) {
-			variables.put("onServerSide", "server-side");
+			variables.put("onServerSide", true);
 		}
 		
 		for ( Field field : this.getClass().getDeclaredFields()) {

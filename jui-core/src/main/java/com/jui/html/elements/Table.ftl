@@ -1,21 +1,21 @@
-{{#caption}}
+{{?caption}}
 <p>{{caption}}</p>
 {{/caption}}
 
-<table class="table {{#styles}}{{.}} {{/styles}}">
+<table class="table {{#styles}}{{this}} {{/styles}}">
   <thead>
     <tr>
       {{#df.ds.headers}}
-        <th scope="col">{{.}}</th>
+        <th scope="col">{{this}}</th>
       {{/df.ds.headers}}
     </tr>
   </thead>
   <tbody>
     {{#df.ds.data}}
       <tr>
-        {{#.}}
-          <td>{{.}}</td>
-        {{/.}}
+        {{#this}}
+          <td>{{this}}</td>
+        {{/this}}
       </tr>
     {{/df.ds.data}}
   </tbody>

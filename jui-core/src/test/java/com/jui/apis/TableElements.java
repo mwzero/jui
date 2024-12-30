@@ -1,10 +1,10 @@
-package com.jui.recipes;
+package com.jui.apis;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
 
 
-public class TableRecipe {
+public class TableElements {
 	
 	public static void main(String... args) throws Exception {
 		

@@ -7,7 +7,7 @@ import com.jui.annotations.Jui;
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
-import com.jui.processors.TemplateHelper;
+import com.jui.processors.TemplateEngine;
 import com.jui.utils.Utils;
 
 import lombok.extern.java.Log;
@@ -15,17 +15,12 @@ import lombok.extern.java.Log;
 @Log
 public class JuiHtmlRenderer {
 	
-	TemplateHelper engine;
+	TemplateEngine engine;
 	
 	public JuiHtmlRenderer() {
 
 		log.info("Initializing Rendering engine");
-		try {
-			this.engine = new TemplateHelper(true, null);
-	    } catch (IOException e) {
-            log.severe("Failed to initialize TemplateEngine: " + e.getLocalizedMessage());
-            throw new IllegalStateException("Template engine initialization failed", e);
-        }
+		this.engine = new TemplateEngine(true, null);
     }
 	
 	public JuiContent render() {
@@ -81,7 +76,7 @@ public class JuiHtmlRenderer {
 			Map<String, Object> variables = component.getVariables();
 
 			try {
-				html.append( engine.renderTemplate(component.getTemplateName(), variables));
+				html.append( engine.renderFromFile(component.getTemplateName(), variables));
 				
 
 			} catch ( Exception e) {

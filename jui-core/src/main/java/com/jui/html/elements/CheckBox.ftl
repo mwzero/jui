@@ -5,5 +5,4 @@
 	    {{.}}
 	  </label>
 	</div>
-	{{#incrementIndex}}{{/incrementIndex}}
 {{/values}}

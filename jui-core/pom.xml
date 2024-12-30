@@ -13,12 +13,6 @@
 
 	<dependencies>
 	
-		<!--https://github.com/samskivert/jmustache -->
-		<dependency>
-		    <groupId>com.samskivert</groupId>
-		    <artifactId>jmustache</artifactId>
-		</dependency>
-
 		<dependency>
 		    <groupId>com.google.code.gson</groupId>
 		    <artifactId>gson</artifactId>
