@@ -16,7 +16,7 @@ public class ST {
 	
 	public static final ST st = new ST();
 	
-	Map<String, String> options;
+	Map<String, String> options = Map.of("classLoading", "true");
 	
     public ST() {
     	

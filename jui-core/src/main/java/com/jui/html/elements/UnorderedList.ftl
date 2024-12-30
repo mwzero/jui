@@ -1,7 +1,7 @@
 <ul class="nav flex-column">
   {{#items}}
     <li class="nav-item">
-      {{#link}}
+      {{?link}}
         <a class="nav-link" href="#" data-url="{{link}}">
       {{/link}}
       {{^link}}
