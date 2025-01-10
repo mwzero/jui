@@ -1,4 +1,4 @@
-package com.jui.net;
+package com.jui.grizzly;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -9,11 +9,15 @@ import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 
 import com.jui.JuiApp;
+import com.jui.JuiHtmlRenderer;
+import com.jui.JuiListener;
 import com.jui.model.JuiMessage;
 
 
 public class JuiGrizzlyRequestHandler extends HttpHandler {
 
+	JuiHtmlRenderer renderer = new JuiHtmlRenderer();
+	
     public JuiGrizzlyRequestHandler() {
     	;
 	}
@@ -37,12 +41,14 @@ public class JuiGrizzlyRequestHandler extends HttpHandler {
             if ("click".compareTo(msg.getAction()) == 0 ) {
             	
             	response.setContentType("text/html");
-            	JuiApp.jui.executeServerAction(msg.getId(), null);
+            	
+            	
+            	JuiListener.listener.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
             	
             } else if ("init".equals(msg.getAction())) {
             	
             	response.setContentType("text/html");
-            	response.getWriter().write(JuiApp.jui.render().toJsonString());
+            	response.getWriter().write(renderer.render().toJsonString());
                 
             }
             

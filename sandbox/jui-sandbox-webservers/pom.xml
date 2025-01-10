@@ -1,23 +1,45 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.jui</groupId>
-		<artifactId>jui-all</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-
-	<artifactId>jui-apps-grizzly</artifactId>
+	<groupId>com.jui</groupId>
+	<artifactId>jui-sandbox-webservers</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<properties></properties>
+	
+	<repositories>
+    		
+    <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/mwzero/jui</url>
+    </repository>
+  </repositories>
+  
+
+	<dependencyManagement>
+
+		<dependencies>
+
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>2.7.9</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+		</dependencies>
+
+	</dependencyManagement>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>com.jui</groupId>
 			<artifactId>jui-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-server</artifactId>
@@ -35,15 +57,16 @@
 			<artifactId>tyrus-standalone-client</artifactId>
 			<version>2.1.5</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
 
 		<dependency>
-		    <groupId>com.google.code.gson</groupId>
-		    <artifactId>gson</artifactId>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+
 		</dependency>
 
 		<dependency>
@@ -51,7 +74,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -63,9 +86,7 @@
 			<scope>test</scope>
 		</dependency>
 
-
 	</dependencies>
-
 
 	<build>
 		<resources>

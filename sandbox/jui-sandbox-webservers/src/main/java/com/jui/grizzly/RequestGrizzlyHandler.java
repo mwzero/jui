@@ -1,4 +1,4 @@
-package com.jui.net;
+package com.jui.grizzly;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

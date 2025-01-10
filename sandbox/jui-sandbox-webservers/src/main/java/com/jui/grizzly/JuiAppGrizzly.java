@@ -1,4 +1,4 @@
-package com.jui;
+package com.jui.grizzly;
 
 import java.io.IOException;
 
@@ -9,9 +9,7 @@ import org.glassfish.grizzly.http.server.NetworkListener;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.tyrus.server.Server;
 
-import com.jui.net.JuiGrizzlyRequestHandler;
-import com.jui.net.WebSocketEndpoint;
-import com.jui.html.WebElement;
+import com.jui.JuiApp;
 
 import jakarta.websocket.DeploymentException;
 import lombok.Getter;
@@ -74,15 +72,6 @@ public class JuiAppGrizzly extends JuiApp {
 		} catch (DeploymentException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public WebElement executeServerAction(String id) {
-		
-		WebElement  component = this.webContext().getLinkedMapContext().get(id);
-		if ( component != null )
-			component.executeServerAction(id, null);
-		return component;
-		
 	}
 
 }
