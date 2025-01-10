@@ -1,9 +1,7 @@
 package com.jui;
 
-import java.io.IOException;
 import java.util.Map;
 
-import com.jui.annotations.Jui;
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 import com.jui.model.JuiContent;

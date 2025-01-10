@@ -1,8 +1,8 @@
-package com.jui.recipes;
+package com.jui.apis;
 
 import static com.jui.JuiApp.jui;
 
-public class MapZoomerRecipe {
+public class MapZoomer {
 	
 	public static void main(String... args) {
 		

@@ -1,11 +1,8 @@
 package com.jui;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import com.jui.html.WebContainer;
-import com.jui.html.WebElement;
-import com.jui.model.JuiContent;
 import com.jui.net.JuiServer;
 import com.jui.net.handlers.HandlerJuiRequest;
 import com.jui.net.handlers.HandlerJuiWebSocket;

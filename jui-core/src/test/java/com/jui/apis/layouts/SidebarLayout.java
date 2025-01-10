@@ -1,4 +1,4 @@
-package com.jui.recipes.layout;
+package com.jui.apis.layouts;
 
 import static com.jui.JuiApp.jui;
 

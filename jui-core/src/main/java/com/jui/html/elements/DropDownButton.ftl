@@ -4,7 +4,7 @@
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
         {{#items}}
-            <li><a class="dropdown-item" href="#">{{label}}</a></li>
+            <li><a class="dropdown-item" href="#">{{this.label}}</a></li>
         {{/items}}
     </ul>
 </div>

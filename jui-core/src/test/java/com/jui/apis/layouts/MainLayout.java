@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.extern.java.Log;
 
 @Log
-public class DefaultLayout {
+public class MainLayout {
 
 	public static void main(String[] args)  {
 

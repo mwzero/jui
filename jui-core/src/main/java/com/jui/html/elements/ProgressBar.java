@@ -20,6 +20,10 @@ public class ProgressBar extends WebElement {
 		this.value = value;
 	}
 	
+	public void clear() {
+		progress(0, "progress 0%");
+	}
+	
 	public void progress(int value, String text) {
 		
 		this.text = text;
@@ -53,4 +57,6 @@ public class ProgressBar extends WebElement {
 				""".formatted(this.clientId(), this.clientId(), this.value, this.value);
 						
 	}
+
+	
 }

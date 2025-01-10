@@ -1,11 +1,11 @@
-package com.jui.apis;
+package com.jui.apis.events;
 
 import static com.jui.JuiApp.jui;
 
 import lombok.extern.java.Log;
 
 @Log
-public class BackFrontEndEventsTest {
+public class BackFrontEndEvents {
 
 	public static void main(String[] args) { 
 	
@@ -24,8 +24,8 @@ public class BackFrontEndEventsTest {
 					log.severe(e.getLocalizedMessage());
 				}
     		}
-			my_bar.progress(0, "progress 0%");
-        	btn.enable();
+			my_bar.clear();
+			btn.enable();
         } );
 		
         jui.start();

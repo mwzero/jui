@@ -44,6 +44,17 @@ public class JuiServer {
 	        server.setExecutor(null); // creates a default executor
 	        server.start();
 	        
+	        log.info("Server is running on port [%s]".formatted(port));
+	        log.info("\r\n"
+	        		+ "       _  _    _  _____ \r\n"
+	        		+ "      | || |  | ||_   _|\r\n"
+	        		+ "      | || |  | |  | |  \r\n"
+	        		+ "  _   | || |  | |  | |  \r\n"
+	        		+ " | |__| || |__| | _| |_ \r\n"
+	        		+ "  \\____/  \\____/ |_____|\r\n"
+	        		+ "                        \r\n"
+	        		+ "                        ");
+	        
 	        if ( useWSS) {
 
 	        	
@@ -53,7 +64,7 @@ public class JuiServer {
 		        log.info("WSS listening on port[%d]".formatted(wssPort));
 	        }
 	        
-	        log.info("Server is running on port [%s]".formatted(port));
+	        
 	        
 		} catch (IOException e) {
 			
