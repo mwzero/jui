@@ -1,7 +1,6 @@
 package com.jui.recipes;
 
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 @Log
 public class ConfifurationEnvironment  {

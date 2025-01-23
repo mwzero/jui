@@ -7,7 +7,6 @@ import java.util.List;
 
 import lombok.extern.java.Log;
 
-@Log
 public class MainLayout {
 
 	public static void main(String[] args)  {
@@ -64,7 +63,7 @@ public class MainLayout {
         		# Container Tab3
         		""");
         
-        jui.start();
+        jui.server().start();
 
 	}
 }

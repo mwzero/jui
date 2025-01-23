@@ -19,7 +19,8 @@ public class MapZoomer {
 			.c_lng(lng)
 			.c_zoom(slider);
     	
-    	jui.start();
+    	jui.server()
+			.start();
 	}
 	
 

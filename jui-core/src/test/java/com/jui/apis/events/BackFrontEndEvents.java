@@ -28,7 +28,7 @@ public class BackFrontEndEvents {
 			btn.enable();
         } );
 		
-        jui.start();
+        jui.server().start();
 
 	}
 }

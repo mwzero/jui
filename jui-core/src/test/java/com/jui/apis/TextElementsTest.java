@@ -45,7 +45,7 @@ public class TextElementsTest {
         		</p>""");
         
         
-        jui.start();
-
+        jui.server().start();
+        
 	}
 }

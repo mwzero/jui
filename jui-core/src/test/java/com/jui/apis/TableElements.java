@@ -23,7 +23,7 @@ public class TableElements {
     	jui.table("Striped and Dark Table", 
     			st.read_csv("table_1.csv")).setStyles("table-striped", "table-dark");
     	
-    	jui.start();
+    	jui.server().start();
     	
     }
 

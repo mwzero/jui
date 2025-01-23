@@ -6,14 +6,13 @@ import java.util.List;
 
 import lombok.extern.java.Log;
 
-@Log
 public class SidebarLayout {
 
 	public static void main(String[] args)  {
 
-		jui.page.layout("sidebar");
+		jui.page().layout("sidebar");
 		
-		jui.sidebar.markdown("""
+		jui.sidebar().markdown("""
  				# App
  				
  				**Overview:** A collection of AI agents around e-mail
@@ -21,7 +20,7 @@ public class SidebarLayout {
  				**Source Code:** You can access the code on GitHub
  				""");
  		
- 		jui.sidebar.dropDownButton("Settings", List.of("Profile", "Account Settings", "Logout"));
+ 		jui.sidebar().dropDownButton("Settings", List.of("Profile", "Account Settings", "Logout"));
  		
 		
 		jui.markdown("""
@@ -32,7 +31,7 @@ public class SidebarLayout {
         
         jui.button("Cliccami", "primary", "alert('Button clicked!')");
         
-        jui.start();
+        jui.server().start();
 
 	}
 }

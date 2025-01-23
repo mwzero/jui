@@ -46,7 +46,7 @@ public class JuiAnnotations {
     	jui.write(testAnnotations.buildTestOne(10, 5));
     	jui.submitbutton("Submit Data", null);
 
-    	jui.start();
+    	jui.server().start();
     	
     }
 	

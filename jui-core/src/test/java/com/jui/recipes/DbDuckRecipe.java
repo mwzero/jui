@@ -25,7 +25,7 @@ public class DbDuckRecipe {
     	jui.table("Simple Table",
     			st.read_sql_query( connection, "select id, first_name, second_name from test"));
     	
-    	jui.start();
+    	jui.server().start();
     	
     }
 	

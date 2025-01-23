@@ -43,7 +43,7 @@ public class DbTableRecipe {
     					"https://raw.githubusercontent.com/mwzero/jui/main/datasets/gapminder_unfiltered.csv", 
     					"select * from countries", connection));
     	
-    	jui.start();
+    	jui.server().start();
     	
     }
 	

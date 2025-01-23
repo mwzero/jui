@@ -49,7 +49,7 @@ public class CsvRecipe {
     					));
     	
     	*/
-    	jui.start();
+    	jui.server().start();
     	
     }
 }

@@ -8,14 +8,14 @@ public class SideBarRecipe {
 	
 	public static void main(String... args) {
 		
-		jui.page.layout("sidebar");
+		jui.page().layout("sidebar");
 
-    	jui.sidebar
+    	jui.sidebar()
     		.ul("JUI Example")
 	    		.add("MapZoomer", "compass", null, mapZoomer(), true)
 	    		.add("MarkDown", "file-text", null, markdownTrials(), false);
     	
-    	jui.start();
+    	jui.server().start();
 	}
 	
 	static WebContainer mapZoomer() {

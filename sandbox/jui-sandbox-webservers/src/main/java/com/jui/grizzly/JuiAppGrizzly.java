@@ -34,7 +34,6 @@ public class JuiAppGrizzly extends JuiApp {
 		super();
 	}
 	
-	@Override
 	public void start(String docRoot, boolean classLoading, String host, int port) {
 		
 		log.info("Starting http/ws Grizzly Server");

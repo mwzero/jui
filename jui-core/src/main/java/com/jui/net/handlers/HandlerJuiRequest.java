@@ -51,10 +51,10 @@ public class HandlerJuiRequest extends HandlerBase {
 
 				 JuiListener.listener.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
 				 
-				 if (JuiApp.jui.getJuiResponse() == null ) {
+				 if (JuiApp.jui.juiResponse() == null ) {
 						response = JuiContent.builder("OK","OK").toJsonString();
 				 } else {
-					 response = JuiContent.builder("KO",JuiApp.jui.getJuiResponse()).toJsonString(); 
+					 response = JuiContent.builder("KO",JuiApp.jui.juiResponse()).toJsonString(); 
 				 }
 					
 				 
@@ -70,7 +70,7 @@ public class HandlerJuiRequest extends HandlerBase {
 					{
 						"error": "%s"
 					}
-					""".formatted(JuiApp.jui.getJuiResponse());
+					""".formatted(JuiApp.jui.juiResponse());
 		}
 		
 

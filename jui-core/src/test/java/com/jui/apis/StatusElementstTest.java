@@ -19,7 +19,7 @@ public class StatusElementstTest {
 		
 		jui.error("Error", "this is :blue[pre-formatted] text :sunglasses: :angry:");
 		
-        jui.start();
+		jui.server().start();
 
 	}
 }
