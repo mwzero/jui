@@ -22,6 +22,5 @@ public class MapZoomer {
     	jui.server()
 			.start();
 	}
-	
 
 }
