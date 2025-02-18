@@ -24,7 +24,7 @@ public class HtmlProcessor {
         try {
         	Path filePath = FS.getFilePath("emoji.properties", Map.of("classLoading","True"));
         	FileInputStream fis = new FileInputStream(filePath.toString());
-        	System.out.println("FILE:" + filePath.toString());
+        	log.fine("Loading FILE:" + filePath.toString());
     		
             emojiProperties.load(fis);
             

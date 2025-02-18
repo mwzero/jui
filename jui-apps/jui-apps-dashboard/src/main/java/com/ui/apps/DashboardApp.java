@@ -17,7 +17,7 @@ public class DashboardApp {
     	
     	log.info("Starting Dashboard APP");
     	
-    	jui.page.layout("sidebar");
+    	jui.page().layout("sidebar");
     	
     	jui.markdown("""
     			# Dashboard: Covid 19
@@ -44,7 +44,7 @@ public class DashboardApp {
     		log.severe(err.getLocalizedMessage());
     	}
     	
-    	jui.start();
+    	jui.server().start();
     	
     }
 }

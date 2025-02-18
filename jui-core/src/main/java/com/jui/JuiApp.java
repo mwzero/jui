@@ -1,6 +1,10 @@
 package com.jui;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 
 import com.jui.html.WebContainer;
 import com.jui.net.JuiServer;
@@ -20,17 +24,28 @@ public class JuiApp extends WebContainer {
 	
 	String juiResponse;
 	
+	//useful for page structure
 	WebContainer sidebar;
-
 	JuiAppSettings page;
 	
+	//Jui Http/Https/WSS Server
 	JuiServer server;
+	
+	//Jui Session: user information
+	JuiSession session;
 	
 	protected JuiApp() {
 		
 		super("core");
 		
-		log.info("JUI App: Start Initialization");
+		try {
+			//LogManager.getLogManager().readConfiguration(new FileInputStream("./logging.properties"));
+			LogManager.getLogManager().readConfiguration(JuiApp.class.getResourceAsStream("/logging.properties"));
+		} catch (SecurityException | IOException e) {
+			log.log(Level.SEVERE, "Error reading logging properties file", e);
+		}
+		
+		log.fine("JUI App: Start Initialization");
 		sidebar = new WebContainer("sidebar");
 		page =  new JuiAppSettings();
 		server = new JuiServer(page);

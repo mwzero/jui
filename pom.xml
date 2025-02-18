@@ -37,10 +37,12 @@
 		
     <module>jui-core</module>
 	<module>jui-playground</module>
+	
+	<!-- modules -->  
+    <module>jui-modules</module>
 
-    <!-- apps  
+    <!-- apps -->  
     <module>jui-apps</module>
-    -->
     
     <!-- sandbox 
     <module>sadnbox/jui-sandbox-wasm</module>

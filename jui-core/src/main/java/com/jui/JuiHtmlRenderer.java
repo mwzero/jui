@@ -17,7 +17,7 @@ public class JuiHtmlRenderer {
 	
 	public JuiHtmlRenderer() {
 
-		log.info("Initializing Rendering engine");
+		log.fine("Initializing Rendering engine");
 		this.engine = new TemplateEngine(true, null);
     }
 	
