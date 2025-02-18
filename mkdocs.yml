@@ -1,4 +1,7 @@
 site_name: Jui Framework
 
+theme:
+  name: material
+  
 nav:
   - index.md
