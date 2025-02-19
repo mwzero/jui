@@ -1,11 +1,9 @@
 package com.jui.apis.layouts;
 
 import static com.jui.JuiApp.jui;
-import static com.jui.JuiApp.linkedMapOf;
+import static com.jui.utils.Utils.linkedMapOf;
 
 import java.util.List;
-
-import lombok.extern.java.Log;
 
 public class MainLayout {
 

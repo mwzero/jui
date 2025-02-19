@@ -52,6 +52,7 @@ public class JuiNotifier {
 
 	    // Determina la dimensione del frame
 	    int frameHeaderLength = 2; // Byte iniziali del frame
+	    
 	    if (rawDataLength > 125 && rawDataLength <= 65535) {
 	        frameHeaderLength += 2; // Estensione per payload medio
 	    } else if (rawDataLength > 65535) {
