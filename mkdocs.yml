@@ -2,6 +2,19 @@ site_name: Jui Framework
 
 theme:
   name: material
+  features:
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
   
 nav:
-  - index.md
+  - Home: index.md
+  - HTML Components:
+    - Text Elements: html-text-elements.md
+    - Input Elements: html-input-elements.md
+    - Container Elements: html-container-elements.md
+    - Chart Elements: html-chart-elements.md
+    - Media Elements: html-media-elements.md
+    - Status Elements: html-status-elements.md
+    
+    

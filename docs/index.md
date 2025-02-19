@@ -1,26 +1,50 @@
-# Welcome to JUI
+# JUI: A Smart & Furious Toolkit
 
-A smart&furious toolkit to build and share web apps in pure Java without frontend development experience.
+*JUI* is a toolkit designed to build and share web applications in pure Java, without requiring frontend development experience.  
 
-JUI includes a simple HTTP/HTTPS/WSS server
+Inspired by streamlit and folium.
 
-# HTML Components
+It includes a simple HTTP/HTTPS/WSS server and a playground to try out its features.
 
-## Text Elements
+# Key Features:
+- Backend Development in Java: Build web applications using only Java.
+- Integrated Server: Includes a simple HTTP/HTTPS/WSS server to handle requests.
+- Playground: An interactive environment to test and experiment with the framework's features.
 
-## Input Elements
+# Quickstart
 
-## Container Elements
+```java
+package com.jui.recipes;
 
-## Chart Elements
+import static com.jui.JuiApp.jui;
 
-## Media Elements
+public class MapZoomer {
+	
+	public static void main(String... args) {
+		
+		jui.markdown("## Map Chart Example");
+		jui.divider().color("blue");
+    	
+    	var slider = jui.slider("Zoom Level", 0, 19, 13);
+    	var lat = jui.input("lat", "40.85631", "latitude");
+    	var lng = jui.input("lng", "14.24641" ,"longitude");
+    	
+    	jui.map()
+			.c_lat(lat)
+			.c_lng(lng)
+			.c_zoom(slider);
+    	
+    	jui.server().start();
+	}
 
-## Status Elements
+}
+```
 
-# JUI Components
+try to navigate to http://localhost:8000/index.html
 
-## Authenticator
+<img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
 
-# Gallery
+# Using the Playground
+The JUI playground allows you to try out the framework's features in a controlled environment. To access the playground:
 
+<img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/playground.png" width="500px">
