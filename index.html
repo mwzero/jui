@@ -58,7 +58,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-jui" class="md-skip">
+        <a href="#jui-a-smart-furious-toolkit" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Welcome to JUI
+              Home
             
           </span>
         </div>
@@ -200,12 +200,194 @@
         
   
   <span class="md-ellipsis">
-    Welcome to JUI
+    Home
     
   </span>
   
 
       </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    HTML Components
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            HTML Components
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="html-text-elements.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Text Elements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="html-input-elements.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Input Elements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="html-container-elements.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Container Elements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="html-chart-elements.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chart Elements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="html-media-elements.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Media Elements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="html-status-elements.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Status Elements
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -245,19 +427,47 @@
 
 
 
-<h1 id="welcome-to-jui">Welcome to JUI</h1>
-<p>A smart&amp;furious toolkit to build and share web apps in pure Java without frontend development experience.</p>
-<p>JUI includes a simple HTTP/HTTPS/WSS server</p>
-<h1 id="html-components">HTML Components</h1>
-<h2 id="text-elements">Text Elements</h2>
-<h2 id="input-elements">Input Elements</h2>
-<h2 id="container-elements">Container Elements</h2>
-<h2 id="chart-elements">Chart Elements</h2>
-<h2 id="media-elements">Media Elements</h2>
-<h2 id="status-elements">Status Elements</h2>
-<h1 id="jui-components">JUI Components</h1>
-<h2 id="authenticator">Authenticator</h2>
-<h1 id="gallery">Gallery</h1>
+<h1 id="jui-a-smart-furious-toolkit">JUI: A Smart &amp; Furious Toolkit</h1>
+<p><em>JUI</em> is a toolkit designed to build and share web applications in pure Java, without requiring frontend development experience.  </p>
+<p>Inspired by streamlit and folium.</p>
+<p>It includes a simple HTTP/HTTPS/WSS server and a playground to try out its features.</p>
+<h1 id="key-features">Key Features:</h1>
+<ul>
+<li>Backend Development in Java: Build web applications using only Java.</li>
+<li>Integrated Server: Includes a simple HTTP/HTTPS/WSS server to handle requests.</li>
+<li>Playground: An interactive environment to test and experiment with the framework's features.</li>
+</ul>
+<h1 id="quickstart">Quickstart</h1>
+<pre><code class="language-java">package com.jui.recipes;
+
+import static com.jui.JuiApp.jui;
+
+public class MapZoomer {
+
+    public static void main(String... args) {
+
+        jui.markdown(&quot;## Map Chart Example&quot;);
+        jui.divider().color(&quot;blue&quot;);
+
+        var slider = jui.slider(&quot;Zoom Level&quot;, 0, 19, 13);
+        var lat = jui.input(&quot;lat&quot;, &quot;40.85631&quot;, &quot;latitude&quot;);
+        var lng = jui.input(&quot;lng&quot;, &quot;14.24641&quot; ,&quot;longitude&quot;);
+
+        jui.map()
+            .c_lat(lat)
+            .c_lng(lng)
+            .c_zoom(slider);
+
+        jui.server().start();
+    }
+
+}
+</code></pre>
+<p>try to navigate to http://localhost:8000/index.html</p>
+<p><img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300"></p>
+<h1 id="using-the-playground">Using the Playground</h1>
+<p>The JUI playground allows you to try out the framework's features in a controlled environment. To access the playground:</p>
+<p><img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/playground.png" width="500px"></p>
 
 
 
@@ -304,7 +514,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.sections", "navigation.expand", "navigation.path"], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.f1b6f286.min.js"></script>
