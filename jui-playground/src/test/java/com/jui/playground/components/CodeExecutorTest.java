@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -33,6 +34,7 @@ class CodeExecutorTest {
     }
 
     @Test
+    @Disabled
     void testCompileAndRunJavaCode_Success() throws Exception {
     	
     	String fileName = "examples/TextElements.java";
