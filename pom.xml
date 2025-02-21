@@ -36,6 +36,7 @@
     	
 		
     <module>jui-core</module>
+    <module>jui-toolkits</module>
 	<module>jui-playground</module>
 	
 	<!-- modules -->  
@@ -59,6 +60,12 @@
 		<dependency>
 			<groupId>com.jui</groupId>
 			<artifactId>jui-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.jui</groupId>
+			<artifactId>jui-toolkits</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	  

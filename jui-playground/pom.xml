@@ -27,7 +27,7 @@
 			
 	      <dependency>
 	        <groupId>com.jui</groupId>
-	        <artifactId>jui-core</artifactId>
+	        <artifactId>jui-toolkits</artifactId>
 	        <version>0.0.1-SNAPSHOT</version>
 	      </dependency>
 	      
@@ -78,8 +78,7 @@
         
 		<dependency>
 			<groupId>com.jui</groupId>
-			<artifactId>jui-core</artifactId>
-			<scope>test</scope>
+			<artifactId>jui-toolkits</artifactId>
 		</dependency>
 		
 		<dependency>

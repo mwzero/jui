@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,22 +19,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jui.playground.components.CodeExecutor;
 import com.jui.playground.config.WebSocketConfig;
 import com.jui.playground.model.ExampleFile;
+
+import com.jui.toolkits.JavaCodeExecutor;
+
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 public class CodeExecutionController {
 	
-	 @Autowired
-	 private WebSocketConfig webSocketConfig;
-	
 	@Autowired
-	CodeExecutor codeExecutor;
+	private WebSocketConfig webSocketConfig;
+	
+	JavaCodeExecutor codeExecutor;
 	
 	private static final String EXAMPLES_DIR = "examples" + File.separator;
+	
+	@PostConstruct
+	public void init() {
+		
+		codeExecutor = JavaCodeExecutor.builder()
+    			.listener(webSocketConfig)
+    			.cp(new String[] {"libs\\jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar"})
+    			//.rootFolder(";")
+    			.build();
+		
+        // Initialization logic here
+        System.out.println("MyController has been initialized");
+        
+    }
 
 	@PostMapping("/compile")
 	public ResponseEntity<String> compileCode(@RequestBody Map<String, String> requestBody) {

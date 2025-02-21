@@ -40,6 +40,6 @@ public class TextElements {
         		</p>""");
         
         
-        jui.start();
+        jui.server().start();
 	}
 }

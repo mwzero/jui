@@ -19,7 +19,7 @@ public class MapZoomerRecipe {
 			.c_lng(lng)
 			.c_zoom(slider);
     	
-    	jui.start();
+    	jui.server().start();
 	}
 	
 

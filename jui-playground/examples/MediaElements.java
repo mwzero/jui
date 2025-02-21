@@ -17,7 +17,8 @@ public class MediaElements {
         jui.image("https://raw.githubusercontent.com/mwzero/jui/main/assets/images/components.png", "Jui Components");
         jui.video("https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.webm", Video.Format.Format_16b9, true);
         jui.audio("https://raw.githubusercontent.com/mwzero/jui/main/assets/audio/creepy-halloween-bell-trap-melody-247720.mp3");
-        jui.start();
+        
+        jui.server().start();
 
 	}
 }
