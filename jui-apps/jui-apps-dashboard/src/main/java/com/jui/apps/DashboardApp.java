@@ -1,4 +1,4 @@
-package com.ui.apps;
+package com.jui.apps;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
@@ -28,7 +28,7 @@ public class DashboardApp {
     	
     	try {
     		DataFrame df = st
-    					 .read_json("../../../../datasets/dpc-covid19-ita-province.zip")
+    					 .read_json("https://raw.githubusercontent.com/pcm-dpc/COVID-19/refs/heads/master/dati-regioni/dpc-covid19-ita-regioni-20200224.csv")
     					.select(
     						List.of("data",
     						"denominazione_regione",

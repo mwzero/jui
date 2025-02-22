@@ -38,3 +38,4 @@ swa/.$jui.drawio.bkp
 /jui-toolkits/target
 assets/.$jui.drawio.bkp
 *.bkp
+.DS_Store

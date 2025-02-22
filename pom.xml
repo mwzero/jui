@@ -43,7 +43,7 @@
     <module>jui-modules</module>
 
     <!-- apps -->  
-    <module>jui-apps</module>
+    <module>jui-apps/jui-apps-dashboard</module>
     
     <!-- sandbox 
     <module>sadnbox/jui-sandbox-wasm</module>
