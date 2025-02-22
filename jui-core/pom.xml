@@ -155,7 +155,16 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
+			
+		</plugins>
+	</build>
+	
+	<profiles>
+	    <profile>
+	        <id>with-dependencies</id>
+	        <build>
+	            <plugins>
+	                <plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
@@ -179,7 +188,9 @@
 				<excludeTransitive>true</excludeTransitive>
 			  </configuration>
 			</plugin>
-		</plugins>
-	</build>
+	            </plugins>
+	        </build>
+	    </profile>
+	</profiles>
 
 </project>
