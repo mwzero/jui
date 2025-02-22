@@ -16,11 +16,10 @@ on:
     types: [created]
 
 jobs:
-  build:
-
+  create_tag_and_release:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write #mandatory for tag creation
       packages: write
 
     steps:
