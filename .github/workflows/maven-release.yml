@@ -50,13 +50,17 @@ jobs:
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2-
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml 
-    - name: Publish JuiCore to GitHub Packages Apache Maven
-      run: mvn deploy -pl com.jui:jui-core -s $GITHUB_WORKSPACE/settings.xml
+    - name: Build selected modules
+      run: mvn clean install -p1 jui-core -am -DskipTests
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: built-modules
+        path: jui-core/target/*.jar
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          jui-core/target/*.jar
       env:
         GITHUB_TOKEN: ${{ github.token }}
-#    - name: Publish Jui Apps to GitHub Packages Apache Maven
-#      run: mvn deploy -pl com.jui:jui-apps-dashboard -s $GITHUB_WORKSPACE/settings.xml --file jui-apps/pom.xml 
-#      env:
-#        GITHUB_TOKEN: ${{ github.token }}
