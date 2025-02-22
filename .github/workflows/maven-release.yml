@@ -51,6 +51,8 @@ jobs:
         path: jui-core/target/*.jar
     - name: Create Tag
       run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git tag v1.0.${{ github.run_number }}
         git push origin v1.0.${{ github.run_number }}        
       env:
