@@ -15,14 +15,6 @@ on:
           - info
           - warning
           - debug
-        tags:
-          description: 'Test scenario tags'
-          required: false
-          type: boolean
-        environment:
-          description: 'Environment to run tests against'
-          type: environment
-          required: false
   release:
     types: [created]
 
@@ -57,6 +49,13 @@ jobs:
       with:
         name: built-modules
         path: jui-core/target/*.jar
+    - name: Create Tag
+      run: |
+        git tag v1.0.${{ github.run_number }}
+        git push origin v1.0.${{ github.run_number }}        
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
