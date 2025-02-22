@@ -37,7 +37,7 @@
 		<dependency>
 	    	<groupId>com.github.mwzero.jui</groupId>
 	    	<artifactId>jui-core</artifactId>
-	    	<version>0.0.3</version>
+	    	<version>v0.0.9</version>
 		</dependency>
 		
 		<dependency>
