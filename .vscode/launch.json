@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DashboardApp",
+            "request": "launch",
+            "mainClass": "com.jui.apps.DashboardApp",
+            "projectName": "jui-apps-dashboard"
+        },
+        {
+            "type": "java",
             "name": "BackFrontEndEventsTest",
             "request": "launch",
             "mainClass": "com.jui.apis.BackFrontEndEventsTest",
