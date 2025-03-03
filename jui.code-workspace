@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "../hubbers"
+		},
+		{
+			"path": "../boilerpress"
 		}
 	],
 	"settings": {
