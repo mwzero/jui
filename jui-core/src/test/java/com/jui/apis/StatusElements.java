@@ -5,7 +5,7 @@ import static com.jui.JuiApp.jui;
 import lombok.extern.java.Log;
 
 @Log
-public class StatusElementstTest {
+public class StatusElements {
 
 	public static void main(String[] args)  {
 	

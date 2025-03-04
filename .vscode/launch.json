@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "LayoutSideBar",
+            "request": "launch",
+            "mainClass": "com.jui.apis.LayoutSideBar",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
             "name": "DashboardApp",
             "request": "launch",
             "mainClass": "com.jui.apps.DashboardApp",

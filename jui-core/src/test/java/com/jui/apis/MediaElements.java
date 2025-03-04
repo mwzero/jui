@@ -4,15 +4,11 @@ import static com.jui.JuiApp.jui;
 
 import com.jui.html.elements.media.Video;
 
-import lombok.extern.java.Log;
 
-@Log
 public class MediaElements {
 
 	public static void main(String[] args)  {
 	
-		log.info("Media  API");
-		
         jui.markdown("""
         		# Media Elements APIs
         		""");

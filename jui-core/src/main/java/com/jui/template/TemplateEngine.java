@@ -1,7 +1,6 @@
-package com.jui.processors;
+package com.jui.template;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -9,23 +8,77 @@ import java.util.regex.Pattern;
 
 import com.jui.utils.FS;
 
+import lombok.extern.java.Log;
+
+/**
+ * The TemplateEngine class is responsible for rendering templates with dynamic content.
+ * It supports loading templates from files, replacing variables, handling conditionals,
+ * and iterating over collections within the templates.
+ * 
+ * This class provides methods to render templates by substituting placeholders with
+ * actual values from a provided context. It can process loops and conditionals to
+ * generate dynamic HTML or other text-based content.
+ * 
+ * Features:
+ * - Load templates from files or strings.
+ * - Replace variables with values from a context map.
+ * - Handle conditional blocks based on boolean values.
+ * - Iterate over collections and arrays to render repeated content.
+ * 
+ * Example usage:
+ * <pre>
+ * {@code
+ * TemplateEngine engine = new TemplateEngine();
+ * Map<String, Object> context = new HashMap<>();
+ * context.put("name", "John");
+ * String template = "Hello, {{name}}!";
+ * String result = engine.render(template, context);
+ * System.out.println(result); // Outputs: Hello, John!
+ * }
+ * </pre>
+ * 
+ * This class is designed to be flexible and extensible, allowing for easy integration
+ * into various applications that require dynamic content rendering.
+ * 
+ * <pre>
+ * an exaustive example: 
+ * <ul class="nav flex-column">
+ * {{#items}}
+ *   <li class="nav-item">
+ *     {{?this.link}}
+ *       <a class="nav-link" href="#" data-url="{{this.link}}">
+ *     {{/this.link}}
+ *     {{^link}}
+ *       <a class="nav-link" href="#" data-content="{{this.content}}">
+ *     {{/link}}
+ *         <i class="bi bi-{{icon}}-fill"></i> <span>{{this.label}}</span>
+ *       </a>
+ *   </li>
+ * {{/items}}
+* </ul>
+* </pre>
+  */
+@Log
 public class TemplateEngine {
 	
 	boolean classLoading;
 	String folder;
-	
-	public TemplateEngine() {
-		
-    }
 
-	public TemplateEngine(boolean templateClassLoading, String templateFolder) {
+    String templateContent;
+
+    public TemplateEngine() {
+        this.classLoading = false;
+        this.folder = null;
+    }
+	
+    public TemplateEngine(boolean templateClassLoading, String templateFolder) {
 		
 		this.classLoading = templateClassLoading;
 		this.folder = templateFolder;
         
     }
-	
-	public String renderFromFile(String templateName, Map<String, Object> variables) throws IOException, URISyntaxException {
+
+    public TemplateEngine compileFromFile(String templateName) throws IOException, URISyntaxException {
 		
 	    String fileName;
 	    if (folder != null)
@@ -33,22 +86,27 @@ public class TemplateEngine {
 	    else
 	        fileName = templateName.replace(".", "/") + ".ftl";
 
-	    Reader reader = FS.getFile(fileName, Map.of("classLoading", String.valueOf(classLoading)));
+        templateContent = FS.getFileContentAsString(fileName, classLoading);
+        return this;
 	    
-	    int intValueOfChar;
-	    String targetString = "";
-	    while ((intValueOfChar = reader.read()) != -1) {
-	        targetString += (char) intValueOfChar;
-	    }
-	    reader.close();
-	    
-	    return this.render(targetString, variables);
 	}
 
-    public String render(String template, Map<String, Object> context) {
-        template = renderLoops(template, context);
-        template = renderConditionals(template, context);
-        return renderVariables(template, context);
+    public TemplateEngine compile(String template) throws IOException, URISyntaxException {
+		
+        templateContent = template;
+        return this;
+	    
+	}
+
+    public String execute(Map<String, Object> context) {
+
+        return this.render(templateContent, context);
+    }
+
+    protected String render(String template, Map<String, Object> context) {
+        String result = renderLoops(template, context);
+        result = renderConditionals(result, context);
+        return renderVariables(result, context);
     }
 
     private String renderVariables(String template, Map<String, Object> context) {
@@ -66,6 +124,10 @@ public class TemplateEngine {
     }
 
     private Object resolveKey(Map<String, Object> context, String key) {
+        if (context == null || key == null || key.isEmpty()) {
+            log.warning("Invalid context or key");
+            return null;
+        }
         String[] parts = key.split("\\.");
         Object current = context;
 
@@ -157,10 +219,8 @@ public class TemplateEngine {
     	
     }
 
-
-
-
     private String renderLoops(String template, Map<String, Object> context) {
+
     	Pattern pattern = Pattern.compile("\\{\\{#([a-zA-Z0-9_.]+)\\}\\}([\\s\\S]+?)\\{\\{/\\1\\}\\}", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(template);
         StringBuffer result = new StringBuffer();

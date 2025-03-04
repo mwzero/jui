@@ -1,11 +1,11 @@
-package com.jui.apis.layouts;
+package com.jui.apis;
 
 import static com.jui.JuiApp.jui;
 import static com.jui.utils.Utils.linkedMapOf;
 
 import java.util.List;
 
-public class MainLayout {
+public class LayoutMain {
 
 	public static void main(String[] args)  {
 

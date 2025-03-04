@@ -1,27 +1,34 @@
 package com.jui.processors;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import com.jui.template.TemplateEngine;
+import com.jui.template.TemplateFactory;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 public class TemplateEngineTest {
-	
-	@Test
-	@Disabled
-    public void if_then_else() {
+    
+    @Test
+    public void if_then_else() throws IOException, URISyntaxException {
 		
-        TemplateEngine engine = new TemplateEngine();
+        TemplateEngine engine = TemplateFactory.buildTemplateEngine();
 
         String template = """
-        		<button id="{{clientId}}" onclick="{{?onServerSide}}{{clientClick}};sendEvent('{{clientId}}', 'click', {}){{/onServerSide}}{{^onServerSide}}{{clientClick}}{{/onServerSide}};return false;"
-                class=\"btn btn-{{type}} ms-1\">
-                {{label}}
-                </button>
-                """;
+            <button id="{{clientId}}" 
+                    onclick="{{?onServerSide}}{{clientClick}};sendEvent('{{clientId}}', 'click', {}){{/onServerSide}}{{^onServerSide}}{{clientClick}}{{/onServerSide}};return false;"
+                    class=\"btn btn-{{type}} ms-1\">
+                    {{label}}
+            </button>
+            """;
 
         Map<String, Object> context = new HashMap<>();
         context.put("clientId", "12345");
@@ -30,33 +37,53 @@ public class TemplateEngineTest {
         context.put("type", "primary");
         context.put("label", "Click Me");
 
-        String output = engine.render(template, context);
+        String output = engine.compile(template).execute(context);
+        assertEquals("""
+            <button id="12345"
+                onclick="alert('clicked');sendEvent('12345', 'click', {});return false;"
+                class="btn btn-primary ms-1">
+                Click Me
+            </button>
+            """.replaceAll("\\s+", ""), output.replaceAll("\\s+", ""));
+
         System.out.println(output);
     }
 	
 	@Test
-	@Disabled
-    public void loop() {
+	public void loop() throws IOException, URISyntaxException {
 		
         TemplateEngine engine = new TemplateEngine();
 
         String template = """
         	<ul>
-        	{{#items}}<li>{{this}}+{{getIndex}}</li>
-            {{/items}}</ul>
-                """;
+            {{#items}}
+                <li>{{this}}+{{getIndex}}</li>
+            {{/items}}
+            </ul>
+            """;
 
         Map<String, Object> context = new HashMap<>();
         List<String> items = Arrays.asList("Apple", "Banana", "Cherry");
         context.put("items", items);
 
-        String output = engine.render(template, context);
+        String output = engine.compile(template).execute(context);
+        
+
+        assertEquals("""
+            <ul>
+                <li>Apple+0</li>
+                <li>Banana+1</li>
+                <li>Cherry+2</li>
+            </ul>
+            """.replaceAll("\\s+", ""), output.replaceAll("\\s+", ""));
+
         System.out.println(output);
+
+       
     }
 	
 	@Test
-	@Disabled
-    public void templatesFromFile() throws Exception {
+	public void templatesFromFile() throws Exception {
 		
         TemplateEngine engine = new TemplateEngine(true, "templates");
 
@@ -64,12 +91,19 @@ public class TemplateEngineTest {
         List<String> items = Arrays.asList("Apple", "Banana", "Cherry");
         context.put("items", items);
 
-        String output = engine.renderFromFile("ul", context);
+        String output = engine.compileFromFile("ul").execute(context);
+        assertEquals("""
+            <ul>
+                <li>Apple+0</li>
+                <li>Banana+1</li>
+                <li>Cherry+2</li>
+            </ul>
+            """.replaceAll("\\s+", ""), output.replaceAll("\\s+", ""));
         System.out.println(output);
     }
 	
 	@Test
-	 public void nestedObject() {
+	 public void nestedObject() throws IOException, URISyntaxException {
         TemplateEngine engine = new TemplateEngine();
 
         String template = "<div>{{user.address.street}}</div>";
@@ -78,7 +112,10 @@ public class TemplateEngineTest {
         User user = new User(new Address("123 Main St"));
         context.put("user", user);
 
-        String output = engine.render(template, context);
+        String output = engine.compile(template).execute(context);
+        assertEquals("""
+            <div>123 Main St</div>
+            """.replaceAll("\\s+", ""), output.replaceAll("\\s+", ""));
         System.out.println(output);
     }
 
@@ -95,6 +132,7 @@ public class TemplateEngineTest {
     }
 
     static class Address {
+
         private String street;
 
         public Address(String street) {

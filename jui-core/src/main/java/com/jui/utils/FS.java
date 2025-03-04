@@ -76,6 +76,26 @@ public class FS {
 		return pathFile;
 		
 	}
+
+	public static String getFileContentAsString(String endpoint, boolean classLoading) throws IOException, URISyntaxException {
+
+		Reader reader = FS.getFile(endpoint, classLoading);
+	    
+	    int intValueOfChar;
+	    String targetString = "";
+	    while ((intValueOfChar = reader.read()) != -1) {
+	        targetString += (char) intValueOfChar;
+	    }
+	    reader.close();
+
+		return targetString;
+	}
+
+	public static Reader getFile(String endpoint, boolean classLoading) throws IOException, URISyntaxException {
+
+		return getFile(endpoint, Map.of("classLoading", String.valueOf(classLoading)));
+	}
+	
 	public static Reader getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
 		
 		Path pathFile = getFilePath(endpoint, options);

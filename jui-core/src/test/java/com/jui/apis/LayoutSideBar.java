@@ -1,10 +1,10 @@
-package com.jui.apis.layouts;
+package com.jui.apis;
 
 import static com.jui.JuiApp.jui;
 
 import com.jui.html.WebContainer;
 
-public class SideBarRecipe {
+public class LayoutSideBar {
 	
 	public static void main(String... args) {
 		
@@ -12,7 +12,7 @@ public class SideBarRecipe {
 
     	jui.sidebar()
     		.ul("JUI Example")
-	    		.add("MapZoomer", "compass", null, mapZoomer(), true)
+	    		.add("MapZoomer", "compass", null, mapZoomer(), false)
 	    		.add("MarkDown", "file-text", null, markdownTrials(), false);
     	
     	jui.server().start();
@@ -30,9 +30,9 @@ public class SideBarRecipe {
     	var lng = page.input("lng", "14.24641" ,"longitude");
     	
     	page.map()
-					.c_lat(lat)
-					.c_lng(lng)
-					.c_zoom(slider);
+			.c_lat(lat)
+			.c_lng(lng)
+			.c_zoom(slider);
     	
     	return page;
     	

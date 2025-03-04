@@ -24,8 +24,12 @@ public class UnorderedList extends WebElement {
     
     public  UnorderedList add(String label, String icon, WebContainer link, WebContainer content, boolean active) {
     	
-    	UnorderedListItem item = new UnorderedListItem(label, icon, 
-    			link != null ? link.clientId() : null, content != null ? content.clientId() : null);
+    	UnorderedListItem item = new UnorderedListItem(
+			label, 
+			icon, 
+    		link != null ? link.clientId() : null, 
+			content != null ? content.clientId() : null);
+			
     	items.add(item);
     	
 		return this;

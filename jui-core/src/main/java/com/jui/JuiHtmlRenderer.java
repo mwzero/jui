@@ -5,7 +5,7 @@ import java.util.Map;
 import com.jui.html.WebContainer;
 import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
-import com.jui.processors.TemplateEngine;
+import com.jui.template.TemplateEngine;
 import com.jui.utils.Utils;
 
 import lombok.extern.java.Log;
@@ -74,7 +74,7 @@ public class JuiHtmlRenderer {
 			Map<String, Object> variables = component.getVariables();
 
 			try {
-				html.append( engine.renderFromFile(component.getTemplateName(), variables));
+				html.append( engine.compileFromFile(component.getTemplateName()).execute(variables));
 				
 
 			} catch ( Exception e) {

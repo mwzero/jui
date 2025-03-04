@@ -2,11 +2,10 @@ package com.jui.apis;
 
 import static com.jui.JuiApp.jui;
 
-public class MapZoomer {
+public class ChartElements {
 	
 	public static void main(String... args) {
 		
-		//jui.setTemplate("templates/bootstrap-simple");
 		jui.markdown("## Map Chart Example");
 		jui.divider().color("blue");
     	
