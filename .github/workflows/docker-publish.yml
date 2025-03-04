@@ -1,7 +1,6 @@
-# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+# This workflow will build a docker image using Docket and then publish it to ghcr.io registry
 
-name: Docker Package
+name: Publich Dashboard App Docker over ghcr.io
 
 on:
   workflow_dispatch:
@@ -15,13 +14,6 @@ on:
           - info
           - warning
           - debug
-        tags:
-          description: 'Test scenario tags'
-          required: false
-          type: boolean
-  release:
-    types: [created]
-
 jobs:
   build:
     runs-on: ubuntu-latest
