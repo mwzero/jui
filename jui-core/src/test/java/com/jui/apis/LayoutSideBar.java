@@ -11,9 +11,9 @@ public class LayoutSideBar {
 		jui.page().layout("sidebar");
 
     	jui.sidebar()
-    		.ul("JUI Example")
-	    		.add("MapZoomer", "compass", null, mapZoomer(), false)
-	    		.add("MarkDown", "file-text", null, markdownTrials(), false);
+    		.ul("Unordered list Example")
+	    		.add("MapZoomer", "compass", "", "", mapZoomer(), true)
+	    		.add("MarkDown", "file-text", "", "", markdownTrials(), false);
     	
     	jui.server().start();
 	}

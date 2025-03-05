@@ -59,7 +59,7 @@ public class OtherElements extends BaseElements {
 		
 		List<UnorderedListItem> uiList = new ArrayList<>(); 
 		list.stream().forEach(item -> {
-			UnorderedListItem uiItem = new UnorderedListItem(item, "", "", "");
+			UnorderedListItem uiItem = new UnorderedListItem(item);
 			uiList.add(uiItem);
 		});
 		ul.setItems(uiList);

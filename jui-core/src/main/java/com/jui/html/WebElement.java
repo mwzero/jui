@@ -38,7 +38,11 @@ public abstract class WebElement {
 	 * Specify the HTML id attribute, calculated by the web context when a new element is added.
 	 */
 	String clientId;
-	
+
+	/*
+	 * Render WebElement onLoad
+	 */
+	boolean renderOnLoad = true;
 	
 	/**
 	 * Specify Key assigned by the user. Used for cols, tabs, etc..

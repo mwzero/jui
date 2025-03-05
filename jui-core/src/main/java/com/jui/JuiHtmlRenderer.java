@@ -46,19 +46,21 @@ public class JuiHtmlRenderer {
 	
 			if ( component instanceof WebContainer ) {
 				
-				String containerEnvelop = renderWebComponent(component);
-				String containerContents = renderWebContainer((WebContainer) component);
-				containerEnvelop = containerEnvelop.replace("{{content-%s}}".formatted(component.clientId()), containerContents);
-				
-				html.append(containerEnvelop);
+				if ( component.renderOnLoad())	{
+					
+					String containerEnvelop = renderWebComponent(component);
+					String containerContents = renderWebContainer((WebContainer) component);
+					containerEnvelop = containerEnvelop.replace("{{content-%s}}".formatted(component.clientId()), containerContents);
+					
+					html.append(containerEnvelop);
+				}
 				
 			}
 				
 			else html.append(renderWebComponent(component));
-				
+					
+			html.append( buildScripts(container) );
 		}
-		
-		html.append( buildScripts(container) );
 		
 		return html.toString();
 	}

@@ -22,14 +22,18 @@ public class UnorderedList extends WebElement {
     	items = new ArrayList<>();
     }
     
-    public  UnorderedList add(String label, String icon, WebContainer link, WebContainer content, boolean active) {
+    public  UnorderedList add(String label, String icon, String link, String content, WebContainer contentContainer, boolean active) {
     	
-    	UnorderedListItem item = new UnorderedListItem(
-			label, 
-			icon, 
-    		link != null ? link.clientId() : null, 
-			content != null ? content.clientId() : null);
-			
+    	UnorderedListItem item = new UnorderedListItem(label);
+		item.setIcon(icon);
+		item.setLink(link);
+		item.setContent(content);
+
+		if ( contentContainer != null ) {
+			item.setContainerId(contentContainer.clientId());
+			contentContainer.renderOnLoad(false);
+		}
+		
     	items.add(item);
     	
 		return this;
