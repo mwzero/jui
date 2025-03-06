@@ -6,14 +6,17 @@ import com.jui.html.WebElement;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.extern.java.Log;
 
 @Getter
 @Setter
 @Accessors(fluent = true)
+@Log
 public class Button extends WebElement {
 	
     String label;
     String type;
+	Boolean disabled;
     
     String clientClick;
     
@@ -39,27 +42,26 @@ public class Button extends WebElement {
     	this.clientClick = jsAction;
 	}
     
-	public void disable() {
-		
-		String command = """
-				const button = document.getElementById("%s");
-				button.disabled = true;
-				button.classList.add("disabled");
-				""".formatted(this.clientId());
-		
-		this.backEndEvents().onServerUpdate(this, "change", command);
-		
-	}
-	
-	public void enable() {
+	public void disable() {this.enableOrDisabled(true);}
+	public void enable() {this.enableOrDisabled(false);}
+	public void toogle() {this.enableOrDisabled(!this.disabled);}
 
-		String command = """
-				const button = document.getElementById("%s");
-				button.disabled = false;
-				button.classList.remove("disabled");
-				""".formatted(this.clientId());
+	protected void enableOrDisabled(boolean disabled) {
 		
-		this.backEndEvents().onServerUpdate(this, "change", command);
+		this.disabled = disabled;
+
+		StringBuffer command = new StringBuffer();
+		command.append("const button = document.getElementById(\"%s\");".formatted(this.clientId()));
+		if ( disabled ) {
+			command.append("button.disabled = true;");
+			command.append("button.classList.add(\"disabled\");");
+		} else {
+			command.append("button.disabled = false;");
+			command.append("button.classList.remove(\"disabled\");");				
+		}
+	
+		this.backEndEvents().onServerUpdate(this, "change", command.toString());	
+		
 	}
 
 }
