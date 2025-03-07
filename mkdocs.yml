@@ -11,7 +11,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Architecture: architecture.md
-  - HTML Components:
+  - HTML Components: 
     - Text Elements: html-text-elements.md
     - Input Elements: html-input-elements.md
     - Container Elements: html-container-elements.md
