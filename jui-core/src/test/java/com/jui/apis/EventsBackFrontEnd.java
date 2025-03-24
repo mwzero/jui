@@ -7,6 +7,7 @@ public class EventsBackFrontEnd {
 	public static void main(String[] args) { 
 
 		var my_bar = jui.progress(0, "Operation in progress. Please wait.");
+		jui.divider().color("blue");
 		
 		var btn = jui.button("Click-me", "primary");
 		btn.onClick("alert('click me')");
@@ -26,7 +27,7 @@ public class EventsBackFrontEnd {
 			btn.enable();
         } );
 		
-        jui.server().start();
+        jui.server().enableWebSocket(true).start();
 
 	}
 }

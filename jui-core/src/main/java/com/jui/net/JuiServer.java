@@ -46,12 +46,13 @@ public class JuiServer {
 	String docRoot;
 	boolean classLoading;
 	String host;
-	int port;
 	
-	boolean enableWebSocket;
+	boolean enableWebSocket = false;
+	boolean enableHttps = false;
+	
+	int port= 8080;
 	int wssPort;
 	
-	boolean enableHttps;
 	JuiModule enableAuthentication;
 	
 	public JuiServer(JuiAppSettings page) {
@@ -63,9 +64,6 @@ public class JuiServer {
 		String rootDoc = "html/";
 		Boolean classLoading = true;
 		String host = "0.0.0.0";
-		int port = 8080;
-		enableWebSocket = false;
-		enableHttps = false;
 		
 		if ( page.layout() != null)
 			rootDoc = "html-" + page.layout() + "/";
