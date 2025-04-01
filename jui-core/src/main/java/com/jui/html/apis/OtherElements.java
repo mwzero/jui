@@ -6,13 +6,11 @@ import java.util.List;
 import com.jui.annotations.JuiAnnotationHelper;
 import com.jui.html.WebElementContext;
 import com.jui.html.elements.DropDownButton;
-import com.jui.html.elements.Input;
-import com.jui.html.elements.Table;
+
 import com.jui.html.elements.Text;
 import com.jui.html.elements.UnorderedList;
 import com.jui.html.elements.UnorderedListItem;
 import com.jui.processors.MarkdownProcessor;
-import com.st.DataFrame;
 
 public class OtherElements extends BaseElements {
 
@@ -20,20 +18,8 @@ public class OtherElements extends BaseElements {
 		super(context);
 	}
 
-	public Input input(String text, String value, String placeholder) { 
-		Input input = new Input(text, true, true, value, placeholder);
-		context.add(input);
-		return input;
-	}
-	
-	public Input input() {
-
-		Input input = new Input();
-		context.add(input);
-		return input;
-	}
-	
 	public void write(String... args) {
+		
 		 for (String arg : args) {
 			 String text = MarkdownProcessor.render(arg);
 			 context.add(new Text(text, false, true));
@@ -67,25 +53,4 @@ public class OtherElements extends BaseElements {
 		return ul;
 	}
 	
-	public Table table(String caption, DataFrame df) {
-		
-		Table table = new Table();
-		table.setDf(df);
-		table.setCaption(caption);
-		context.add(table);
-		return table;
-	}
-
-	public Table table(String caption, DataFrame df, int limit) {
-		
-		Table table = new Table();
-		table.setDf(df.limit(limit));
-		table.setDf(df);
-		table.setCaption(caption);
-		
-		context.add(table);
-		return table;
-	}
-	
-
 }

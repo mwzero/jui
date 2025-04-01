@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DataViewTest",
+            "request": "launch",
+            "mainClass": "com.jui.apis.DataViewTest",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
             "name": "LayoutSideBar",
             "request": "launch",
             "mainClass": "com.jui.apis.LayoutSideBar",

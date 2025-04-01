@@ -5,8 +5,10 @@ import java.util.Map;
 import com.jui.html.apis.ChartElements;
 import com.jui.html.apis.ContainerElements;
 import com.jui.html.apis.ContainerElements.ContainerType;
+import com.jui.html.apis.DataElements;
 import com.jui.html.apis.InputButtonElements;
 import com.jui.html.apis.InputSelectionElements;
+import com.jui.html.apis.InputTextElements;
 import com.jui.html.apis.MediaElements;
 import com.jui.html.apis.OtherElements;
 import com.jui.html.apis.StatusElements;
@@ -30,10 +32,16 @@ public class WebContainer extends WebElement implements AutoCloseable {
 	
 	@Delegate
     private final ContainerElements containerApis;
+
+	@Delegate
+    private final DataElements dataApis;
 	
 	@Delegate 
 	private final ChartElements chartElements;
 	
+	@Delegate 
+	private final InputTextElements inputTextElements;
+
 	@Delegate 
 	private final InputButtonElements inputButtonElements;
 	
@@ -58,17 +66,21 @@ public class WebContainer extends WebElement implements AutoCloseable {
 		super("Div", key, attributes);
 		this.type = type;
 		
-		
+		dataApis = new DataElements(this.webContext());
 		textApis = new TextElements(this.webContext());
 		containerApis = new ContainerElements(this.webContext());
 		chartElements = new ChartElements(this.webContext());
 		inputButtonElements = new InputButtonElements(this.webContext());
 		inputSelectionElements = new InputSelectionElements(this.webContext());
+		inputTextElements = new InputTextElements(this.webContext());
+
 		otherElements = new OtherElements(this.webContext());
 		mediaElements = new MediaElements(this.webContext());
 		statusElements = new StatusElements(this.webContext());
 		
+		
 	}
+	
 	
 	@Override
 	public String getHtml() {
