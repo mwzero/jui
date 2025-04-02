@@ -9,13 +9,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.Authenticator;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
 
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.Proxy;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
 import java.util.UUID;
@@ -29,21 +35,49 @@ import lombok.extern.java.Log;
 @Log
 public class FS {
 	
-	public static Path getFilePath(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
+	private static InputStream getProxyInputStream(URL url, String proxyHost, int proxyPort) throws Exception {
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+        return connection.getInputStream();
+    }
+
+
+	public static Path getFilePath(String endpoint, Map<String, String> options) throws Exception {
 		
 		if ( endpoint.startsWith("http") )  {
-			
+
 			URL url = new URL(endpoint);
 			String endpointPath = url.getPath();
 			String fileName = endpointPath.substring(endpointPath.lastIndexOf("/") + 1);
 			Path tempDir = Files.createTempDirectory("csv_temp");
 			Path tempFile = tempDir.resolve(fileName);
-			
-	        try (InputStream in = url.openStream()) {
-	        	Files.copy(in, tempFile, StandardCopyOption.REPLACE_EXISTING);
-	        }
-	        
-	        return tempFile;
+
+			boolean useProxy = Boolean.parseBoolean(System.getenv().getOrDefault("USE_PROXY", "false"));
+            String proxyHost = System.getenv().getOrDefault("PROXY_HOST", "");
+            int proxyPort = Integer.parseInt(System.getenv().getOrDefault("PROXY_PORT", "0"));
+            String proxyUser = System.getenv().getOrDefault("PROXY_USER", "");
+            String proxyPassword = System.getenv().getOrDefault("PROXY_PASSWORD", "");
+
+            if (useProxy) {
+				log.fine("endpoint [%s] using proxy [%s:%d]".formatted(endpoint, proxyHost, proxyPort));
+                Authenticator.setDefault(new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(proxyUser, proxyPassword.toCharArray());
+                    }
+                });
+            }
+
+
+			try (InputStream is = useProxy ? getProxyInputStream(url, proxyHost, proxyPort) : url.openStream()) {
+                Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
+            } catch (Exception e) {
+				log.warning("Impossible to get [%s]. Err[%s]".formatted(endpoint, e.getMessage()));	
+				throw e;
+			}
+
+            return tempFile;
+
 		} 
 		
 		Path pathFile;
@@ -77,7 +111,7 @@ public class FS {
 		
 	}
 
-	public static String getFileContentAsString(String endpoint, boolean classLoading) throws IOException, URISyntaxException {
+	public static String getFileContentAsString(String endpoint, boolean classLoading) throws Exception {
 
 		Reader reader = FS.getFile(endpoint, classLoading);
 	    
@@ -91,12 +125,12 @@ public class FS {
 		return targetString;
 	}
 
-	public static Reader getFile(String endpoint, boolean classLoading) throws IOException, URISyntaxException {
+	public static Reader getFile(String endpoint, boolean classLoading) throws Exception {
 
 		return getFile(endpoint, Map.of("classLoading", String.valueOf(classLoading)));
 	}
 	
-	public static Reader getFile(String endpoint, Map<String, String> options) throws IOException, URISyntaxException {
+	public static Reader getFile(String endpoint, Map<String, String> options) throws Exception {
 		
 		Path pathFile = getFilePath(endpoint, options);
 	        
@@ -104,7 +138,7 @@ public class FS {
 			
 			InputStream fis = Files.newInputStream(pathFile);
             ZipInputStream zis = new ZipInputStream(fis);
-            ZipEntry entry = zis.getNextEntry();
+            //ZipEntry entry = zis.getNextEntry();
             
             return new InputStreamReader(zis);
         }

@@ -4,8 +4,6 @@ import static com.jui.JuiApp.jui;
 
 import java.util.List;
 
-import lombok.extern.java.Log;
-
 public class LayoutSideBarSimple {
 
 	public static void main(String[] args)  {

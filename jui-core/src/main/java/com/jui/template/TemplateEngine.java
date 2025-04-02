@@ -78,7 +78,7 @@ public class TemplateEngine {
         
     }
 
-    public TemplateEngine compileFromFile(String templateName) throws IOException, URISyntaxException {
+    public TemplateEngine compileFromFile(String templateName) throws Exception {
 		
 	    String fileName;
 	    if (folder != null)

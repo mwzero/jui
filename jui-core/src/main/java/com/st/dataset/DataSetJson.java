@@ -1,7 +1,6 @@
-package com.st;
+package com.st.dataset;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 
@@ -9,8 +8,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import lombok.extern.slf4j.Slf4j;
 
 public class DataSetJson extends DataSet {
 	

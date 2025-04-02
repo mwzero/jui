@@ -39,15 +39,15 @@ public class ChartBar extends WebElement {
 		String xasis = "";
 		
 		//data.getDf().getColumns().get(0).getName()
-		for ( int irow=0; irow < df.getDs().rowCount(); irow++ ) {
+		for ( int irow=0; irow < df.rowCount(); irow++ ) {
 			
 			if ( xasis != "" ) {
 				xasis+=",";
 				series+=",";
 			} 
 
-			xasis += "\"" + df.getDs().getObject(irow,0)  + "\"";
-			series += df.getDs().getObject(irow,1);
+			xasis += "\"" + df.getObject(irow,0)  + "\"";
+			series += df.getObject(irow,1);
 
         }
 		

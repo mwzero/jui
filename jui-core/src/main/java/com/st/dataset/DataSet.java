@@ -1,4 +1,4 @@
-package com.st;
+package com.st.dataset;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ public class DataSet {
     protected List<String[]> data;
     
     public DataSet() {
+
         this.data = new ArrayList<>();
     }
     
@@ -23,23 +24,29 @@ public class DataSet {
 
 	public void load() throws Exception {};
 
-    public void show(int limit) {
-    	
-        for (String header : headers) {
-            System.out.print(header + "\t");
-        }
-        System.out.println();
-
-        int i=1;
-        for (String[] row : data) {
-            for (String value : row) {
-                System.out.print(value + "\t");
-            }
-            System.out.println();
-            if ( (limit != 0) && (i++ == limit ) )
-            	break;
-        }
-    }
+    public String show(int limit) {
+		
+		StringBuilder result = new StringBuilder();
+	
+		for (String header : headers) {
+			result.append(header).append("\t");
+		}
+		result.append("\n");
+	
+		int i = 1;
+		for (String[] row : data) {
+			for (String value : row) {
+				result.append(value).append("\t");
+			}
+			result.append("\n");
+			if ((limit != 0) && (i++ == limit)) {
+				break;
+			}
+		}
+	
+		return result.toString();
+	}
+	
 
     public List<String[]> getData() {
         return data;

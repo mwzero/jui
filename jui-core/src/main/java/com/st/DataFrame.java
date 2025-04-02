@@ -3,35 +3,32 @@ package com.st;
 
 import java.util.List;
 
+import com.st.dataset.DataSet;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.Delegate;
+import lombok.extern.java.Log;
 
+@Log
 @Getter
 @Setter
+@Accessors(fluent = true)
 public class DataFrame {
 	
-	private DataSet ds;
+	@Delegate
+	DataSet ds;
 	
 	public DataFrame(DataSet dataset) {
-        this.ds = dataset;
-    }
-
-    public void load() throws Exception {
-    	ds.load();
-    }
-
-    public void show(int limit) {
-    	ds.show(limit);
+		this.ds = dataset;
     }
 
 	public DataFrame select(List<String> of) {
-		
 		return new DataFrame(ds.select(of));
-		
 	}
 
 	public DataFrame limit(int limit) {
-		
 		return new DataFrame(ds.limit(limit));
 	}
 }

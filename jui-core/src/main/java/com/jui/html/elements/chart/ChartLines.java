@@ -34,20 +34,20 @@ public class ChartLines extends WebElement {
 				</div>		
 				""".formatted(this.clientId(), width == 0 ? "100%" : width + "px", height + "px");
 		
-		Object [] xasis = new Object [df.getDs().rowCount()];
-		Object  series[][] = new Object [df.getDs().columnCount() - 1][df.getDs().rowCount()];
+		Object [] xasis = new Object [df.rowCount()];
+		Object  series[][] = new Object [df.columnCount() - 1][df.rowCount()];
 		
-		for ( int irow=0; irow < df.getDs().rowCount(); irow++ ) {
+		for ( int irow=0; irow < df.rowCount(); irow++ ) {
 			
-			xasis[irow] = df.getDs().getObject(irow,0);
+			xasis[irow] = df.getObject(irow,0);
 
-			for ( int icol =1; icol <df.getDs().columnCount(); icol ++) {
-				series[icol-1][irow] = df.getDs().getObject(irow,icol);
+			for ( int icol =1; icol <df.columnCount(); icol ++) {
+				series[icol-1][irow] = df.getObject(irow,icol);
 			}
         }
 		
 		String jsSeries = "";
-		for ( int icol =1; icol <df.getDs().columnCount(); icol ++) {
+		for ( int icol =1; icol <df.columnCount(); icol ++) {
 
 			if ( jsSeries.length() > 0 ) jsSeries +=",";
 
@@ -56,7 +56,7 @@ public class ChartLines extends WebElement {
 						name: '%s',
 						data: [%s]
 					}
-				""".formatted(df.getDs().getColumnAt(icol), Utils.buildString (series[icol-1]));
+				""".formatted(df.getColumnAt(icol), Utils.buildString (series[icol-1]));
 		}
 		
 		String js = """ 

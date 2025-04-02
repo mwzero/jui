@@ -2,7 +2,6 @@ package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
-import com.st.DB;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,7 +14,6 @@ public class DbDuckRecipe {
 	public static void main(String... args) throws Exception {
 		
 		populateDuckDB();
-		Connection  connection = DB.getConnection("org.duckdb.DuckDBDriver","jdbc:duckdb:test", "", "");
 		
 		jui.markdown("""
     			# Table Examples
@@ -23,7 +21,9 @@ public class DbDuckRecipe {
     	jui.divider();
     	
     	jui.table("Simple Table",
-    			st.read_sql_query( connection, "select id, first_name, second_name from test"));
+    			st.read_sql_query( 
+					st.getConnection("org.duckdb.DuckDBDriver","jdbc:duckdb:test", "", ""), 
+					"select id, first_name, second_name from test"));
     	
     	jui.server().start();
     	

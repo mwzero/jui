@@ -4,7 +4,6 @@ import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
 
 import com.jui.utils.FS;
-import com.st.DB;
 import com.st.DataFrame;
 
 import java.nio.file.Path;
@@ -21,7 +20,7 @@ public class DbTableRecipe {
 		
 		populateH2();
 		
-		Connection  connection = DB.getConnection("org.h2.Driver","jdbc:h2:~/testdb", "", "");
+		Connection  connection = st.getConnection("org.h2.Driver","jdbc:h2:~/testdb", "", "");
 		
 		jui.markdown("""
     			# Table Examples

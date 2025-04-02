@@ -1,7 +1,6 @@
-package com.st;
+package com.st.dataset;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class DataSetDB extends DataSet {
 	

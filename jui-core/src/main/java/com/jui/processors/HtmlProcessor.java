@@ -1,8 +1,6 @@
 package com.jui.processors;
 
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Properties;
@@ -28,7 +26,7 @@ public class HtmlProcessor {
     		
             emojiProperties.load(fis);
             
-        } catch (IOException | URISyntaxException e) {
+        } catch (Exception e) {
 			log.severe("emoji properties file not loaded. Err:" + e.getLocalizedMessage());
 		}
     }
