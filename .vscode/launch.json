@@ -6,6 +6,18 @@
     "configurations": [
         {
             "type": "java",
+            "name": "JuiDataFrameRecipe",
+            "request": "launch",
+            "mainClass": "com.jui.st.JuiDataFrameRecipe",
+            "projectName": "jui-core",
+            "env": {
+                "USE_PROXY": "true",
+                "PROXY_HOST": "ipv4.93.57.67.206.hybrid-web.global.blackspider.com",
+                "PROXY_PORT": "8006"
+            }
+        },
+        {
+            "type": "java",
             "name": "DataViewTest",
             "request": "launch",
             "mainClass": "com.jui.apis.DataViewTest",

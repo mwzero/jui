@@ -1,6 +1,8 @@
 package com.st.dataset;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataSetDB extends DataSet {
 	
@@ -20,16 +22,16 @@ public class DataSetDB extends DataSet {
         ResultSetMetaData metaData = resultSet.getMetaData();
 
         int columnCount = metaData.getColumnCount();
-        this.headers = new String[columnCount];
+        this.headers = new ArrayList<String>();
 
         for (int i = 1; i <= columnCount; i++) {
-            headers[i - 1] = metaData.getColumnName(i);
+            headers.set(i - 1, metaData.getColumnName(i));
         }
 
         while (resultSet.next()) {
-            String[] row = new String[columnCount];
+            List<Object> row = new ArrayList<Object>();
             for (int i = 1; i <= columnCount; i++) {
-                row[i - 1] = resultSet.getString(i);
+                row.set(i - 1, resultSet.getObject(i));
             }
             data.add(row);
         }

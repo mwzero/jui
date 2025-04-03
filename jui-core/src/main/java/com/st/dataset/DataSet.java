@@ -2,23 +2,31 @@ package com.st.dataset;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class DataSet {
 	
 	protected Reader reader;
-    protected String[] headers;
-    protected List<String[]> data;
+    protected List<String> headers;
+    protected List<List<Object>> data;
     
     public DataSet() {
 
         this.data = new ArrayList<>();
+		this.headers = new ArrayList<>();
     }
     
-    public DataSet(String[] headers, List<String[]> data) {
-        this.headers = headers;
+    public DataSet(String[] headers, List<List<Object>> data) {
+        this.headers = Arrays.asList(headers);
         this.data = data;
+    }
+
+
+	public void addColumn(String string, List<Object> of) {
+		this.headers.add(string);
+		this.data.add(of);
     }
 
 
@@ -34,8 +42,8 @@ public class DataSet {
 		result.append("\n");
 	
 		int i = 1;
-		for (String[] row : data) {
-			for (String value : row) {
+		for (List<Object> row : data) {
+			for (Object value : row) {
 				result.append(value).append("\t");
 			}
 			result.append("\n");
@@ -48,11 +56,11 @@ public class DataSet {
 	}
 	
 
-    public List<String[]> getData() {
+    public List<List<Object>> getData() {
         return data;
     }
 
-    public String[] getHeaders() {
+    public List<String> getHeaders() {
         return headers;
     }
 
@@ -61,17 +69,17 @@ public class DataSet {
 	}
 
 	public int columnCount() {
-		return headers.length;
+		return headers.size();
 	}
 
 	public Object getObject(int irow, int i) {
 		
-		return data.get(irow)[i];
+		return data.get(irow).get(i);
 	}
 
 	public String getColumnAt(int icol) {
 		
-		return headers[icol];
+		return headers.get(icol);
 	}
 
 	public DataSet select(List<String> of) {
@@ -80,18 +88,18 @@ public class DataSet {
 		
 		data.stream().forEach( row -> {
 			
-			ArrayList<String> newRow = new ArrayList<String>();
+			List<Object> newRow = new ArrayList<Object>();
 			
-			IntStream.range(0, headers.length).forEach(idx -> {
-			    if (of.contains(headers[idx])) {
-			        newRow.add(row[idx]);
+			IntStream.range(0, headers.size()).forEach(idx -> {
+			    if (of.contains(headers.get(idx))) {
+			        newRow.add(row.get(idx));
 			    }
 			});
 			
-			ds.data.add(newRow.toArray(new String[of.size()]));
+			//ds.data.add(newRow.toArray(new String[of.size()]));
 		});
 		
-		ds.headers = of.toArray(String[]::new);
+		ds.headers = of;
 		
 		return ds;
 		

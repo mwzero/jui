@@ -1,6 +1,7 @@
 package com.jui.html.apis;
 
 import com.jui.html.WebElementContext;
+import java.util.UUID;
 
 public class BaseElements {
 	
@@ -11,4 +12,10 @@ public class BaseElements {
 		this.context = context;
 		
 	}
+
+    public String buildUniqueIDGenerator() {
+        UUID uniqueID = UUID.randomUUID();
+        String idString = uniqueID.toString();
+		return idString.replace("-", "_");
+    }
 }

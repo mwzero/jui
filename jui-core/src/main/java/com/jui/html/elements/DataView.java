@@ -8,13 +8,16 @@ import com.st.DataFrame;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Getter
 @Setter
+@Accessors(fluent = true)
 public class DataView extends WebElement  {
 	
 	String caption;
 	DataFrame df;
+	int limit;
 	
 	List<String> styles;
 	

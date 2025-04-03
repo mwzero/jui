@@ -2,6 +2,8 @@ package com.st.dataset;
 
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -26,12 +28,12 @@ public class DataSetCSV extends DataSet {
     	}
     	
     	Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
-        this.headers = records.iterator().next().toMap().keySet().toArray(new String[0]);
+        this.headers = new ArrayList<>(records.iterator().next().toMap().keySet());
 
         for (CSVRecord record : records) {
-            String[] row = new String[headers.length];
-            for (int i = 0; i < headers.length; i++) {
-                row[i] = record.get(headers[i]);
+            List<Object> row = new ArrayList<Object>();
+            for (int i = 0; i < headers.size(); i++) {
+                row.add(record.get(headers.get(i)));
             }
             data.add(row);
         }

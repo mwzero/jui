@@ -140,15 +140,15 @@ public abstract class WebElement {
 	
 	public String getPostData() {return null;}
 	
-	public WebElement add(WebElement component) {
+	public WebElement add(WebElement... components) {
+		for (WebElement component : components) {
+			this.webContext().add(component);
+		}
 		
-		//add component to web context
-		//generate a key and assign to it
-		this.webContext().add(component);
-		
-		return component;
+		// Restituisci l'ultimo componente aggiunto
+		return components[components.length - 1];
 	}
-
+	
 	public Map<String, Object> getMapValue() {
 		return Map.of("clientId", this.clientId);
 	}

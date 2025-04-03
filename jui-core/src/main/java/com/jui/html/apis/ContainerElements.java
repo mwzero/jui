@@ -39,6 +39,7 @@ public class ContainerElements extends BaseElements {
 		return container;	
 	}
 	
+	public WebContainer container() { return this.addContainer(buildUniqueIDGenerator(), ContainerType.DIV, null);}
 	public WebContainer container(String key) { return this.addContainer(key, ContainerType.DIV, null);}
 	public WebContainer dialog(String key, String Title) { return this.addContainer(key, ContainerType.DIALOG, null);}
 	public WebContainer expander(String key, String Title) { return this.addContainer(key, ContainerType.EXPANDER, null);}

@@ -2,7 +2,6 @@ package com.jui.recipes;
 
 import static com.jui.JuiApp.jui;
 import static com.st.ST.st;
-
 import com.st.DataFrame;
 
 public class CsvRecipe {
@@ -16,7 +15,7 @@ public class CsvRecipe {
     	jui.divider();
     	
     	//country,continent,year,lifeExp,pop,gdpPercap
-    	DataFrame df = st.read_csv("csv/gapminder_unfiltered.csv");
+    	//DataFrame df = st.read_csv("csv/gapminder_unfiltered.csv");
     	
     	/*
     	jui.chart.lines(

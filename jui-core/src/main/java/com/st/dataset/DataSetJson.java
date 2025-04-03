@@ -3,6 +3,7 @@ package com.st.dataset;
 import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -39,13 +40,13 @@ public class DataSetJson extends DataSet {
                 if (element.isJsonObject()) {
                 	
                 	String[] row = parseElement(element);
-                	data.add(row);
+                	data.add(Arrays.asList(row));
                     
                 }
             }
         } else {
         	String[] row = parseElement(jsonElement);
-        	data.add(row);
+        	data.add(Arrays.asList(row));
         }
     }
     
@@ -53,14 +54,14 @@ public class DataSetJson extends DataSet {
     	
     	JsonObject json = element.getAsJsonObject();
     	String[] row = new String[json.keySet().size()];
-    	headers = new String[json.keySet().size()];
+    	headers = new ArrayList<>(json.keySet());
     	
     	int i=0;
         for (String key : json.keySet()) {
         	
             JsonElement value = json.get(key);
             row[i] = value.toString();
-            headers[i++] = key;
+            headers.set(i++, key);
         }
         
         return row;

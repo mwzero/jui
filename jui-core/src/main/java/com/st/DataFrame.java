@@ -20,6 +20,11 @@ public class DataFrame {
 	@Delegate
 	DataSet ds;
 	
+	public DataFrame() {
+
+		this.ds = new DataSet();
+	}		
+
 	public DataFrame(DataSet dataset) {
 		this.ds = dataset;
     }
@@ -31,4 +36,6 @@ public class DataFrame {
 	public DataFrame limit(int limit) {
 		return new DataFrame(ds.limit(limit));
 	}
+
+
 }
