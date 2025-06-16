@@ -3,9 +3,11 @@ package com.jui.model;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.jui.net.handlers.HandlerJuiRequest;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
 /**
  * The message that the front-end sends to the back-end.
@@ -14,6 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Log
 public class JuiMessage {
 	
 	 String action;
