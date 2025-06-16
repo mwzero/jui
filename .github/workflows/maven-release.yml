@@ -39,7 +39,7 @@ jobs:
         restore-keys: ${{ runner.os }}-m2-
 
     - name: Build selected modules
-      run: mvn --projects jui-core -am clean install -DskipTests
+      run: mvn --projects jui-core -am clean install -DskipTests -Pwith-dependencies
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -52,6 +52,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Rename JAR file
+      run: |
+        mv jui-core/target/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
+        jui-core/target/jui-core-0.0.${{ github.run_number }}.jar
+
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
@@ -60,6 +65,6 @@ jobs:
           body: "Automated release"
           draft: false
           prerelease: false
-          files: jui-core/target/*.jar
+          files: jui-core/target/jui-core-0.0.${{ github.run_number }}.jar
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
