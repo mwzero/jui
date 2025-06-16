@@ -13,7 +13,7 @@ public class BaseElements {
 		
 	}
 
-    public String buildUniqueIDGenerator() {
+	protected String buildUniqueIDGenerator() {
         UUID uniqueID = UUID.randomUUID();
         String idString = uniqueID.toString();
 		return idString.replace("-", "_");
