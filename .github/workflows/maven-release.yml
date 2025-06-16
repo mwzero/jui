@@ -53,9 +53,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Rename JAR file
-      run: |
-        mv jui-core/target/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
-        jui-core/target/jui-core-0.0.${{ github.run_number }}.jar
+      run: |
+        mv jui-core/target/jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar mv jui-core/target/jui-core-0.0.${{ github.run_number }}.jar
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
