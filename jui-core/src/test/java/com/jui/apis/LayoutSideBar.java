@@ -10,8 +10,8 @@ public class LayoutSideBar {
 		
     	jui.sidebar()
     		.ul("Unordered list Example")
-	    		.add("MapZoomer", "compass", "", "", mapZoomer(), true)
-	    		.add("MarkDown", "file-text", "", "", markdownTrials(), false);
+	    		.add("MapZoomer", "compass", null, null, mapZoomer(), true)
+	    		.add("MarkDown", "file-text", null, null, markdownTrials(), false);
     	
     	jui.server()
     		.layout("sidebar")

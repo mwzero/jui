@@ -179,6 +179,7 @@
 			    .then(htmlContent  => {
 			    	setInnerHTML(document.getElementById("jui-form"), htmlContent.main );
 			    	setInnerHTML(document.getElementById("sidebar"), htmlContent.sidebar );
+			    	
 			    })
 			    .catch((error) => {
 			        console.error('Error:', error);
@@ -220,6 +221,61 @@
 					element.addEventListener("change", handleEvent);
 					element.addEventListener("input", handleEvent); 
 				});
+				
+				document.querySelectorAll('.nav-link').forEach(link => {
+	                link.addEventListener('click', function(e) {
+	                    e.preventDefault();
+	                    
+						if (this.hasAttribute('data-url')) {
+						    const url = this.getAttribute('data-url');
+						    console.log("data-url:", url);
+							fetch(url)
+	                        	.then(response => response.text())
+	                        	.then(html => {
+	                        		setInnerHTML(document.getElementById("jui-form"), html );
+	                        	})
+	                        	.catch(error => {
+	                            	console.error('Error loading content:', error);
+	                            	setInnerHTML(document.getElementById("jui-form"), '<p>There was an error loading the content.</p>' );
+	                        	});
+						
+						} else if (this.hasAttribute('data-content')) {
+						
+						    const dataContent = this.getAttribute('data-content');
+						    console.log("data-content:", dataContent);
+							setInnerHTML(document.getElementById("jui-form"), '<p>Eccolo</p>' );
+							
+						} else if (this.hasAttribute('data-jui')) {
+						
+							const juiId = this.getAttribute('data-jui');
+						    console.log("data-jui:", juiId);
+						
+							fetch('/jui', {
+						        method: 'POST',
+						        headers: {
+						            'Content-Type': 'application/json',
+						        },
+						        body: JSON.stringify({action: "update", id: juiId}),
+						    })
+						    .then(response => {
+			                    if (!response.ok) {
+			                        throw new Error('Errore nel recupero del contenuto');
+			                    }
+			                    return response.json();  // Ottieni il contenuto come testo (HTML)
+			                })
+						    .then(htmlContent  => {
+						    	setInnerHTML(document.getElementById("jui-form"), htmlContent.main );
+						    	setInnerHTML(document.getElementById("sidebar"), htmlContent.sidebar );
+						    	
+						    })
+						    .catch((error) => {
+						        console.error('Error:', error);
+						    });
+			    
+						}
+						
+	                });
+	            });
 			}
 		
     
@@ -312,23 +368,6 @@
                     themeLabel.innerText = 'Light Mode';
                 }
             }
-
-            // Event listener for sidebar links to dynamically load content
-            document.querySelectorAll('#sidebar .nav-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.getAttribute('data-url');
-                    fetch(url)
-                        .then(response => response.text())
-                        .then(html => {
-                            pageContent.innerHTML = html;
-                        })
-                        .catch(error => {
-                            console.error('Error loading content:', error);
-                            pageContent.innerHTML = '<p>There was an error loading the content.</p>';
-                        });
-                });
-            });
 
             // Event listener to toggle light/dark mode
             toggleThemeButton.addEventListener('click', function() {

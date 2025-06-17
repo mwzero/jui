@@ -104,6 +104,7 @@ public class TemplateEngine {
     }
 
     protected String render(String template, Map<String, Object> context) {
+    	
         String result = renderLoops(template, context);
         result = renderConditionals(result, context);
         return renderVariables(result, context);
@@ -159,7 +160,7 @@ public class TemplateEngine {
 
 
     private String renderConditionals(String template, Map<String, Object> context) {
-        Pattern pattern = Pattern.compile("\\{\\{\\?([a-zA-Z0-9_]+)\\}\\}([\\s\\S]+?)\\{\\{/\\1\\}\\}", Pattern.DOTALL);
+    	Pattern pattern = Pattern.compile("\\{\\{\\?([\\w.]+)}}(.*?)\\{\\{\\/\\1}}", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(template);
         StringBuffer result = new StringBuffer();
 
@@ -176,8 +177,7 @@ public class TemplateEngine {
             }
         }
         matcher.appendTail(result);
-
-        pattern = Pattern.compile("\\{\\{\\^([a-zA-Z0-9_]+)\\}\\}(.+?)\\{\\{/\\1\\}\\}", Pattern.DOTALL);
+        pattern = Pattern.compile("\\{\\{\\^([\\w.]+)}}(.*?)\\{\\{\\/\\1}}", Pattern.DOTALL);
         matcher = pattern.matcher(result.toString());
         StringBuffer conditionalResult = new StringBuffer();
 
@@ -199,19 +199,10 @@ public class TemplateEngine {
     private boolean evaluateCondition(Map<String, Object> context, String conditionKey) {
     	
     	boolean condition = true;
-        
-        if ( context.containsKey(conditionKey)) {
-        	
-        	if ( context.get(conditionKey) != null ) {
-            	if ( context.get(conditionKey) instanceof Boolean ) {
-            		
-            		condition = (boolean) context.get(conditionKey);
-            		
-            	} else
-            		condition = true;
-        	} else
-        		condition = false;
-        		
+    	
+    	Object condKey = resolveKey(context, conditionKey);
+    	if ( condKey != null ) {
+    		condition = true;
         } else
         	condition = false;
         
@@ -235,7 +226,8 @@ public class TemplateEngine {
                 StringBuilder loopResult = new StringBuilder();
                 int idx =0;
                 for (Object item : list) {
-                    Map<String, Object> itemContext = new HashMap<>(context);
+                    //Map<String, Object> itemContext = new HashMap<>(context);
+                	Map<String, Object> itemContext = new HashMap<>();
                     if (item instanceof Map) {
                         itemContext.putAll((Map<String, Object>) item);
                     } else {

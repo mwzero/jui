@@ -32,6 +32,12 @@ public class JuiHtmlRenderer {
 			
 		return content;
 	}
+	
+	public String renderWebContainer(String id) {
+		
+		WebElement element = JuiApp.jui.webContext().getLinkedMapContext().get(id);
+		return this.renderWebContainer((WebContainer)element);
+	}
 
 	private String renderWebContainer (WebContainer container ) {
 		
@@ -108,4 +114,6 @@ public class JuiHtmlRenderer {
         
         return script.toString();
     }
+
+
 }

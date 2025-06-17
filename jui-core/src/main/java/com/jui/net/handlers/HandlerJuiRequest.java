@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.jui.JuiApp;
 import com.jui.JuiHtmlRenderer;
 import com.jui.JuiListener;
+import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
 import com.jui.model.JuiMessage;
 import com.sun.net.httpserver.HttpExchange;
@@ -48,6 +49,13 @@ public class HandlerJuiRequest extends HandlerBase {
 				 
 				log.fine("Start to render JUI Page");
 				response = renderer.render().toJsonString();
+				 
+			 } else if ("update".compareTo(msg.getAction()) == 0 ) {
+				 
+				log.fine("Update");
+				
+				response = JuiContent.builder().main(renderer.renderWebContainer(msg.getId())).build().toJsonString();
+				
 				 
 			 } else {
 

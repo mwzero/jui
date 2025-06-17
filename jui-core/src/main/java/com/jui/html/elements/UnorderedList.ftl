@@ -4,10 +4,13 @@
       {{?this.link}}
         <a class="nav-link" href="#" data-url="{{this.link}}">
       {{/this.link}}
-      {{^link}}
+      {{?this.content}}
         <a class="nav-link" href="#" data-content="{{this.content}}">
-      {{/link}}
-          <i class="bi bi-{{icon}}-fill"></i> <span>{{this.label}}</span>
+      {{/this.content}}
+      {{?this.containerId}}
+        <a class="nav-link" href="#" data-jui="{{this.containerId}}">
+      {{/this.containerId}}
+          <i class="bi bi-{{this.icon}}-fill"></i> <span>{{this.label}}</span>
         </a>
     </li>
   {{/items}}
