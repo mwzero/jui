@@ -8,8 +8,6 @@ public class LayoutSideBarSimple {
 
 	public static void main(String[] args)  {
 
-		jui.page().layout("sidebar");
-		
 		jui.sidebar().markdown("""
  				# App
  				
@@ -29,7 +27,8 @@ public class LayoutSideBarSimple {
         
         jui.button("Cliccami", "primary", "alert('Button clicked!')");
         
-        jui.server().start();
+        jui.server()
+        	.layout("sidebar").start();
 
 	}
 }

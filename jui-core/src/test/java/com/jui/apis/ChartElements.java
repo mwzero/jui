@@ -19,6 +19,7 @@ public class ChartElements {
 			.c_zoom(slider);
     	
     	jui.server()
+    		.port(8080)
 			.start();
 	}
 

@@ -7,7 +7,6 @@ import java.security.KeyStore;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 
-import com.jui.JuiAppSettings;
 import com.jui.modules.JuiModule;
 import com.jui.net.handlers.HandlerBase;
 import com.jui.net.handlers.HandlerFile;
@@ -41,23 +40,21 @@ public class JuiServer {
 	
 	@Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-	JuiAppSettings page;
-	
 	String docRoot;
-	boolean classLoading;
-	String host;
 	
+	//
+	boolean classLoading;
+
 	boolean enableWebSocket = false;
 	boolean enableHttps = false;
-	
+	String layout;
 	int port= 8080;
+	String host;
 	int wssPort;
 	
 	JuiModule enableAuthentication;
 	
-	public JuiServer(JuiAppSettings page) {
-		this.page = page;
-	}
+	public JuiServer() {}
 
 	public void start() {
 		
@@ -65,8 +62,8 @@ public class JuiServer {
 		Boolean classLoading = true;
 		String host = "0.0.0.0";
 		
-		if ( page.layout() != null)
-			rootDoc = "html-" + page.layout() + "/";
+		if ( layout() != null)
+			rootDoc = "html-" + layout() + "/";
 		
 		this.start(rootDoc, classLoading, host, port);
 	}

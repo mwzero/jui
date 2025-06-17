@@ -23,16 +23,13 @@ public class JuiHtmlRenderer {
 	
 	public JuiContent render() {
 			
-		JuiContent content = new JuiContent();
-		content.setMain( renderWebContainer(JuiApp.jui));
-		
-		if ( JuiApp.jui.sidebar.webContext().getLinkedMapContext() != null) {
+		JuiContent content =JuiContent.builder()
+				.main(renderWebContainer(JuiApp.jui))
+				.sidebar( 
+						JuiApp.jui.sidebar.webContext().getLinkedMapContext() != null ? 
+								renderWebContainer(JuiApp.jui.sidebar) : "")
+				.build();
 			
-			content.setSidebar(renderWebContainer(JuiApp.jui.sidebar));
-			
-		} else
-			content.setSidebar("");
-		
 		return content;
 	}
 
