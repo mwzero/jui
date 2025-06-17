@@ -51,13 +51,20 @@ public class HandlerJuiRequest extends HandlerBase {
 				 
 			 } else {
 
+				 //TODO: why we are still using Jui Respone attribute?
 				 JuiListener.listener.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
-				 
+				 response = JuiContent.builder()
+						 .main("OK")
+						 .sidebar("OK")
+						 .build()
+						 .toJsonString();
+				 /*
 				 if (JuiApp.jui.juiResponse() == null ) {
-						response = JuiContent.builder("OK","OK").toJsonString();
+					response = JuiContent.builder("OK","OK").toJsonString();
 				 } else {
-					 response = JuiContent.builder("KO",JuiApp.jui.juiResponse()).toJsonString(); 
+					response = JuiContent.builder("KO",JuiApp.jui.juiResponse()).toJsonString(); 
 				 }
+				 */
 					
 				 
 			 }
@@ -72,7 +79,7 @@ public class HandlerJuiRequest extends HandlerBase {
 					{
 						"error": "%s"
 					}
-					""".formatted(JuiApp.jui.juiResponse());
+					""".formatted(e.getLocalizedMessage());
 		}
 		
 

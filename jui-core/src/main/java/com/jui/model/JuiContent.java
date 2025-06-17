@@ -2,8 +2,7 @@ package com.jui.model;
 
 import com.google.gson.Gson;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
 
 /**
  * The content that the back-end sends to the front-end for insertion into the HTML page. 
@@ -11,30 +10,19 @@ import lombok.Setter;
  * that are rendered as part of the page.
  * 
  */
-@Getter
-@Setter
+@Builder
 public class JuiContent {
 	
 	 String sidebar;
      String main;
      
-     public JuiContent () {
-    	 
-     }
-     public JuiContent (String sidebar, String main) {
-    	 
-    	 this.main = main;
-    	 this.sidebar = sidebar;
-    	 
-     }
+     String error;
+     
      
      public String toJsonString() {
+    	 
 	     Gson gson = new Gson();
 	     return gson.toJson(this);
      }
      
-     public static JuiContent builder(String sidebar, String main) {
-    	 return new JuiContent(sidebar, main);
-     }
-
 }

@@ -1,14 +1,14 @@
-package com.jui.modules;
+package com.jui.modules.google;
+
 
 import static com.jui.JuiApp.jui;
 
-import com.jui.modules.google.GoogleAuthenticator;
+import com.jui.modules.OAuth2Authentication;
 
-public class ServerTest {
+public class GoogleServerTest {
 	
-	public static void main(String... args) {
+public static void main(String... args) {
 		
-		//jui.setTemplate("templates/bootstrap-simple");
 		jui.markdown("## Server Tests");
 		jui.divider().color("blue");
 		
@@ -24,6 +24,5 @@ public class ServerTest {
 						.build()))
 			.start();
 	}
-	
 
 }

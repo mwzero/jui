@@ -11,11 +11,27 @@ Jui comes with a built-in HTTP server to run and serve applications.
 
 Download the latest JUI Framework release from [JUI GitHub Releases](https://github.com/mwzero/jui/releases) or if you prefer add the following dependency to your POM file:
 
+Add jitpack as maven repository:
+
+```xml
+<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+        	<releases>
+        		<enabled>true</enabled>
+        	</releases>
+		</repository>
+	</repositories>
+```
+
+Add Jui dependency:
+
 ```xml
 <dependency>
   <groupId>com.jui</groupId>
   <artifactId>jui-core</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>v0.0.13</version>
 </dependency>
 ```
 
