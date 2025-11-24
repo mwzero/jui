@@ -1,0 +1,8 @@
+it/jui/framework/session/SessionManager.class
+it/jui/framework/server/UiServlet.class
+it/jui/cli/HotReloadService.class
+it/jui/framework/UIApp.class
+it/jui/framework/session/InMemorySessionManager.class
+it/jui/framework/server/UiServlet$1.class
+it/jui/framework/UIContext.class
+it/jui/cli/Main.class

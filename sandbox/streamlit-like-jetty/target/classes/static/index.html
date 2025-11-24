@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="h-full">
+<head>
+    <title>Java Streamlit (CLI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        .console-scroll::-webkit-scrollbar { width: 8px; }
+        .console-scroll::-webkit-scrollbar-track { background: #1f2937; }
+        .console-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 h-full transition-colors duration-200">
+    
+    <div class="fixed top-4 right-4 z-50">
+        <button id="menu-btn" onclick="toggleMenu()" class="p-2 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-700 dark:text-gray-200">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+
+        <div id="menu-dropdown" class="hidden absolute top-12 right-0 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden transform transition-all origin-top-right">
+            <div class="p-1">
+                <button onclick="toggleTheme()" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                    </svg>
+                    Toggle Dark/Light
+                </button>
+                <button onclick="deploySim()" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                    </svg>
+                    Deploy to Cloud
+                </button>
+                <button onclick="toggleConsole()" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                    Show Console
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-container" class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 shadow-xl rounded-xl mt-8 mb-32 transition-colors duration-200 min-h-[50vh]">
+        <div class="text-center text-gray-500 dark:text-gray-400 mt-10">
+            <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent text-indigo-600 rounded-full" role="status" aria-label="loading"></div>
+            <p class="mt-2">Connecting to server...</p>
+        </div>
+    </div>
+
+    <div id="console-panel" class="fixed bottom-0 left-0 w-full h-48 bg-gray-900 text-green-400 font-mono text-xs p-4 hidden border-t border-gray-700 shadow-2xl z-40 flex flex-col">
+        <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-1">
+            <span class="font-bold text-gray-300">System Console</span>
+            <button onclick="toggleConsole()" class="text-gray-400 hover:text-white">✕</button>
+        </div>
+        <div id="console-logs" class="flex-1 overflow-y-auto console-scroll space-y-1">
+            <div class="opacity-50">[SYSTEM] Console ready.</div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        Notification
+    </div>
+
+    <script>
+        const container = document.getElementById('app-container');
+        let sid = sessionStorage.getItem('sid');
+        if (!sid) {
+            sid = crypto.randomUUID();
+            sessionStorage.setItem('sid', sid);
+        }
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            toggleMenu(); 
+        }
+
+        function toggleMenu() {
+            document.getElementById('menu-dropdown').classList.toggle('hidden');
+        }
+        function toggleConsole() {
+            document.getElementById('console-panel').classList.toggle('hidden');
+            logToConsole("[UI] Console visibility toggled.");
+            toggleMenu(); 
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+        function deploySim() {
+            toggleMenu();
+            showToast("Deploying to cloud...");
+            logToConsole("[DEPLOY] Starting deployment sequence...");
+            setTimeout(() => {
+                logToConsole("[DEPLOY] Uploading assets...");
+                setTimeout(() => {
+                    logToConsole("[DEPLOY] Success! App available at https://cloud.myapp.com");
+                    showToast("🚀 Deployed successfully!");
+                }, 1500);
+            }, 1000);
+        }
+        function logToConsole(msg) {
+            const logs = document.getElementById('console-logs');
+            const entry = document.createElement('div');
+            entry.innerText = `> ${msg}`;
+            logs.appendChild(entry);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        async function sendUpdate(id, val) {
+            logToConsole(`[EVENT] Widget ${id} changed to: ${val}`);
+            try {
+                const r = await fetch('/ui?sessionId=' + sid, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id, value: val })
+                });
+                if (r.ok) {
+                    container.innerHTML = await r.text();
+                    logToConsole("[SERVER] UI Updated received.");
+                } else {
+                    logToConsole("[ERROR] Server responded with " + r.status);
+                }
+            } catch (e) { 
+                console.error(e); 
+                logToConsole("[NETWORK ERROR] " + e.message);
+            }
+        }
+        
+        async function load() {
+            initTheme();
+            logToConsole("[INIT] Connecting to Session " + sid);
+            try {
+                const r = await fetch('/ui?sessionId=' + sid);
+                if (r.ok) {
+                    container.innerHTML = await r.text();
+                    logToConsole("[INIT] App loaded successfully.");
+                } else {
+                    container.innerHTML = "<div class='text-center text-red-500'>Server error.</div>";
+                }
+            } catch (e) { 
+                container.innerHTML = "<div class='text-center text-red-500'>Server unreachable.</div>";
+            }
+        }
+
+        window.sendUpdate = sendUpdate;
+        window.onload = load;
+        
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('menu-dropdown');
+            const btn = document.getElementById('menu-btn');
+            if (!menu.contains(event.target) && !btn.contains(event.target) && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
