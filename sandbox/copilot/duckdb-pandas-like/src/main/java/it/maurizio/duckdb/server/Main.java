@@ -1,0 +1,2 @@
+package it.maurizio.duckdb.server;
+public class Main { public static void main(String[] args) { System.out.println("DuckDB server bootstrap"); } }

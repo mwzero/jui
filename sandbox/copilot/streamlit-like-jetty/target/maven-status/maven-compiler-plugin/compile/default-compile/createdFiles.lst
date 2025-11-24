@@ -1,0 +1,12 @@
+it\example\streamlitlike\app\MyApp.class
+it\example\streamlitlike\server\CookieUtil.class
+it\example\streamlitlike\server\UploadHandler.class
+it\example\streamlitlike\server\Main.class
+it\example\streamlitlike\ws\WsMain.class
+it\example\streamlitlike\ws\ProductSocket.class
+it\example\streamlitlike\server\EventHandler.class
+it\example\streamlitlike\server\SessionManager.class
+it\example\streamlitlike\server\UploadHandler$Part.class
+it\example\streamlitlike\ui\UIContext.class
+it\example\streamlitlike\server\InMemorySessionManager.class
+it\example\streamlitlike\server\MainPageHandler.class

@@ -1,0 +1,59 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Streamlit-like WS</title>
+  <style> body { font-family: sans-serif; } </style>
+</head>
+<body>
+  <div style="width:280px;border-right:1px solid #ccc;padding:10px;">
+    <h2>Add New Product (WebSocket)</h2>
+
+    <label>Product URL</label><br>
+    <input type="text" id="productUrl"><br>
+
+    <label><input type="checkbox" id="notifyEmail"> Notify me by email</label><br>
+
+    <label>Category</label><br>
+    <select id="category">
+      <option>Electronics</option>
+      <option>Books</option>
+      <option>Clothing</option>
+      <option>Home</option>
+    </select><br>
+
+    <button id="addButton">Add Product</button><br>
+    <hr>
+    <div id="messages"></div>
+  </div>
+
+  <script>
+    let ws = new WebSocket("ws://" + location.host + "/ws");
+    let sessionId = null;
+
+    ws.onmessage = (evt) => {
+      try {
+        const data = JSON.parse(evt.data);
+        if (data.type === 'session') {
+          sessionId = data.id;
+          return;
+        }
+      } catch (e) {
+        // non-JSON: assume partial HTML
+        document.getElementById('messages').innerHTML = evt.data;
+      }
+    };
+
+    function sendEvent(component, value) {
+      const payload = JSON.stringify({type:'event', component, value, sessionId});
+      ws.send(payload);
+    }
+
+    document.getElementById('productUrl').addEventListener('input', e => sendEvent('productUrl', e.target.value));
+    document.getElementById('notifyEmail').addEventListener('change', e => sendEvent('notifyEmail', e.target.checked ? 'true' : 'false'));
+    document.getElementById('category').addEventListener('change', e => sendEvent('category', e.target.value));
+    document.getElementById('addButton').addEventListener('click', () => sendEvent('addButton', ''));
+  </script>
+</body>
+</html>
