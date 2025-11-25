@@ -32,6 +32,27 @@ public class TestApp implements UIApp {
         ui.spinner("spinner");
         ui.progressBar("progress1", 10);
         ui.progressBarAnimated("progress2", 10);
-        
+
+        ui.subheader("Navigazione");
+        String activeTab = ui.tabs("Sezioni", List.of("Profilo", "Team", "Impostazioni"), "Profilo");
+        ui.info("Tab attiva: " + activeTab);
+
+        ui.subheader("Layout & metriche");
+        ui.card("Benvenuto, " + nome + "!", "Riepilogo rapido dei dati forniti: età " + age + ".");
+        ui.metricCard("Utenti attivi", "1.248", "+12% rispetto a ieri", true);
+        ui.metricCard("Errori giornalieri", "12", "-3% rispetto alla media", false);
+
+        ui.subheader("Dati");
+        ui.table(
+            "Ultime richieste",
+            List.of("ID", "Utente", "Stato"),
+            List.of(
+                List.of("#1024", "Anna", "Completata"),
+                List.of("#1025", "Luca", "In corso"),
+                List.of("#1026", "Sara", "In attesa")
+            )
+        );
+        ui.badge("Nuovo", "info");
+
     }
 }
