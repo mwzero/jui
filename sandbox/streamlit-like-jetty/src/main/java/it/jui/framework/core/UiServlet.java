@@ -1,13 +1,11 @@
-package it.jui.framework.server;
+package it.jui.framework.core;
 
 import it.jui.cli.HotReloadService;
-import it.jui.framework.*;
-import it.jui.framework.core.UIApp;
-import it.jui.framework.core.UIContext;
-import it.jui.framework.session.SessionManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.util.Map;
@@ -17,11 +15,14 @@ public class UiServlet extends HttpServlet {
 
     private final SessionManager sm;
     private final HotReloadService hotReloadService;
-    private final Gson gson = new Gson();
+    private final Gson gson;
 
     public UiServlet(SessionManager sm, HotReloadService hotReloadService) {
         this.sm = sm;
         this.hotReloadService = hotReloadService;
+        gson = new GsonBuilder()
+            .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+            .create();
     }
 
     @Override

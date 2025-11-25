@@ -11,10 +11,12 @@ public class TestApp implements UIApp {
         ui.text("Prova il menu in alto a sinistra per cambiare tema!");
 
         String nome = ui.textInput("Come ti chiami?", "Ospite");
-        int age = ui.slider("La tua età", 0, 100, 25);
-
+        long age = ui.slider("La tua età", 0, 100, 25);
         if (ui.button("Conferma Dati")) {
-             ui.info("Dati salvati: " + nome + ", anni: " + age);
+
+            ui.text("Dati confermati!");
+            ui.info("Dati salvati: " + nome + ", anni: " + age);
         }
+        
     }
 }

@@ -1,4 +1,4 @@
-package it.jui.framework.session;
+package it.jui.framework.core;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,8 +1,8 @@
 package it.jui.cli;
 
-import it.jui.framework.session.SessionManager;
-import it.jui.framework.server.UiServlet;
-import it.jui.framework.session.InMemorySessionManager;
+import it.jui.framework.core.InMemorySessionManager;
+import it.jui.framework.core.SessionManager;
+import it.jui.framework.core.UiServlet;
 
 //jetty
 import org.eclipse.jetty.server.Server;
