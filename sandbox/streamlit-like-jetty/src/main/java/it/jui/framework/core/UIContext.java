@@ -55,7 +55,7 @@ public class UIContext {
     @SuppressWarnings("unchecked")
     public <T> T getValue(String widgetId, T defaultValue) {
         Object value = sessionManager.getState(sessionId).get(widgetId);
-        if (value == null) { sessionManager.updateState(sessionId, widgetId, defaultValue); return defaultValue; }
+        if (value == null && defaultValue != null) { sessionManager.updateState(sessionId, widgetId, defaultValue); return defaultValue; }
         return (T) value;
     }
 
