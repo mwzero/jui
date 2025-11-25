@@ -2,6 +2,9 @@ package it.jui.framework.core;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.jui.framework.apis.DataElements;
+import it.jui.framework.apis.LayoutElements;
+import it.jui.framework.apis.NavigationElements;
 import it.jui.framework.apis.StatusElements;
 import it.jui.framework.apis.TextElements;
 import lombok.experimental.Delegate;
@@ -20,13 +23,25 @@ public class UIContext {
     @Delegate
     private final StatusElements statusApis;
 
+    @Delegate
+    private final LayoutElements layoutApis;
+
+    @Delegate
+    private final NavigationElements navigationApis;
+
+    @Delegate
+    private final DataElements dataApis;
+
     public UIContext(String sessionId, SessionManager sessionManager) {
 
         this.sessionId = sessionId;
         this.sessionManager = sessionManager;
-        
+
         textApis = new TextElements(this);
         statusApis = new StatusElements(this);
+        layoutApis = new LayoutElements(this);
+        navigationApis = new NavigationElements(this);
+        dataApis = new DataElements(this);
     }
 
     public String getHtml() { return htmlOutput.toString(); }
