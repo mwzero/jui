@@ -1,5 +1,7 @@
 package it.jui.framework.core;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.jui.framework.apis.DataElements;
@@ -12,6 +14,7 @@ import lombok.experimental.Delegate;
 public class UIContext {
 
     private final StringBuilder htmlOutput = new StringBuilder();
+    private final Map<String, String> htmlDependencies = new HashMap<>();
     
     private final String sessionId;
     private final SessionManager sessionManager;
@@ -65,6 +68,10 @@ public class UIContext {
     
     public void addHtml(String html) {
         htmlOutput.append(html).append("\n"); 
+    }
+
+    public void addHtmlDependency(String key, String html) {
+        htmlDependencies.putIfAbsent(key, html);
     }
 
     @SuppressWarnings("unchecked")

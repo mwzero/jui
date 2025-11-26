@@ -7,7 +7,6 @@ public class TestApp implements UIApp {
     public void run(UIContext ui) {
 
         ui.title("Hello JUI");
-
         ui.header("Elements");
         ui.subheader("Text Elements");
         ui.text("Prova il menu in alto a sinistra per cambiare tema!");

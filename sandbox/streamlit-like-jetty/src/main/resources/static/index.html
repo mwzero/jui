@@ -145,6 +145,7 @@
             } catch (e) { 
                 console.error(e); 
                 logToConsole("[NETWORK ERROR] " + e.message);
+                showToast("Network error:" + e.message);
             }
         }
         
