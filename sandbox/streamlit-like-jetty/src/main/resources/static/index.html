@@ -128,6 +128,42 @@
             logs.scrollTop = logs.scrollHeight;
         }
 
+        function injectDependencies(deps) {
+            if (!deps) return;
+
+            const head = document.head;
+            const existing = new Set(Array.from(head.children).map(el => el.outerHTML));
+
+            Object.values(deps).forEach(html => {
+                if (existing.has(html)) return;
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = html.trim();
+                const node = wrapper.firstElementChild;
+                if (node) {
+                    head.appendChild(node);
+                    existing.add(html);
+                }
+            });
+        }
+
+        function applyServerPayload(data, isInitial) {
+            if (isInitial && data.htmlDependencies) {
+                injectDependencies(data.htmlDependencies);
+            }
+
+            if (isInitial && data.fullPage && data.html && data.html.toLowerCase().includes('<html')) {
+                document.open();
+                document.write(data.html);
+                document.close();
+                return;
+            }
+
+            if (data.html) {
+                container.innerHTML = data.html;
+                logToConsole("[SERVER] UI Updated received.");
+            }
+        }
+
         async function sendUpdate(id, val) {
             logToConsole(`[EVENT] Widget ${id} changed to: ${val}`);
             try {
@@ -137,30 +173,31 @@
                     body: JSON.stringify({ id: id, value: val })
                 });
                 if (r.ok) {
-                    container.innerHTML = await r.text();
-                    logToConsole("[SERVER] UI Updated received.");
+                    const data = await r.json();
+                    applyServerPayload(data, false);
                 } else {
                     logToConsole("[ERROR] Server responded with " + r.status);
                 }
-            } catch (e) { 
-                console.error(e); 
+            } catch (e) {
+                console.error(e);
                 logToConsole("[NETWORK ERROR] " + e.message);
                 showToast("Network error:" + e.message);
             }
         }
-        
+
         async function load() {
             initTheme();
             logToConsole("[INIT] Connecting to Session " + sid);
             try {
                 const r = await fetch('/ui?sessionId=' + sid);
                 if (r.ok) {
-                    container.innerHTML = await r.text();
+                    const data = await r.json();
+                    applyServerPayload(data, true);
                     logToConsole("[INIT] App loaded successfully.");
                 } else {
                     container.innerHTML = "<div class='text-center text-red-500'>Server error.</div>";
                 }
-            } catch (e) { 
+            } catch (e) {
                 container.innerHTML = "<div class='text-center text-red-500'>Server unreachable.</div>";
             }
         }

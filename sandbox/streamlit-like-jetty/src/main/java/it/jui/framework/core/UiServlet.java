@@ -29,7 +29,7 @@ public class UiServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String sid = req.getParameter("sessionId");
         if (sid == null) sid = req.getSession(true).getId();
-        render(sid, resp);
+        render(sid, resp, true);
     }
 
     @Override
@@ -46,19 +46,22 @@ public class UiServlet extends HttpServlet {
             if (widgetId != null && value != null) {
                 sm.updateState(sid, widgetId, value);
             }
-            render(sid, resp);
+            render(sid, resp, false);
         } catch (Exception e) {
             resp.setStatus(500);
             resp.getWriter().write("Error: " + e.getMessage());
         }
     }
 
-    private void render(String sid, HttpServletResponse resp) throws IOException {
+    private void render(String sid, HttpServletResponse resp, boolean fullPage) throws IOException {
         UIApp app = hotReloadService.getApp();
         UIContext ui = new UIContext(sid, sm);
-        try { app.run(ui); } 
+        try { app.run(ui); }
         catch (Exception e) { ui.title("Runtime Error"); ui.info(e.getMessage()); }
-        resp.setContentType("text/html");
-        resp.getWriter().write(ui.getHtml());
+        UiResponse uiResponse = new UiResponse(ui.getHtml(), ui.getHtmlDependencies(), fullPage);
+        resp.setContentType("application/json");
+        resp.getWriter().write(gson.toJson(uiResponse));
     }
+
+    private record UiResponse(String html, Map<String, String> htmlDependencies, boolean fullPage) { }
 }
