@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import it.jui.framework.apis.DataElements;
 import it.jui.framework.apis.LayoutElements;
+import it.jui.framework.apis.MapElements;
 import it.jui.framework.apis.NavigationElements;
 import it.jui.framework.apis.StatusElements;
 import it.jui.framework.apis.TextElements;
@@ -35,6 +36,10 @@ public class UIContext {
     @Delegate
     private final DataElements dataApis;
 
+    @Delegate
+    private final MapElements mapApis;
+
+
     public UIContext(String sessionId, SessionManager sessionManager) {
 
         this.sessionId = sessionId;
@@ -45,6 +50,7 @@ public class UIContext {
         layoutApis = new LayoutElements(this);
         navigationApis = new NavigationElements(this);
         dataApis = new DataElements(this);
+        mapApis = new MapElements(this);
     }
 
     public String getHtml() { return htmlOutput.toString(); }
