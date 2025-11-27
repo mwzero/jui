@@ -74,6 +74,10 @@ public class UIContext {
         htmlDependencies.putIfAbsent(key, html);
     }
 
+    public Map<String, String> getHtmlDependencies() {
+        return new HashMap<>(htmlDependencies);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T getValue(String widgetId, T defaultValue) {
         Object value = sessionManager.getState(sessionId).get(widgetId);
