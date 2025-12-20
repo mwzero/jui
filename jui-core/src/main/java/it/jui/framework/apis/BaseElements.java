@@ -35,4 +35,6 @@ public class BaseElements {
         if (value == null) { state.put(widgetId, defaultValue); return defaultValue; }
         return (T) value;
     }
+
+    public void addHtml(String html) { htmlOutput.append(html).append("\n"); }
 }

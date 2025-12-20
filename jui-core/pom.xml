@@ -1,18 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<artifactId>jui-core</artifactId>
+
 	<parent>
 		<groupId>com.jui</groupId>
 		<artifactId>jui-all</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-
-	<artifactId>jui-core</artifactId>
-
-	<properties>
-        <jetty.version>11.0.20</jetty.version>
-        <gson.version>2.10.1</gson.version>
-    </properties>
 
 	<dependencies>
 
@@ -20,23 +15,19 @@
 		<dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
         </dependency>
 
         <dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-            <version>1.18.42</version>
 			<scope>provided</scope>
 		</dependency>
 	
@@ -44,32 +35,17 @@
 		<dependency>
 		    <groupId>org.bouncycastle</groupId>
 		    <artifactId>bcpkix-jdk18on</artifactId>
-		    <version>1.80</version>
 		</dependency>
 
-		<dependency>
-		    <groupId>com.google.code.gson</groupId>
-		    <artifactId>gson</artifactId>
-		</dependency>
-		
 		<dependency>
         	<groupId>org.apache.commons</groupId>
         	<artifactId>commons-csv</artifactId>
-        	<version>1.9.0</version>
     	</dependency>
 
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.42</version>
-			<scope>provided</scope>
-		</dependency>
-		
 		<!-- H2 Database JDBC Driver -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <!--version>2.2.224</version-->
             <scope>test</scope>
         </dependency>
         
@@ -128,7 +104,6 @@
         <dependency>
 			<groupId>org.duckdb</groupId>
 			<artifactId>duckdb_jdbc</artifactId>
-			<version>1.1.0</version>
 			<scope>test</scope>
 		</dependency>
 

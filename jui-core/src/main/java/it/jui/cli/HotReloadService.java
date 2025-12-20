@@ -16,8 +16,6 @@ public class HotReloadService {
     private long lastModified = 0;
 
     public HotReloadService(File sourceFile) {
-        // FIX: Forziamo il file ad essere assoluto. 
-        // Questo garantisce che getParentFile() non ritorni mai null.
         this.sourceFile = sourceFile.getAbsoluteFile();
     }
 

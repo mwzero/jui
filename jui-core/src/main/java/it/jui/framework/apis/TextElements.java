@@ -12,9 +12,6 @@ public class TextElements extends BaseElements {
         super(sessionId, sessionManager, htmlOutput, widgetCounter);
     }
 
-    public void addHtml(String html) { htmlOutput.append(html).append("\n"); }
-    public String getHtml() { return htmlOutput.toString(); }
-
     public void title(String t) { 
         addHtml("<h1 class='text-3xl font-bold mb-4 text-indigo-700 dark:text-indigo-400'>" + t + "</h1>"); 
     }

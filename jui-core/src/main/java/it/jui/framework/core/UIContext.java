@@ -16,8 +16,10 @@ public class UIContext {
     private final Map<String, Object> state;
     private final AtomicInteger widgetCounter = new AtomicInteger(0);
 
+    public String getHtml() { return htmlOutput.toString(); }
+
     @Delegate
-    private final TextElements textApis;
+    private final TextElements text;
     
     public UIContext(String sessionId, SessionManager sessionManager) {
 
@@ -25,7 +27,13 @@ public class UIContext {
         this.sessionManager = sessionManager;
         this.state = sessionManager.getState(sessionId);
 
-        textApis = new TextElements(sessionId, sessionManager, htmlOutput, widgetCounter);
+        text = new TextElements(sessionId, sessionManager, htmlOutput, widgetCounter);
+    }
+
+    void logSessionState() {
+        System.out.println("Session State: " + state);
+        System.out.println("Session Id: " + sessionId);
+        System.out.println("sessionManager: " + sessionManager);
     }
 
 }

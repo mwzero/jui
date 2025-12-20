@@ -1,7 +1,7 @@
 package it.jui.framework.server;
 
 import it.jui.cli.HotReloadService;
-import it.jui.framework.*;
+import it.jui.framework.core.AppProvider;
 import it.jui.framework.core.UIApp;
 import it.jui.framework.core.UIContext;
 import it.jui.framework.session.SessionManager;
@@ -15,13 +15,13 @@ import java.util.stream.Collectors;
 
 public class UiServlet extends HttpServlet {
 
-    private final SessionManager sm;
-    private final HotReloadService hotReloadService;
+    private final SessionManager sessionManager;
+    private final AppProvider appProvider;
     private final Gson gson = new Gson();
 
-    public UiServlet(SessionManager sm, HotReloadService hotReloadService) {
-        this.sm = sm;
-        this.hotReloadService = hotReloadService;
+    public UiServlet(SessionManager sessionManager, AppProvider appProvider) {
+        this.sessionManager = sessionManager;
+        this.appProvider = appProvider;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class UiServlet extends HttpServlet {
             Object value = data.get("value");
             
             if (widgetId != null && value != null) {
-                sm.updateState(sid, widgetId, value);
+                sessionManager.updateState(sid, widgetId, value);
             }
             render(sid, resp);
         } catch (Exception e) {
@@ -52,11 +52,20 @@ public class UiServlet extends HttpServlet {
         }
     }
 
-    private void render(String sid, HttpServletResponse resp) throws IOException {
-        UIApp app = hotReloadService.getApp();
-        UIContext ui = new UIContext(sid, sm);
+    private void render(String sessionId, HttpServletResponse resp) throws IOException {
+
+        // Ottiene l'istanza aggiornata di UIApp. Utile nel caso sia usato hot-reload da file
+        UIApp app = appProvider.getApp();
+
+        // Crea il contesto UI 
+        UIContext ui = new UIContext(sessionId, sessionManager);
+
+        // Esegue l'applicazione con gestione degli errori
         try { app.run(ui); } 
-        catch (Exception e) { ui.title("Runtime Error"); ui.info(e.getMessage()); }
+        catch (Exception e) { 
+            ui.title("Runtime Error"); 
+            ui.info(e.getMessage()); 
+        }
         resp.setContentType("text/html");
         resp.getWriter().write(ui.getHtml());
     }

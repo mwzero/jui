@@ -1,6 +1,8 @@
 package it.jui.cli;
 
 import it.jui.framework.session.SessionManager;
+import it.jui.framework.core.AppProvider;
+import it.jui.framework.core.HotReloadAppProvider;
 import it.jui.framework.server.UiServlet;
 import it.jui.framework.session.InMemorySessionManager;
 
@@ -33,7 +35,8 @@ public class JuiCLI {
         if ("init".equalsIgnoreCase(command)) {
             initProject(filename);
         } else if ("watch".equalsIgnoreCase(command) || "run".equalsIgnoreCase(command)) {
-            startServer(filename);
+            AppProvider appProvider = new HotReloadAppProvider(new File(filename));
+            start(appProvider);
         } else {
             printUsage();
         }
@@ -47,7 +50,7 @@ public class JuiCLI {
         System.out.println("  java -jar framework.jar watch <AppName.java>");
     }
 
-    private static void initProject(String filename) throws Exception {
+    public static void initProject(String filename) throws Exception {
         File file = new File(filename);
         if (file.exists()) {
             System.out.println("Errore: Il file " + filename + " esiste già.");
@@ -88,16 +91,13 @@ public class JuiCLI {
         }
     }
 
-    private static void startServer(String sourceFilePath) throws Exception {
-        File sourceFile = new File(sourceFilePath);
+    public static void start(AppProvider appProvider) throws Exception {
         
-        System.out.println("=== Avvio Server Watch Mode ===");
-        System.out.println("Sorgente: " + sourceFile.getName());
-
-        HotReloadService hotReloadService = new HotReloadService(sourceFile);
         SessionManager sessionManager = new InMemorySessionManager();
 
         Server server = new Server(8080);
+        
+        // Configura il contesto servlet
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
         
@@ -107,14 +107,13 @@ public class JuiCLI {
             if (!resourceBase.endsWith("/")) resourceBase += "/";
             context.setResourceBase(resourceBase);
         }
-        
         server.setHandler(context);
 
         ServletHolder staticHolder = new ServletHolder("default", DefaultServlet.class);
         staticHolder.setInitParameter("dirAllowed", "true");
         context.addServlet(staticHolder, "/");
 
-        ServletHolder uiServletHolder = new ServletHolder("uiServlet", new UiServlet(sessionManager, hotReloadService));
+        ServletHolder uiServletHolder = new ServletHolder(new UiServlet(sessionManager, appProvider));
         context.addServlet(uiServletHolder, "/ui");
 
         System.out.println("Server attivo: http://localhost:8080/ui");

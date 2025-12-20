@@ -2,11 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
-  
   <groupId>com.jui</groupId>
-  
   <artifactId>jui-all</artifactId>
-  
   <version>0.0.1-SNAPSHOT</version>
   
   <packaging>pom</packaging>
@@ -19,8 +16,8 @@
     
     <!-- maven -->
     <maven.build.timestamp.format>yyyy-MM-dd HH:mmss Z</maven.build.timestamp.format>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     
     <!-- sonar -->
@@ -30,25 +27,21 @@
     <sonar.language>java</sonar.language>
     <sonar.coverage.jacoco.xmlReportPaths>${basedir}/lm-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
+    <jui.version>0.0.1-SNAPSHOT</jui.version>
+    <jetty.version>11.0.20</jetty.version>
+    <gson.version>2.10.1</gson.version>
+    
+
   </properties>
   
   <modules>
     
     <module>jui-core</module>
-    ß
+    
     <!--
     <module>jui-toolkits</module>
     <module>jui-playground</module>
-    -->
-  
-    <!-- modules -->  
-    <module>jui-modules</module>
-
-    <!-- apps 
     <module>jui-apps/jui-apps-dashboard</module>
-    -->  
-    
-    <!-- sandbox 
     <module>jui-sandbox-wasm</module>
     -->
     
@@ -61,22 +54,120 @@
       <dependency>
         <groupId>com.jui</groupId>
         <artifactId>jui-core</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${jui.version}</version>
       </dependency>
       
       <dependency>
         <groupId>com.jui</groupId>
         <artifactId>jui-toolkits</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${jui.version}</version>
       </dependency>
-    
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>2.7.9</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
+        <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+        <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>${gson.version}</version>
+    </dependency>
+
+    <dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+      <version>1.18.42</version>
+		</dependency>
+	
+		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15to18 -->
+		<dependency>
+		    <groupId>org.bouncycastle</groupId>
+		    <artifactId>bcpkix-jdk18on</artifactId>
+		    <version>1.80</version>
+		</dependency>
+
+		<dependency>
+        	<groupId>org.apache.commons</groupId>
+        	<artifactId>commons-csv</artifactId>
+        	<version>1.9.0</version>
+    	</dependency>
+
+		<!-- H2 Database JDBC Driver -->
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>2.2.224</version>
+    </dependency>
+        
+        <!-- MySQL JDBC Driver 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+			<scope>test</scope>
+        </dependency>
+        -->
+        
+        <!-- MariaDB JDBC Driver 
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        -->
+
+        <!-- PostgreSQL JDBC Driver 
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.4</version>
+			<scope>test</scope>            
+        </dependency>
+        -->
+
+        <!-- Oracle JDBC Driver 
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>19.8.0.0</version>
+			<scope>test</scope>           
+        </dependency>
+        -->
+
+        <!-- Microsoft SQL Server JDBC Driver 
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>10.2.1.jre8</version>
+			<scope>test</scope>            
+        </dependency>
+        -->
+
+        <!-- SQLite JDBC Driver 
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.42.0.0</version>
+        </dependency>
+        -->
+
+    <dependency>
+      <groupId>org.duckdb</groupId>
+      <artifactId>duckdb_jdbc</artifactId>
+      <version>1.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+      <version>5.10.0</version>
+		</dependency>
       
     </dependencies>
     
@@ -85,19 +176,13 @@
   <repositories>
     
     <repository>
-      
       <id>github</id>
-      
       <url>https://maven.pkg.github.com/mwzero/jui</url>
-      
       <releases>
-        
         <enabled>true</enabled>
-      
       </releases>
       
       <snapshots>
-        
         <enabled>true</enabled>
       
       </snapshots>
