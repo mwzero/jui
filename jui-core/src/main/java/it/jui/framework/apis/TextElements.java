@@ -9,8 +9,28 @@ public class TextElements extends BaseElements {
         super(ctx);
     }
 
-    public void title(String t) { 
-        ctx.addHtml("<h1 class='text-3xl font-bold mb-4 text-indigo-700 dark:text-indigo-400'>" + t + "</h1>"); 
+    public void title(String text) {
+        title(text, null);
+    }
+
+    public void title(String text, String iconName) {
+        String safe = escapeHtml(text);
+        String icon = (iconName == null || iconName.isBlank())
+            ? ""
+            : """
+            <span class="material-symbols-outlined align-middle text-[32px]
+                        text-indigo-700 dark:text-indigo-400"
+                    aria-hidden="true">%s</span>
+            """.formatted(escapeHtml(iconName));
+
+        ctx.addHtml("""
+            <h1 class="mb-4 inline-flex items-center gap-2 text-3xl font-bold
+                    text-gray-900 dark:text-gray-100"
+                data-jui="title">
+            %s
+            <span>%s</span>
+            </h1>
+            """.formatted(icon, safe));
     }
     public void header(String t) { 
         ctx.addHtml("<h2 class='text-2xl font-semibold mb-3 mt-6 text-gray-800 dark:text-gray-200'>" + t + "</h2>"); 

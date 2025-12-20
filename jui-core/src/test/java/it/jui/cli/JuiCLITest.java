@@ -17,7 +17,7 @@ public class JuiCLITest {
     
     AppProvider appProvider = new StaticAppProvider(ui -> 
       {
-        ui.title("Ciao da JUI!");
+        ui.title("Ciao da JUI!", "dashboard");
         ui.text("Prova il menu in alto a sinistra per cambiare tema!");
 
         String nome = ui.textInput("Come ti chiami?", "Ospite");
