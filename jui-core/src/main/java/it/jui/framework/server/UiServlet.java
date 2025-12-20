@@ -1,14 +1,18 @@
 package it.jui.framework.server;
 
-import it.jui.cli.HotReloadService;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
+import com.google.gson.reflect.TypeToken;
+
 import it.jui.framework.core.AppProvider;
 import it.jui.framework.core.UIApp;
 import it.jui.framework.core.UIContext;
 import it.jui.framework.session.SessionManager;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 import java.io.*;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,18 +21,21 @@ public class UiServlet extends HttpServlet {
 
     private final SessionManager sessionManager;
     private final AppProvider appProvider;
-    private final Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     public UiServlet(SessionManager sessionManager, AppProvider appProvider) {
         this.sessionManager = sessionManager;
         this.appProvider = appProvider;
+        gson = new GsonBuilder()
+            .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+            .create();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String sid = req.getParameter("sessionId");
         if (sid == null) sid = req.getSession(true).getId();
-        render(sid, resp);
+        render(sid, resp, true);
     }
 
     @Override
@@ -45,14 +52,14 @@ public class UiServlet extends HttpServlet {
             if (widgetId != null && value != null) {
                 sessionManager.updateState(sid, widgetId, value);
             }
-            render(sid, resp);
+            render(sid, resp, false);
         } catch (Exception e) {
             resp.setStatus(500);
             resp.getWriter().write("Error: " + e.getMessage());
         }
     }
 
-    private void render(String sessionId, HttpServletResponse resp) throws IOException {
+    private void render(String sessionId, HttpServletResponse resp, boolean fullPage) throws IOException {
 
         // Ottiene l'istanza aggiornata di UIApp. Utile nel caso sia usato hot-reload da file
         UIApp app = appProvider.getApp();
@@ -66,7 +73,11 @@ public class UiServlet extends HttpServlet {
             ui.title("Runtime Error"); 
             ui.info(e.getMessage()); 
         }
-        resp.setContentType("text/html");
-        resp.getWriter().write(ui.getHtml());
+        UiResponse uiResponse = new UiResponse(ui.getHtml(), ui.getHtmlDependencies(), fullPage);
+        resp.setContentType("application/json");
+        resp.getWriter().write(gson.toJson(uiResponse));
     }
+
+    private record UiResponse(String html, Map<String, String> htmlDependencies, boolean fullPage) { }
+
 }
