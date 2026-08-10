@@ -1,10 +1,9 @@
 package it.jui.cli;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 
 import org.junit.jupiter.api.Test;
+import org.eclipse.jetty.server.Server;
 
 import it.jui.framework.core.AppProvider;
 import it.jui.framework.core.HotReloadAppProvider;
@@ -46,21 +45,13 @@ public class JuiCLITest {
   }
 
   private void start(AppProvider appProvider) throws Exception {
-    
-    Thread t = new Thread(() -> {
-      try {
-        JuiCLI.start(appProvider); // qui blocca su join()
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }, "jetty");
-    t.setDaemon(true);
-    t.start();
-
-    System.out.println("Apri http://localhost:8080/");
-    System.out.println("Premi INVIO qui per terminare il test...");
-
-    new BufferedReader(new InputStreamReader(System.in)).readLine();
+    Server server = JuiCLI.startServer(appProvider, 0);
+    try {
+      server.start();
+    } finally {
+      server.stop();
+      server.join();
+    }
   }
 
 

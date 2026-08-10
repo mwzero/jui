@@ -93,19 +93,29 @@ public class JuiCLI {
     }
 
     public static void start(AppProvider appProvider) throws Exception {
-        
+        Server server = startServer(appProvider);
+        server.start();
+        server.join();
+    }
+
+    public static Server startServer(AppProvider appProvider) {
+        return startServer(appProvider, 8080);
+    }
+
+    public static Server startServer(AppProvider appProvider, int port) {
         SessionManager sessionManager = new InMemorySessionManager();
 
-        Server server = new Server(8080);
-        
-        // Configura il contesto servlet
+        Server server = new Server(port);
+
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
-        
+
         URL staticResources = JuiCLI.class.getResource("/static");
         if (staticResources != null) {
             String resourceBase = staticResources.toExternalForm();
-            if (!resourceBase.endsWith("/")) resourceBase += "/";
+            if (!resourceBase.endsWith("/")) {
+                resourceBase += "/";
+            }
             context.setResourceBase(resourceBase);
         }
         server.setHandler(context);
@@ -117,8 +127,7 @@ public class JuiCLI {
         ServletHolder uiServletHolder = new ServletHolder(new UiServlet(sessionManager, appProvider));
         context.addServlet(uiServletHolder, "/ui");
 
-        System.out.println("Server attivo: http://localhost:8080/ui");
-        server.start();
-        server.join();
+        System.out.println("Server attivo: http://localhost:" + port + "/ui");
+        return server;
     }
 }

@@ -1,6 +1,8 @@
 package com.jui.template;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -147,13 +149,28 @@ public class TemplateEngine {
 
     private Object getFieldValue(Object obj, String fieldName) {
         try {
-            return obj.getClass().getField(fieldName).get(obj);
+            Field field = obj.getClass().getField(fieldName);
+            return field.get(obj);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             try {
                 String methodName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
-                return obj.getClass().getMethod(methodName).invoke(obj);
+                Method method = obj.getClass().getMethod(methodName);
+                return method.invoke(obj);
             } catch (Exception ex) {
-                return null;
+                try {
+                    Field field = obj.getClass().getDeclaredField(fieldName);
+                    field.setAccessible(true);
+                    return field.get(obj);
+                } catch (Exception ignored) {
+                    try {
+                        String methodName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+                        Method method = obj.getClass().getDeclaredMethod(methodName);
+                        method.setAccessible(true);
+                        return method.invoke(obj);
+                    } catch (Exception ignoredAgain) {
+                        return null;
+                    }
+                }
             }
         }
     }
