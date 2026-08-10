@@ -16,8 +16,8 @@
     
     <!-- maven -->
     <maven.build.timestamp.format>yyyy-MM-dd HH:mmss Z</maven.build.timestamp.format>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
+     <maven.compiler.source>25</maven.compiler.source>
+     <maven.compiler.target>25</maven.compiler.target>
     <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     
     <!-- sonar -->
@@ -223,7 +223,7 @@
           
           <artifactId>maven-surefire-plugin</artifactId>
           
-          <version>2.22.2</version>
+          <version>3.5.4</version>
         
         </plugin>
         
@@ -233,13 +233,22 @@
           
           <artifactId>maven-compiler-plugin</artifactId>
           
-          <version>3.8.1</version>
+          <version>3.14.1</version>
           
           <configuration>
             
+            <proc>full</proc>
             <source>${maven.compiler.source}</source>
             
             <target>${maven.compiler.target}</target>
+
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.42</version>
+              </path>
+            </annotationProcessorPaths>
           
           </configuration>
         
@@ -314,6 +323,8 @@
       <plugin>
         
         <artifactId>maven-surefire-plugin</artifactId>
+
+        <version>3.5.4</version>
         
         <configuration>
           
@@ -326,20 +337,6 @@
           -->
         
         </configuration>
-        
-        <dependencies>
-          
-          <dependency>
-            
-            <groupId>org.ow2.asm</groupId>
-            
-            <artifactId>asm</artifactId>
-            
-            <version>6.2</version>
-          
-          </dependency>
-        
-        </dependencies>
       
       </plugin>
       
