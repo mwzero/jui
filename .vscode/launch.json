@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "JuiCLITest",
+            "request": "launch",
+            "mainClass": "it.jui.cli.JuiCLITest",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
+            "name": "MapTestCLI",
+            "request": "launch",
+            "mainClass": "it.jui.cli.MapTestCLI",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
+            "name": "ChartElements",
+            "request": "launch",
+            "mainClass": "com.jui.apis.ChartElements",
+            "projectName": "jui-core"
+        },
+        {
+            "type": "java",
             "name": "JuiDataFrameRecipe",
             "request": "launch",
             "mainClass": "com.jui.st.JuiDataFrameRecipe",

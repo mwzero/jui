@@ -7,10 +7,8 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import com.jui.JuiApp;
 import com.jui.JuiHtmlRenderer;
 import com.jui.JuiListener;
-import com.jui.html.WebElement;
 import com.jui.model.JuiContent;
 import com.jui.model.JuiMessage;
 import com.sun.net.httpserver.HttpExchange;
@@ -59,7 +57,6 @@ public class HandlerJuiRequest extends HandlerBase {
 				 
 			 } else {
 
-				 //TODO: why we are still using Jui Respone attribute?
 				 JuiListener.listener.executeServerAction(msg.getId(), msg.getAction(), msg.getPayload());
 				 response = JuiContent.builder()
 						 .main("OK")
