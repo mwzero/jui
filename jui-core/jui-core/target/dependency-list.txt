@@ -1,0 +1,12 @@
+
+The following files have been resolved:
+   org.eclipse.jetty:jetty-server:jar:11.0.20:compile[36m -- module org.eclipse.jetty.server[m
+   org.eclipse.jetty:jetty-servlet:jar:11.0.20:compile[36m -- module org.eclipse.jetty.servlet[m
+   com.google.code.gson:gson:jar:2.10.1:compile[36m -- module com.google.gson[m
+   org.projectlombok:lombok:jar:1.18.42:provided[36m -- module lombok[m
+   org.bouncycastle:bcpkix-jdk18on:jar:1.80:compile[36m -- module org.bouncycastle.pkix[m
+   org.apache.commons:commons-csv:jar:1.9.0:compile[36m -- module commons.csv[0;1;33m (auto)[m
+   com.h2database:h2:jar:2.2.224:test[36m -- module com.h2database[0;1m [auto][m
+   org.duckdb:duckdb_jdbc:jar:1.1.0:test[36m -- module duckdb.jdbc[0;1;33m (auto)[m
+   org.junit.jupiter:junit-jupiter-engine:jar:5.10.0:test[36m -- module org.junit.jupiter.engine[m
+
