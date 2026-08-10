@@ -11,6 +11,25 @@ import it.jui.framework.core.StaticAppProvider;
 
 public class JuiCLITest {
 
+  public static void main(String[] args) throws Exception {
+    
+    AppProvider appProvider = new StaticAppProvider(ui -> 
+      {
+        ui.title("Ciao da JUI!", "dashboard");
+        ui.text("Prova il menu in alto a sinistra per cambiare tema!");
+
+        String nome = ui.textInput("Come ti chiami?", "Ospite");
+        int age = ui.slider("La tua età", 0, 100, 25);
+
+        if (ui.button("Conferma Dati")) {
+              ui.info("Dati salvati: " + nome + ", anni: " + age);
+        }
+      }
+    );
+    JuiCLI.startServer(appProvider).start();
+  }
+
+
   @Test
   public void runStaticAppProvider() throws Exception {
     
