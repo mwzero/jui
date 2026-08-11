@@ -8,6 +8,7 @@ import org.eclipse.jetty.server.Server;
 import it.jui.framework.core.AppProvider;
 import it.jui.framework.core.HotReloadAppProvider;
 import it.jui.framework.core.StaticAppProvider;
+import it.jui.framework.core.UIContext;
 
 public class JuiCLITest {
 
@@ -15,20 +16,15 @@ public class JuiCLITest {
     
     AppProvider appProvider = new StaticAppProvider(ui -> 
       {
-        ui.title("Ciao da JUI!", "dashboard");
-        ui.text("Prova il menu in alto a sinistra per cambiare tema!");
+        ui.title("Hello JUI");
+        ui.header("Map Elements");
+        
+        ui.map("Neapolis", 40.8518, 14.2681, 10);
 
-        String nome = ui.textInput("Come ti chiami?", "Ospite");
-        int age = ui.slider("La tua età", 0, 100, 25);
-
-        if (ui.button("Conferma Dati")) {
-              ui.info("Dati salvati: " + nome + ", anni: " + age);
-        }
       }
     );
     JuiCLI.startServer(appProvider).start();
   }
-
 
   @Test
   public void runStaticAppProvider() throws Exception {
@@ -47,7 +43,7 @@ public class JuiCLITest {
       }
     );
 
-    this.start(appProvider);
+    JuiCLI.startServer(appProvider).start();
   }
 
   @Test
@@ -60,18 +56,7 @@ public class JuiCLITest {
     System.out.println("Sorgente: " + sourceFilePath);
 
     AppProvider appProvider = new HotReloadAppProvider(new File(sourceFilePath));
-    this.start(appProvider);
+    JuiCLI.startServer(appProvider).start();
   }
-
-  private void start(AppProvider appProvider) throws Exception {
-    Server server = JuiCLI.startServer(appProvider, 0);
-    try {
-      server.start();
-    } finally {
-      server.stop();
-      server.join();
-    }
-  }
-
 
 }
