@@ -1,8 +1,8 @@
-package it.jui.framework.session;
+package it.jui.framework.server;
 
 import java.util.Map;
 
-public interface SessionManager {
+public interface ISessionManager {
 
     Map<String, Object> getState(String sessionId);
 

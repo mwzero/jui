@@ -1,0 +1,79 @@
+package it.jui.framework.core;
+
+import javax.tools.*;
+
+import it.jui.framework.app.JuiApp;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+public class HotReloadService {
+
+    private final File sourceFile;
+    private JuiApp currentAppInstance;
+    private long lastModified = 0;
+
+    public HotReloadService(String srcFile) {
+        this.sourceFile = new File(srcFile).getAbsoluteFile();
+    }
+
+    public synchronized JuiApp getApp() {
+        if (!sourceFile.exists()) {
+             return ui -> ui.info("File sorgente non trovato: " + sourceFile.getAbsolutePath());
+        }
+
+        long currentModified = sourceFile.lastModified();
+        
+        if (currentModified > lastModified || currentAppInstance == null) {
+            try {
+                long start = System.currentTimeMillis();
+                currentAppInstance = compileAndLoad();
+                lastModified = currentModified;
+                System.out.println("Ricompilato " + sourceFile.getName() + " in " + (System.currentTimeMillis() - start) + "ms");
+            } catch (Exception e) {
+                final String errorMsg = e.getMessage();
+                return ui -> {
+                    ui.title("Errore di Compilazione");
+                    ui.info(errorMsg != null ? errorMsg.replace("\n", "<br>") : "Errore sconosciuto");
+                };
+            }
+        }
+        return currentAppInstance;
+    }
+
+    private JuiApp compileAndLoad() throws Exception {
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        if (compiler == null) {
+            throw new RuntimeException("Compilatore JDK non trovato. Assicurati di usare un JDK e non una JRE.");
+        }
+
+        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+        
+        // Ora parentDir è sicuro perché sourceFile è assoluto
+        File parentDir = sourceFile.getParentFile();
+        
+        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
+
+        String currentClasspath = System.getProperty("java.class.path");
+        List<String> options = new ArrayList<>();
+        options.add("-classpath");
+        options.add(currentClasspath + File.pathSeparator + parentDir.getAbsolutePath());
+
+        JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, null, options, null, compilationUnits);
+
+        boolean success = task.call();
+        fileManager.close();
+
+        if (!success) throw new RuntimeException("Errore di sintassi nel codice.");
+
+        try (URLClassLoader classLoader = new URLClassLoader(new URL[]{parentDir.toURI().toURL()})) {
+            String className = sourceFile.getName().replace(".java", "");
+            Class<?> loadedClass = classLoader.loadClass(className);
+            return (JuiApp) loadedClass.getDeclaredConstructor().newInstance();
+        }
+    }
+}

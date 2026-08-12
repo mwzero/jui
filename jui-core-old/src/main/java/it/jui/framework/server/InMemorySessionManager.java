@@ -1,9 +1,9 @@
-package it.jui.framework.session;
+package it.jui.framework.server;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class InMemorySessionManager implements SessionManager {
+public class InMemorySessionManager implements ISessionManager {
 
     private final ConcurrentHashMap<String, ConcurrentHashMap<String, Object>> sessions = new ConcurrentHashMap<>();
 

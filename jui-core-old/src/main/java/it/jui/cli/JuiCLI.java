@@ -1,7 +1,11 @@
 package it.jui.cli;
 
-import it.jui.framework.app.JuiProvider;
+import it.jui.framework.core.AppProvider;
+import it.jui.framework.core.HotReloadAppProvider;
+import it.jui.framework.server.InMemorySessionManager;
 import it.jui.framework.server.JuiServer;
+import it.jui.framework.server.SessionManager;
+import it.jui.framework.server.UiServlet;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +30,7 @@ public class JuiCLI {
         if ("init".equalsIgnoreCase(command)) {
             initProject(filename);
         } else if ("watch".equalsIgnoreCase(command) || "run".equalsIgnoreCase(command)) {
-            JuiProvider appProvider = new JuiProvider(filename);
+            AppProvider appProvider = new HotReloadAppProvider(new File(filename));
             JuiServer server = new JuiServer(8080, appProvider);
             server.start();
         } else {

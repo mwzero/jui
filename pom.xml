@@ -37,6 +37,7 @@
   <modules>
     
     <module>jui-core</module>
+    <module>jui-core-old</module>
     
     <!--
     <module>jui-toolkits</module>

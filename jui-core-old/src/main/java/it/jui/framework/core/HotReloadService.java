@@ -1,6 +1,5 @@
-package it.jui.cli;
+package it.jui.framework.core;
 
-import it.jui.framework.core.UIApp;
 import javax.tools.*;
 import java.io.File;
 import java.net.URL;

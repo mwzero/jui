@@ -8,9 +8,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.reflect.TypeToken;
 
-import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
-
+import it.jui.framework.core.AppProvider;
+import it.jui.framework.core.UIApp;
 import it.jui.framework.core.UIContext;
 
 import java.io.*;
@@ -20,10 +19,10 @@ import java.util.stream.Collectors;
 public class UiServlet extends HttpServlet {
 
     private final ISessionManager sessionManager;
-    private final JuiProvider appProvider;
+    private final AppProvider appProvider;
     private Gson gson = new Gson();
 
-    public UiServlet(ISessionManager sessionManager, JuiProvider appProvider) {
+    public UiServlet(ISessionManager sessionManager, AppProvider appProvider) {
         this.sessionManager = sessionManager;
         this.appProvider = appProvider;
         gson = new GsonBuilder()
@@ -69,7 +68,7 @@ public class UiServlet extends HttpServlet {
     private UiResponse render(String sessionId, boolean fullPage) throws IOException {
 
         // Ottiene l'istanza aggiornata di UIApp. Utile nel caso sia usato hot-reload da file
-        JuiApp app = appProvider.getApp();
+        UIApp app = appProvider.getApp();
 
         // Crea il contesto UI 
         UIContext ui = new UIContext(sessionId, sessionManager);
