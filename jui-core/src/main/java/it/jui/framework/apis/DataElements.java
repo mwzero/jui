@@ -15,7 +15,7 @@ public class DataElements extends BaseElements {
         for (String h : headers) {
             head.append(String.format(
                 "<th scope='col' class='px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300'>%s</th>",
-                h));
+                escapeHtml(h)));
         }
 
         StringBuilder body = new StringBuilder();
@@ -24,7 +24,7 @@ public class DataElements extends BaseElements {
             for (String cell : row) {
                 body.append(String.format(
                     "<td class='px-6 py-4 text-sm text-gray-700 dark:text-gray-200'>%s</td>",
-                    cell));
+                    escapeHtml(cell)));
             }
             body.append("</tr>");
         }
@@ -41,7 +41,7 @@ public class DataElements extends BaseElements {
             "</table>" +
             "</div>" +
             "</div>",
-            title, head.toString(), body.toString()));
+            escapeHtml(title), head.toString(), body.toString()));
     }
 
     public void badge(String label, String tone) {
@@ -56,6 +56,6 @@ public class DataElements extends BaseElements {
 
         ctx.addHtml(String.format(
             "<span class='inline-flex items-center px-3 py-1 text-xs font-medium rounded-full %s'>%s</span>",
-            toneClasses, label));
+            toneClasses, escapeHtml(label)));
     }
 }
