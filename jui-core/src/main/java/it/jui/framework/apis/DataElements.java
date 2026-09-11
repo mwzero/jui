@@ -3,6 +3,7 @@ package it.jui.framework.apis;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.RecordComponent;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -49,6 +50,11 @@ public class DataElements extends BaseElements {
         }
 
         Class<?> type = sample.getClass();
+        if (isScalarType(type)) {
+            renderScalarTable(title, items);
+            return;
+        }
+
         if (type.isRecord()) {
             renderRecordTable(title, items, type);
             return;
@@ -159,6 +165,20 @@ public class DataElements extends BaseElements {
             rows.add(List.of(stringValue(item)));
         }
         renderTable(title, List.of("Value"), rows);
+    }
+
+    /**
+     * Value-like JDK types must be classified before bean reflection. Otherwise
+     * methods such as String.isEmpty() or LocalDate.isLeapYear() look like bean
+     * getters and accidentally become table columns.
+     */
+    private boolean isScalarType(Class<?> type) {
+        return CharSequence.class.isAssignableFrom(type)
+                || Number.class.isAssignableFrom(type)
+                || type == Boolean.class
+                || type == Character.class
+                || type.isEnum()
+                || TemporalAccessor.class.isAssignableFrom(type);
     }
 
     private List<PojoColumn> pojoColumns(Class<?> type) {
