@@ -1,0 +1,12 @@
+FROM maven:3.9-eclipse-temurin-25 AS build
+
+WORKDIR /src
+COPY . .
+RUN mvn -B -pl examples/customer-app -am package -DskipTests
+
+FROM eclipse-temurin:25-jre
+
+WORKDIR /app
+COPY --from=build /src/examples/customer-app/target/customer-app-0.0.1-SNAPSHOT.jar /app/app.jar
+
+CMD ["java", "-jar", "/app/app.jar"]
