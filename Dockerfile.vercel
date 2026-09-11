@@ -4,7 +4,7 @@ WORKDIR /src
 COPY . .
 RUN mvn -B -pl examples/customer-app -am package -DskipTests
 
-FROM eclipse-temurin:25-jre
+FROM eclipse-temurin:25
 
 WORKDIR /app
 COPY --from=build /src/examples/customer-app/target/customer-app-0.0.1-SNAPSHOT.jar /app/app.jar
