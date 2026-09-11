@@ -14,7 +14,17 @@ import org.eclipse.jetty.server.Server;
 
 public class JuiServer {
 
+    private static final int DEFAULT_PORT = 8080;
+
     Server server;
+
+    /**
+     * Starts a JUI server on the deployment-provided PORT when available, falling
+     * back to 8080 for local development.
+     */
+    public JuiServer(JuiProvider appProvider) throws Exception {
+        this(resolvePort(), appProvider);
+    }
 
     public JuiServer(int port, JuiProvider appProvider) throws Exception {
 
@@ -42,13 +52,28 @@ public class JuiServer {
         ServletHolder uiServletHolder = new ServletHolder(new UiServlet(sessionManager, appProvider));
         context.addServlet(uiServletHolder, "/ui");
 
-        System.out.println("Server attivo: http://localhost:" + port + "/ui");
+        System.out.println("JUI server listening on port " + port);
     }
 
     public void start() throws Exception {
-        
         server.start();
         server.join();
     }
 
+    private static int resolvePort() {
+        String configured = System.getenv("PORT");
+        if (configured == null || configured.isBlank()) {
+            return DEFAULT_PORT;
+        }
+
+        try {
+            int port = Integer.parseInt(configured);
+            if (port < 1 || port > 65535) {
+                throw new IllegalArgumentException("PORT must be between 1 and 65535: " + configured);
+            }
+            return port;
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("PORT must be a valid integer: " + configured, e);
+        }
+    }
 }
