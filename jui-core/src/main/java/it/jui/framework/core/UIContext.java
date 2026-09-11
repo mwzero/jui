@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import it.jui.framework.apis.DataElements;
+import it.jui.framework.apis.FormElements;
 import it.jui.framework.apis.LayoutElements;
 import it.jui.framework.apis.MapElements;
 import it.jui.framework.apis.NavigationElements;
@@ -38,6 +39,9 @@ public class UIContext {
     private final DataElements dataApis;
 
     @Delegate
+    private final FormElements formApis;
+
+    @Delegate
     private final MapElements mapApis;
 
     public UIContext(String sessionId, ISessionManager sessionManager) {
@@ -49,6 +53,7 @@ public class UIContext {
         layoutApis = new LayoutElements(this);
         navigationApis = new NavigationElements(this);
         dataApis = new DataElements(this);
+        formApis = new FormElements(this);
         mapApis = new MapElements(this);
     }
 
