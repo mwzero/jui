@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.jui.framework.apis.CrudElements;
 import it.jui.framework.apis.DataElements;
 import it.jui.framework.apis.FormElements;
 import it.jui.framework.apis.LayoutElements;
@@ -42,6 +43,9 @@ public class UIContext {
     private final FormElements formApis;
 
     @Delegate
+    private final CrudElements crudApis;
+
+    @Delegate
     private final MapElements mapApis;
 
     public UIContext(String sessionId, ISessionManager sessionManager) {
@@ -54,6 +58,7 @@ public class UIContext {
         navigationApis = new NavigationElements(this);
         dataApis = new DataElements(this);
         formApis = new FormElements(this);
+        crudApis = new CrudElements(this);
         mapApis = new MapElements(this);
     }
 
@@ -108,6 +113,24 @@ public class UIContext {
             return defaultValue;
         }
         return (T) value;
+    }
+
+    /**
+     * Framework state primitive used by composite components such as forms and CRUD.
+     */
+    public void setValue(String widgetId, Object value) {
+        if (value == null) {
+            removeValue(widgetId);
+        } else {
+            sessionManager.updateState(sessionId, widgetId, value);
+        }
+    }
+
+    /**
+     * Removes one deterministic value from the current session state.
+     */
+    public void removeValue(String widgetId) {
+        sessionManager.getState(sessionId).remove(widgetId);
     }
 
     /**
