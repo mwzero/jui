@@ -1,0 +1,26 @@
+name: JUI CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Test core and customer app
+        run: mvn -B -pl jui-core,examples/customer-app -am test
+
+      - name: Package customer app
+        run: mvn -B -pl examples/customer-app -am package -DskipTests

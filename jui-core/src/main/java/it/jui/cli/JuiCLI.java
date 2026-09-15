@@ -27,7 +27,7 @@ public class JuiCLI {
             initProject(filename);
         } else if ("watch".equalsIgnoreCase(command) || "run".equalsIgnoreCase(command)) {
             JuiProvider appProvider = new JuiProvider(filename);
-            JuiServer server = new JuiServer(8080, appProvider);
+            JuiServer server = new JuiServer(appProvider);
             server.start();
         } else {
             printUsage();
@@ -35,11 +35,12 @@ public class JuiCLI {
     }
 
     private static void printUsage() {
-        System.out.println("Streamlit-like Java CLI");
-        System.out.println("-----------------------");
+        System.out.println("JUI CLI");
+        System.out.println("-------");
         System.out.println("Usage:");
-        System.out.println("  java -jar framework.jar init <AppName.java>");
-        System.out.println("  java -jar framework.jar watch <AppName.java>");
+        System.out.println("  java -jar jui-core.jar init <AppName.java>");
+        System.out.println("  java -jar jui-core.jar run <AppName.java>");
+        System.out.println("  java -jar jui-core.jar watch <AppName.java>");
     }
 
     public static void initProject(String filename) throws Exception {
@@ -51,7 +52,6 @@ public class JuiCLI {
         
         String className = filename.replace(".java", "");
         
-        // 1. Carica il template dalle risorse (dentro il JAR o classpath)
         String rawTemplate = loadTemplateResource("/AppTemplate.txt");
         
         if (rawTemplate == null) {
@@ -59,7 +59,6 @@ public class JuiCLI {
             return;
         }
 
-        // 2. Sostituisce il placeholder con il nome reale della classe
         String finalContent = rawTemplate.replace("{{CLASS_NAME}}", className);
 
         try (FileWriter writer = new FileWriter(file)) {
@@ -67,10 +66,9 @@ public class JuiCLI {
         }
         
         System.out.println("File creato: " + filename);
-        System.out.println("Avvia con: java -jar framework.jar watch " + filename);
+        System.out.println("Avvia con: java -jar jui-core.jar watch " + filename);
     }
 
-    // Metodo helper per leggere il file dalle risorse come Stringa
     private static String loadTemplateResource(String path) {
         try (InputStream is = JuiCLI.class.getResourceAsStream(path)) {
             if (is == null) return null;
@@ -82,6 +80,4 @@ public class JuiCLI {
             return null;
         }
     }
-
-    
 }

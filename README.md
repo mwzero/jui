@@ -1,96 +1,113 @@
-# Welcome to JUI
-JUI is a lightweight framework for creating interactive web applications directly in Java with few simple commands.
+# JUI
 
-Inspired by [streamlit](https://github.com/streamlit/streamlit) and [folium](https://github.com/python-visualization/folium).
+JUI is a lightweight Java framework for building interactive web applications with a very small application surface.
 
-JUI allows developers to create rich and dynamic user interfaces in just a few simple steps. With JUI, you can quickly turn your Java "scripts" into full-featured web applications without having to write HTML, CSS, or JavaScript.
+The current canonical API lives under `it.jui.framework` and is designed around a simple model:
 
-Jui comes with a built-in HTTP server to run and serve applications.
+- implement `JuiApp`;
+- receive a `UIContext`;
+- describe the application with compact Java calls such as `ui.title(...)`, `ui.textInput(...)`, `ui.button(...)`, `ui.table(...)` and `ui.map(...)`;
+- let JUI handle HTTP, browser rendering and session state.
 
-## Installation
+The long-term design goal is to make JUI especially suitable for code generation by small local LLMs: applications should require few source tokens, little framework context and deterministic APIs.
 
-Download the latest JUI Framework release from [JUI GitHub Releases](https://github.com/mwzero/jui/releases) or if you prefer add the following dependency to your POM file:
+## Canonical API
 
-Add jitpack as maven repository:
+Legacy `com.jui.*` APIs and `jui-core-old` are retained for historical/reference purposes only. New applications should use `jui-core` and the `it.jui.framework.*` packages.
 
-```xml
-<repositories>
-	<repository>
-	    <id>jitpack.io</id>
-	    <url>https://jitpack.io</url>
-	<releases>
-		<enabled>true</enabled>
-	</releases>
-	</repository>
-</repositories>
-```
-
-Add Jui dependency:
-
-```xml
-<dependency>
-  <groupId>com.jui</groupId>
-  <artifactId>jui-core</artifactId>
-  <version>v0.0.13</version>
-</dependency>
-```
-
-Note: Publishing JUI to Maven central repository is on the roadmap; 
-
-## Quickstart
-
-### a little example
-
-Write a new Java file "MapZoomerRecipe.java"
+## Minimal application
 
 ```java
-package com.jui.recipes;
+import it.jui.framework.app.JuiApp;
+import it.jui.framework.core.UIContext;
 
-import static com.jui.JuiApp.jui;
+public class HelloApp implements JuiApp {
 
-public class MapZoomer {
-	
-	public static void main(String... args) {
-		
-		jui.markdown("## Map Chart Example");
-		jui.divider().color("blue");
-    	
-    		var slider = jui.slider("Zoom Level", 0, 19, 13);
-    		var lat = jui.input("lat", "40.85631", "latitude");
-    		var lng = jui.input("lng", "14.24641" ,"longitude");
-    	
-    		jui.map()
-			.c_lat(lat)
-			.c_lng(lng)
-			.c_zoom(slider);
-    	
-    		jui.server()
-			.start();
-	}
-
+    @Override
+    public void run(UIContext ui) {
+        ui.title("Hello JUI");
+        ui.text("A Java-only interactive application.");
+    }
 }
 ```
 
-Run the following command:
+## Interactive application
 
-```sh
-java -cp jui-0.0.1.jar MapZoomerRecipe.java
+```java
+import it.jui.framework.app.JuiApp;
+import it.jui.framework.core.UIContext;
+
+public class CustomerApp implements JuiApp {
+
+    @Override
+    public void run(UIContext ui) {
+        ui.title("Customer");
+
+        String name = ui.textInput("Name", "Guest");
+        int age = ui.slider("Age", 0, 100, 25);
+
+        if (ui.button("Save")) {
+            ui.success("Saved: " + name + ", " + age);
+        }
+    }
+}
 ```
 
-try to navigate to http://localhost:8000/index.html
+Widget state is keyed deterministically from the widget label in the current API. Buttons use one-shot event semantics: a click evaluates to `true` for the render triggered by that click and is then consumed.
 
-<img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/little-example.gif" width="300">
+Normal text-oriented APIs escape HTML. Raw HTML must be intentional and explicit:
 
-## Roadmap
+```java
+ui.text("<b>escaped text</b>");
+ui.html("<b>trusted raw HTML</b>");
+```
 
-* **GeoJSON & D3 Integration:**: Develop components for efficient geographic data processing and advanced visualizations.
-* **Enhanced HTML Elements:**: Implement feature-rich and intuitive APIs to extend HTML element functionality.
-* **Unified UI Consistency:**: Ensure consistent design and alignment across HTML, CSS, and JavaScript layouts.
-* **Expanded Open Data Use Cases:**: Increase the number of practical applications that effectively utilize open data.
+## CLI
+
+Create a source file from the canonical template:
+
+```bash
+java -jar jui-core.jar init MyApp.java
+```
+
+Run/watch it:
+
+```bash
+java -jar jui-core.jar run MyApp.java
+```
+
+or:
+
+```bash
+java -jar jui-core.jar watch MyApp.java
+```
+
+JUI compiles the application source using the current JDK and serves it through the built-in HTTP server.
+
+## Modules
+
+- `jui-core` — current implementation and canonical API.
+- `jui-core-old` — legacy implementation, not intended for new development.
+- other modules and playground code may still contain legacy examples and should not be used as the API source of truth.
+
+## Direction: LLM-first application framework
+
+JUI is evolving toward a compact application framework where a small local model can generate useful applications without needing knowledge of HTML, CSS, JavaScript, Jetty or deployment internals.
+
+The design principle is:
+
+> Minimum tokens from user intent to running application.
+
+Future work should favor high-semantic-density application primitives, a compact validated application model/IR, machine-generated API metadata for LLM context and deterministic packaging/deployment.
+
+## Build
+
+```bash
+mvn test
+```
+
+The normal unit-test suite must terminate automatically; manual tests that start a blocking server are kept disabled from the Maven unit-test lifecycle.
 
 ## License
-JUI is fully free, open-source, and distributed under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
 
-## 📬 Contact
-
-If you have any questions, feedback, or would like to get in touch, please feel free to reach out to us via email at [maurizio.farina@gmail.com](mailto:mauirizio.farina@gmail.com)
+Apache License 2.0.
