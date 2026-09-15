@@ -1,15 +1,18 @@
 package it.jui.framework.apis;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import it.jui.framework.core.UIContext;
+import it.jui.framework.data.CrudRepository;
 
 /**
- * High-semantic-density CRUD composition for mutable in-memory lists.
+ * High-semantic-density CRUD composition.
  * <p>
- * This first version deliberately uses list position as row identity. Persistent
- * identity belongs to the future repository-backed CRUD API.
+ * Mutable lists are supported as a zero-configuration convenience. Persistent
+ * stores should implement {@link CrudRepository} so identity and storage remain
+ * outside the UI layer.
  */
 public class CrudElements extends BaseElements {
 
@@ -18,15 +21,13 @@ public class CrudElements extends BaseElements {
     }
 
     /**
-     * Renders create, list, edit and delete behavior for a mutable list.
+     * Convenience CRUD for a mutable in-memory list. List position is used as
+     * temporary identity and is intentionally limited to non-persistent scenarios.
      */
     public <T> void crud(Class<T> type, List<T> items) {
         crud(humanize(type.getSimpleName()), type, items);
     }
 
-    /**
-     * Same as {@link #crud(Class, List)} with an explicit visible title.
-     */
     public <T> void crud(String title, Class<T> type, List<T> items) {
         if (type == null) throw new IllegalArgumentException("crud type must not be null");
         if (items == null) throw new IllegalArgumentException("crud items must not be null");
@@ -45,8 +46,6 @@ public class CrudElements extends BaseElements {
             mode = "create";
         }
 
-        // Row actions are consumed before rendering so the clicked action affects
-        // the current rerun immediately.
         for (int i = 0; i < items.size(); i++) {
             if (consume(crudKey + ":edit:" + i)) {
                 String editFormKey = crudKey + ":edit:" + i;
@@ -115,6 +114,141 @@ public class CrudElements extends BaseElements {
         renderNew(crudKey, type);
         ctx.table(title, items);
         renderRowActions(crudKey, items.size());
+    }
+
+    /**
+     * Repository-backed CRUD with stable user-defined identity.
+     */
+    public <T, ID> void crud(Class<T> type, CrudRepository<T, ID> repository) {
+        crud(humanize(type.getSimpleName()), type, repository);
+    }
+
+    public <T, ID> void crud(String title, Class<T> type, CrudRepository<T, ID> repository) {
+        if (type == null) throw new IllegalArgumentException("crud type must not be null");
+        if (repository == null) throw new IllegalArgumentException("crud repository must not be null");
+
+        String crudKey = "crud:repo:" + type.getName();
+        String modeId = ctx.getNextWidgetId(crudKey + ":mode");
+        String selectedIdState = ctx.getNextWidgetId(crudKey + ":selected-id");
+        String selectedTokenState = ctx.getNextWidgetId(crudKey + ":selected-token");
+        String createFormKey = crudKey + ":create";
+
+        String mode = ctx.getValue(modeId, "list");
+        List<T> items = repository.findAll();
+
+        if (consume(crudKey + ":new")) {
+            ctx.clearForm(createFormKey, type);
+            ctx.setValue(modeId, "create");
+            ctx.removeValue(selectedIdState);
+            ctx.removeValue(selectedTokenState);
+            mode = "create";
+        }
+
+        for (T item : items) {
+            ID id = repository.id(item);
+            String token = identityToken(id);
+            if (consume(crudKey + ":edit:" + token)) {
+                String editFormKey = crudKey + ":edit:" + token;
+                ctx.clearForm(editFormKey, type);
+                ctx.setValue(modeId, "edit");
+                ctx.setValue(selectedIdState, id);
+                ctx.setValue(selectedTokenState, token);
+                mode = "edit";
+            }
+            if (consume(crudKey + ":delete:" + token)) {
+                repository.deleteById(id);
+                ctx.setValue(modeId, "list");
+                ctx.removeValue(selectedIdState);
+                ctx.removeValue(selectedTokenState);
+                mode = "list";
+                items = repository.findAll();
+                break;
+            }
+        }
+
+        if (consume(crudKey + ":cancel")) {
+            if ("create".equals(mode)) {
+                ctx.clearForm(createFormKey, type);
+            } else if ("edit".equals(mode)) {
+                String token = ctx.getValue(selectedTokenState, null);
+                if (token != null) ctx.clearForm(crudKey + ":edit:" + token, type);
+            }
+            ctx.setValue(modeId, "list");
+            ctx.removeValue(selectedIdState);
+            ctx.removeValue(selectedTokenState);
+            mode = "list";
+        }
+
+        ctx.header(title);
+
+        if ("create".equals(mode)) {
+            renderModeTitle("New " + humanize(type.getSimpleName()));
+            Optional<T> created = ctx.form(createFormKey, type);
+            renderCancel(crudKey);
+            if (created.isPresent()) {
+                repository.create(created.get());
+                ctx.clearForm(createFormKey, type);
+                ctx.setValue(modeId, "list");
+                ctx.success(humanize(type.getSimpleName()) + " saved");
+            }
+            return;
+        }
+
+        if ("edit".equals(mode)) {
+            @SuppressWarnings("unchecked")
+            ID selectedId = (ID) ctx.getValue(selectedIdState, null);
+            String token = ctx.getValue(selectedTokenState, null);
+            Optional<T> current = selectedId == null ? Optional.empty() : repository.findById(selectedId);
+
+            if (selectedId == null || token == null || current.isEmpty()) {
+                ctx.setValue(modeId, "list");
+                ctx.removeValue(selectedIdState);
+                ctx.removeValue(selectedTokenState);
+            } else {
+                String editFormKey = crudKey + ":edit:" + token;
+                renderModeTitle("Edit " + humanize(type.getSimpleName()));
+                Optional<T> updated = ctx.form(editFormKey, current.get());
+                renderCancel(crudKey);
+                if (updated.isPresent()) {
+                    repository.update(selectedId, updated.get());
+                    ctx.clearForm(editFormKey, type);
+                    ctx.setValue(modeId, "list");
+                    ctx.removeValue(selectedIdState);
+                    ctx.removeValue(selectedTokenState);
+                    ctx.success(humanize(type.getSimpleName()) + " updated");
+                }
+                return;
+            }
+        }
+
+        renderNew(crudKey, type);
+        ctx.table(title, repository.findAll());
+        renderRepositoryActions(crudKey, repository, repository.findAll());
+    }
+
+    private <T, ID> void renderRepositoryActions(String crudKey, CrudRepository<T, ID> repository, List<T> items) {
+        if (items.isEmpty()) return;
+        StringBuilder html = new StringBuilder("<div class='mb-6 space-y-2' data-jui='crud-actions'>");
+        int row = 1;
+        for (T item : items) {
+            ID id = repository.id(item);
+            String token = identityToken(id);
+            String editId = ctx.getNextWidgetId(crudKey + ":edit:" + token);
+            String deleteId = ctx.getNextWidgetId(crudKey + ":delete:" + token);
+            html.append(String.format(
+                    "<div class='flex items-center gap-2 text-sm'><span class='text-gray-500 dark:text-gray-400'>Row %d</span>" +
+                    "<button type='button' onclick=\"sendUpdate('%s', true)\" class='px-3 py-1 border rounded-md dark:border-gray-600' data-jui='crud-edit'>Edit</button>" +
+                    "<button type='button' onclick=\"sendUpdate('%s', true)\" class='px-3 py-1 border border-red-300 text-red-600 rounded-md dark:border-red-700 dark:text-red-400' data-jui='crud-delete'>Delete</button></div>",
+                    row++, editId, deleteId));
+        }
+        html.append("</div>");
+        ctx.addHtml(html.toString());
+    }
+
+    private String identityToken(Object id) {
+        if (id == null) throw new IllegalArgumentException("CrudRepository returned a null id");
+        return Integer.toUnsignedString(Objects.hashCode(id), 36)
+                + "-" + Integer.toUnsignedString(String.valueOf(id).hashCode(), 36);
     }
 
     private boolean consume(String key) {
