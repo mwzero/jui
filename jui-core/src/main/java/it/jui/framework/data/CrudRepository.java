@@ -17,10 +17,15 @@ public interface CrudRepository<T, ID> {
     ID id(T value);
 
     /**
-     * Creates or updates a value and returns the persisted representation. This is
-     * useful for stores that assign values such as generated IDs on insert.
+     * Creates a value and returns the persisted representation. Database-backed
+     * repositories may assign generated IDs here.
      */
-    T save(T value);
+    T create(T value);
+
+    /**
+     * Updates the value identified by {@code id} and returns the persisted value.
+     */
+    T update(ID id, T value);
 
     void deleteById(ID id);
 
