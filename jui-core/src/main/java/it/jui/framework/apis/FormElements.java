@@ -7,7 +7,6 @@ import java.lang.reflect.RecordComponent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,37 +24,57 @@ public class FormElements extends BaseElements {
         super(ctx);
     }
 
-    /**
-     * Renders a create form. Records are the preferred model; bean-style POJOs
-     * with a no-arg constructor plus public getters/setters are also supported.
-     *
-     * @return a value only on the render caused by a successful Save click
-     */
     public <T> Optional<T> form(Class<T> type) {
         if (type == null) throw new IllegalArgumentException("form type must not be null");
-        return renderForm(type, null);
+        return renderForm("form:" + type.getName(), type, null);
     }
 
-    /**
-     * Renders an edit form initialized from an existing record or bean-style POJO.
-     * Records produce a new instance on Save. POJOs are updated through setters.
-     *
-     * @return the updated value only on the render caused by a successful Save click
-     */
     @SuppressWarnings("unchecked")
     public <T> Optional<T> form(T value) {
         if (value == null) throw new IllegalArgumentException("form value must not be null");
-        return renderForm((Class<T>) value.getClass(), value);
+        Class<T> type = (Class<T>) value.getClass();
+        return renderForm("form:" + type.getName(), type, value);
     }
 
-    private <T> Optional<T> renderForm(Class<T> type, T initialValue) {
-        String formKey = "form:" + type.getName();
+    /**
+     * Internal/high-level-component overload that isolates form state with a stable key.
+     */
+    public <T> Optional<T> form(String key, Class<T> type) {
+        if (type == null) throw new IllegalArgumentException("form type must not be null");
+        return renderForm(formKey(key, type), type, null);
+    }
+
+    /**
+     * Internal/high-level-component overload for editing with isolated form state.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Optional<T> form(String key, T value) {
+        if (value == null) throw new IllegalArgumentException("form value must not be null");
+        Class<T> type = (Class<T>) value.getClass();
+        return renderForm(formKey(key, type), type, value);
+    }
+
+    /**
+     * Clears all persisted field and submit state for a keyed form.
+     */
+    public void clearForm(String key, Class<?> type) {
+        String formKey = formKey(key, type);
+        for (FieldSpec field : fieldsFor(type, null)) {
+            ctx.removeValue(ctx.getNextWidgetId(formKey + ":" + field.name()));
+        }
+        ctx.removeValue(ctx.getNextWidgetId(formKey + ":submit"));
+    }
+
+    private String formKey(String key, Class<?> type) {
+        String stableKey = key == null || key.isBlank() ? type.getName() : key;
+        return "form:" + stableKey + ":" + type.getName();
+    }
+
+    private <T> Optional<T> renderForm(String formKey, Class<T> type, T initialValue) {
         List<FieldSpec> fields = fieldsFor(type, initialValue);
 
         ctx.addHtml("<div class='mb-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-4' data-jui='form'>");
-        for (FieldSpec field : fields) {
-            renderField(formKey, field);
-        }
+        for (FieldSpec field : fields) renderField(formKey, field);
 
         String submitId = ctx.getNextWidgetId(formKey + ":submit");
         boolean submitted = ctx.consumeBoolean(submitId);
@@ -98,27 +117,19 @@ public class FormElements extends BaseElements {
 
         Map<String, Method> getters = new LinkedHashMap<>();
         Map<String, Method> setters = new LinkedHashMap<>();
-
         for (Method method : type.getMethods()) {
             if (!Modifier.isPublic(method.getModifiers()) || Modifier.isStatic(method.getModifiers())) continue;
-
             String getterProperty = getterProperty(method);
             if (getterProperty != null) getters.put(getterProperty, method);
-
             String setterProperty = setterProperty(method);
             if (setterProperty != null) setters.put(setterProperty, method);
         }
 
-        List<String> names = getters.keySet().stream()
-                .filter(setters::containsKey)
-                .sorted()
-                .toList();
-
+        List<String> names = getters.keySet().stream().filter(setters::containsKey).sorted().toList();
         if (names.isEmpty()) {
             throw new IllegalArgumentException(
                     "Unsupported form type " + type.getName() + ": use a record or a bean with public getters/setters");
         }
-
         ensureNoArgConstructor(type);
 
         List<FieldSpec> result = new ArrayList<>();
@@ -130,7 +141,6 @@ public class FormElements extends BaseElements {
                 throw new IllegalArgumentException("Getter/setter type mismatch for form field '" + name + "'");
             }
             ensureSupported(fieldType, name);
-
             Object defaultValue = defaultValue(fieldType);
             if (initialValue != null) {
                 try {
@@ -160,17 +170,14 @@ public class FormElements extends BaseElements {
                     id, checked ? "checked" : "", id, id, escapeHtml(label)));
             return;
         }
-
         if (type == LocalDate.class) {
             ctx.addHtml(inputHtml(id, label, "date", stringValue(value), "this.value"));
             return;
         }
-
         if (Number.class.isAssignableFrom(type)) {
             ctx.addHtml(inputHtml(id, label, "number", stringValue(value), "this.value"));
             return;
         }
-
         if (type.isEnum()) {
             String current = stringValue(value);
             StringBuilder options = new StringBuilder();
@@ -186,7 +193,6 @@ public class FormElements extends BaseElements {
                     escapeHtml(label), id, options));
             return;
         }
-
         ctx.addHtml(inputHtml(id, label, "text", stringValue(value), "this.value"));
     }
 
@@ -198,33 +204,24 @@ public class FormElements extends BaseElements {
                 escapeHtml(label), inputType, escapeHtml(value), id, jsValue);
     }
 
-    private <T> T buildRecord(Class<T> type, List<FieldSpec> fields, String formKey)
-            throws ReflectiveOperationException {
+    private <T> T buildRecord(Class<T> type, List<FieldSpec> fields, String formKey) throws ReflectiveOperationException {
         RecordComponent[] components = type.getRecordComponents();
         Class<?>[] parameterTypes = Arrays.stream(components).map(RecordComponent::getType).toArray(Class<?>[]::new);
         Constructor<T> constructor = type.getDeclaredConstructor(parameterTypes);
         if (!constructor.canAccess(null)) constructor.setAccessible(true);
-
         Object[] values = new Object[fields.size()];
-        for (int i = 0; i < fields.size(); i++) {
-            FieldSpec field = fields.get(i);
-            values[i] = convertedState(formKey, field);
-        }
+        for (int i = 0; i < fields.size(); i++) values[i] = convertedState(formKey, fields.get(i));
         return constructor.newInstance(values);
     }
 
-    private <T> T buildPojo(Class<T> type, T initialValue, List<FieldSpec> fields, String formKey)
-            throws ReflectiveOperationException {
+    private <T> T buildPojo(Class<T> type, T initialValue, List<FieldSpec> fields, String formKey) throws ReflectiveOperationException {
         T target = initialValue;
         if (target == null) {
             Constructor<T> constructor = type.getDeclaredConstructor();
             if (!constructor.canAccess(null)) constructor.setAccessible(true);
             target = constructor.newInstance();
         }
-
-        for (FieldSpec field : fields) {
-            field.setter().invoke(target, convertedState(formKey, field));
-        }
+        for (FieldSpec field : fields) field.setter().invoke(target, convertedState(formKey, field));
         return target;
     }
 
@@ -256,8 +253,7 @@ public class FormElements extends BaseElements {
 
     private Object normalizeDefault(Class<?> fieldType, Object value) {
         if (value != null) {
-            if (wrap(fieldType).isEnum()) return String.valueOf(value);
-            if (wrap(fieldType) == LocalDate.class) return String.valueOf(value);
+            if (wrap(fieldType).isEnum() || wrap(fieldType) == LocalDate.class) return String.valueOf(value);
             return value;
         }
         return defaultValue(fieldType);
@@ -281,45 +277,29 @@ public class FormElements extends BaseElements {
 
     private void ensureSupported(Class<?> type, String fieldName) {
         Class<?> wrapped = wrap(type);
-        boolean supported = wrapped == String.class
-                || wrapped == Boolean.class
-                || Number.class.isAssignableFrom(wrapped)
-                || wrapped == LocalDate.class
-                || wrapped.isEnum();
-        if (!supported) {
-            throw new IllegalArgumentException(
-                    "Unsupported form field '" + fieldName + "' of type " + type.getName());
-        }
+        boolean supported = wrapped == String.class || wrapped == Boolean.class
+                || Number.class.isAssignableFrom(wrapped) || wrapped == LocalDate.class || wrapped.isEnum();
+        if (!supported) throw new IllegalArgumentException("Unsupported form field '" + fieldName + "' of type " + type.getName());
     }
 
     private <T> void ensureNoArgConstructor(Class<T> type) {
-        try {
-            type.getDeclaredConstructor();
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException(
-                    "POJO form type " + type.getName() + " requires a no-arg constructor", e);
+        try { type.getDeclaredConstructor(); }
+        catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("POJO form type " + type.getName() + " requires a no-arg constructor", e);
         }
     }
 
     private String getterProperty(Method method) {
-        if (method.getParameterCount() != 0 || method.getReturnType() == Void.TYPE || method.getDeclaringClass() == Object.class) {
-            return null;
-        }
+        if (method.getParameterCount() != 0 || method.getReturnType() == Void.TYPE || method.getDeclaringClass() == Object.class) return null;
         String name = method.getName();
         if (name.startsWith("get") && name.length() > 3) return decapitalize(name.substring(3));
-        if (name.startsWith("is") && name.length() > 2
-                && (method.getReturnType() == boolean.class || method.getReturnType() == Boolean.class)) {
-            return decapitalize(name.substring(2));
-        }
+        if (name.startsWith("is") && name.length() > 2 && (method.getReturnType() == boolean.class || method.getReturnType() == Boolean.class)) return decapitalize(name.substring(2));
         return null;
     }
 
     private String setterProperty(Method method) {
         String name = method.getName();
-        if (name.startsWith("set") && name.length() > 3 && method.getParameterCount() == 1
-                && method.getReturnType() == Void.TYPE) {
-            return decapitalize(name.substring(3));
-        }
+        if (name.startsWith("set") && name.length() > 3 && method.getParameterCount() == 1 && method.getReturnType() == Void.TYPE) return decapitalize(name.substring(3));
         return null;
     }
 
@@ -334,13 +314,8 @@ public class FormElements extends BaseElements {
         return Character.toUpperCase(spaced.charAt(0)) + spaced.substring(1);
     }
 
-    private boolean asBoolean(Object value) {
-        return value instanceof Boolean b ? b : Boolean.parseBoolean(String.valueOf(value));
-    }
-
-    private String stringValue(Object value) {
-        return value == null ? "" : String.valueOf(value);
-    }
+    private boolean asBoolean(Object value) { return value instanceof Boolean b ? b : Boolean.parseBoolean(String.valueOf(value)); }
+    private String stringValue(Object value) { return value == null ? "" : String.valueOf(value); }
 
     private String rootMessage(Throwable error) {
         Throwable current = error;
