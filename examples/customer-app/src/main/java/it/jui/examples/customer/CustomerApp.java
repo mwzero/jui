@@ -22,14 +22,8 @@ public class CustomerApp implements JuiApp {
     public void run(UIContext ui) {
         ui.title("Customer Manager");
         ui.text("A compact JUI app generated from Java types.");
-
-        ui.form(Customer.class).ifPresent(customer -> {
-            customers.add(customer);
-            ui.success("Customer saved");
-        });
-
         ui.metric("Customers", customers.size());
-        ui.table("Customers", customers);
+        ui.crud(Customer.class, customers);
     }
 
     public static void main(String[] args) throws Exception {
