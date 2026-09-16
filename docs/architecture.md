@@ -1,6 +1,6 @@
 # JUI Architecture
 
-JUI is a Java-first server-rendered UI framework. Application code implements `JuiApp` and is rerun to describe the current page whenever the browser initializes or sends a widget update.
+JUI is a Java-first server-rendered UI framework. Application code implements `JuiApp` and is rerun whenever the browser initializes or sends a widget update.
 
 ## Runtime overview
 
@@ -10,55 +10,66 @@ Browser
   │ GET static shell/resources
   │ GET/POST /ui
   ▼
-Jetty / JuiServer
+JDK HttpServer / JuiServer
   │
-  ├── static resources
-  └── UiServlet
+  ├── static browser runtime
+  ├── optional auth routes
+  └── UiHandler
         │
         ├── session state
         ├── JuiProvider -> JuiApp
         └── new UIContext per render
               │
-              ├── text / status / layout
-              ├── table / metric
-              ├── form / crud
-              └── map / navigation
+              ├── text / input / status
+              ├── layout / navigation / lists
+              ├── table / metric / form / CRUD
+              ├── media / chart / map
+              └── auth state
                     │
                     ▼
               generated HTML
 ```
 
-The browser is thin. JUI application semantics remain in Java.
+The browser is deliberately thin. Application semantics stay in Java.
 
 ## Server
 
-`JuiServer` embeds Jetty.
+`JuiServer` uses the JDK `com.sun.net.httpserver.HttpServer` from the `jdk.httpserver` module. JUI does not require Jetty, a Servlet container or a server framework dependency.
 
 - context path: `/`
-- static browser resources: served from the packaged `/static` resources
+- static browser shell: packaged under `/static`
 - UI endpoint: `/ui`
+- one virtual thread per HTTP exchange through `Executors.newVirtualThreadPerTaskExecutor()`
 - default local port: `8080`
-- deployment port: value of the `PORT` environment variable when present
+- deployment port: `PORT` environment variable when present
+- optional Google OAuth routes can be installed before `start()`
 
-A `JuiServer` is constructed with a `JuiProvider`, which supplies the `JuiApp` to execute for each render.
+```java
+JuiServer server = new JuiServer(new JuiProvider(app));
+server.start();
+```
+
+Optional Google authentication is installed explicitly:
+
+```java
+JuiServer server = new JuiServer(new JuiProvider(app))
+        .googleOAuth(GoogleOAuthConfig.fromEnv());
+server.start();
+```
+
+The HTTP layer is intentionally small. `HttpSupport` only provides query parsing and response/body helpers; it is not a replacement Servlet framework.
 
 ## Render cycle
 
-`UiServlet` implements the current request/rerender loop.
-
-### Initial render
-
-A `GET /ui` request resolves a session ID, creates a fresh `UIContext`, executes:
+A `GET /ui` creates a fresh `UIContext`, executes:
 
 ```java
 app.run(ui);
 ```
 
-and returns a JSON response containing generated HTML, HTML dependencies and a `fullPage` flag.
+and returns generated HTML plus browser dependencies.
 
-### Widget update
-
-Interactive browser widgets call the backend with `POST /ui` and a payload containing:
+Interactive widgets send `POST /ui` payloads such as:
 
 ```json
 {
@@ -67,36 +78,57 @@ Interactive browser widgets call the backend with `POST /ui` and a payload conta
 }
 ```
 
-The servlet stores the value in the current session, creates a new `UIContext`, reruns the application and returns the new rendered output.
+The value is stored in session state and the application is rerun. JUI applications are therefore deterministic render functions over application data plus UI/session state.
 
-This means JUI applications should be understood as deterministic render functions over application data plus session/widget state.
+## Browser runtime
+
+The browser shell does four small jobs:
+
+1. maintains a browser session id;
+2. sends widget values to `/ui`;
+3. replaces the rendered application fragment;
+4. loads declared browser dependencies and executes component scripts after every rerender.
+
+The same transport supports scalar values, lists and structured JSON values. It is used by ordinary inputs as well as multi-select values, uploaded-file metadata/content and interactive `MapState` updates.
+
+The default file uploader sends base64 content through the normal `/ui` transport and applies a 5 MB browser-side limit. The JDK HTTP handler also bounds request bodies. Large-file applications should provide a dedicated upload/storage path rather than storing binary data in JUI session state.
 
 ## Session state
 
-`ISessionManager` abstracts widget/session storage. The current server uses `InMemorySessionManager`.
+`ISessionManager` abstracts widget/session storage. The default server uses `InMemorySessionManager`.
 
-Interactive widgets should use deterministic IDs. `UIContext.getNextWidgetId(String key)` derives an ID from a stable application-level key so the same widget maps to the same session value across rerenders.
+Interactive widgets use stable keys through `UIContext.getNextWidgetId(String)`. Actions such as buttons use one-shot state through `consumeBoolean(...)`.
 
-Normal values are retrieved through `getValue(...)`.
+`UIContext` also exposes framework primitives used by composite components:
 
-Action events such as buttons use one-shot semantics through `consumeBoolean(...)`: the value is removed from session state when consumed, so an action is true for exactly the render triggered by that click.
+```java
+getRawValue(...)
+setValue(...)
+removeValue(...)
+capture(Runnable)
+```
 
-Composite components such as forms and CRUD use the same session state primitives rather than maintaining a separate state system.
+`capture(...)` lets immediate-mode layout APIs render nested JUI content and then wrap the resulting fragment without introducing a retained component tree.
 
 ## UI API composition
 
-`UIContext` delegates to focused API classes including:
+`UIContext` delegates to focused API classes:
 
 - `TextElements`
+- `InputElements`
 - `StatusElements`
 - `LayoutElements`
 - `NavigationElements`
+- `ListElements`
 - `DataElements`
 - `FormElements`
 - `CrudElements`
 - `MapElements`
+- `MediaElements`
+- `ChartElements`
+- `AuthElements`
 
-The public experience remains a single compact `UIContext`:
+The application still sees one compact API:
 
 ```java
 ui.title("Customers");
@@ -104,90 +136,97 @@ ui.metric("Customers", customers.size());
 ui.crud(Customer.class, customers);
 ```
 
-Higher-level APIs are intentionally composed from lower-level primitives rather than introducing a second application model.
+Higher-level APIs compose the same immediate-mode primitives rather than creating a second UI model.
 
-## Type-driven tables
+## Composite layout
 
-`table(List<T>)` infers a presentation deterministically:
+Layout components render nested lambdas on the same `UIContext`:
 
-- Java records -> record component declaration order
-- bean-style POJOs -> public getter properties in stable order
-- maps -> stable sorted keys
-- scalar values -> one `Value` column
+```java
+ui.columns(
+    () -> ui.metric("Users", 42),
+    () -> ui.metric("Revenue", 120000)
+);
 
-Ordinary content is HTML-escaped.
+ui.expander("Advanced", () -> ui.text("Options"));
+ui.dialog("Details", () -> ui.table(customers));
+```
 
-## Type-driven forms
+Sidebar navigation uses the same mechanism and passes the current selection to a content renderer.
 
-`form(Class<T>)` creates values and `form(T)` edits existing values.
+## Type-driven tables and forms
 
-Records are the preferred model. JUI uses record components and the canonical constructor. Bean-style POJOs are supported when suitable public getter/setter pairs and a no-argument constructor are available.
+`table(List<T>)` infers presentation from records, bean-style POJOs, maps and scalar values.
 
-Current field inference includes strings, numeric values, booleans, `LocalDate` and enums.
+`form(Class<T>)` creates objects and `form(T)` edits existing objects. Records are the preferred model because component order and construction are deterministic. Current form inference includes strings, numbers, booleans, `LocalDate` and enums.
 
-Keyed internal form overloads allow composite components such as CRUD to isolate form state.
+## CRUD and persistence
 
-## CRUD
-
-The compact in-memory API is:
+The compact prototype API is:
 
 ```java
 ui.crud(Customer.class, customers);
 ```
 
-It composes create, list, edit, delete and cancel behavior from the existing form, table and state primitives.
-
-For durable or externally managed data, JUI uses:
+Persistent or externally managed data uses:
 
 ```java
 CrudRepository<T, ID>
 ```
 
-The repository owns identity and persistence:
+with create/update/delete operations and stable identity. JUI does not need to know whether the implementation is backed by H2, PostgreSQL, REST or another store.
 
-```java
-List<T> findAll();
-ID id(T value);
-T create(T value);
-T update(ID id, T value);
-void deleteById(ID id);
-Optional<T> findById(ID id);
+`InMemoryCrudRepository<T, ID>` provides the same contract for memory-backed applications.
+
+## Charts, maps and media
+
+Charts declare ApexCharts as a browser dependency and serialize deterministic chart options from Java values. Record/POJO based chart methods can infer the x-axis and series from property names.
+
+Leaflet maps expose their browser center and zoom as `MapState`. `moveend`/zoom events use the normal JUI update/rerun transport instead of the legacy frontend/backend relation graph.
+
+Image, audio and video APIs render native browser media elements.
+
+## Authentication
+
+Authentication is session-scoped but separated from UI rendering.
+
+The built-in Google OAuth support:
+
+- registers JDK `HttpServer` contexts directly;
+- uses the standard authorization-code flow;
+- exchanges tokens server-side with the JDK `HttpClient`;
+- reads OpenID Connect user info;
+- stores a canonical `AuthUser` in JUI session state;
+- signs and expires the OAuth `state` value instead of relying on the old global application singleton.
+
+Applications can inspect the user through `ui.authUser()` and render login/logout controls through `AuthElements`.
+
+## jui-data
+
+Data loading is intentionally outside the UI core.
+
+The optional `jui-data` module provides:
+
+```text
+DataFrame
+DataFrames.readCsv(...)
+DataFrames.readJson(...)
+DataFrames.readSql(...)
 ```
 
-JUI therefore does not need to know whether persistence is implemented with H2/JDBC, PostgreSQL, a REST API or another store.
+A `DataFrame` supports `select`, `limit`, row/column access and `toMaps()`, which can be passed directly to JUI tables.
 
-`InMemoryCrudRepository<T, ID>` provides the same repository shape for memory-backed applications with stable IDs.
+This replaces the former `com.st` prototype without coupling data access to `jui-core`.
 
 ## Application data vs UI state
 
-JUI session state stores interactive widget values and transient UI mode such as CRUD create/edit selection.
+JUI session state is for widget values, authentication and transient interaction state. Business data should remain in application-owned collections, repositories or services.
 
-Business/application data should remain in application-owned collections or repositories. For example:
-
-```java
-private final CrudRepository<Customer, Long> customers;
-
-@Override
-public void run(UIContext ui) {
-    ui.crud(Customer.class, customers);
-}
-```
-
-This separation becomes especially important in stateless/container deployments.
-
-## Deployment
-
-The canonical example builds an executable shaded JAR. The repository also includes `Dockerfile.vercel` and `vercel.json` for deploying that HTTP server as a Vercel container.
-
-The runtime reads `$PORT`, so the same server code can run locally or behind a deployment platform.
-
-Container instances should be treated as stateless. Durable application data belongs in an external backing store exposed to JUI through `CrudRepository` or another application-level service.
+This separation is particularly important for stateless/container deployments.
 
 ## LLM-first design
 
 JUI remains Java-first; there is no required application IR or textual DSL.
-
-The intended generation path is:
 
 ```text
 Natural language
@@ -205,8 +244,8 @@ JUI runtime
 deploy
 ```
 
-The central architecture rule is semantic compression: when JUI can infer structure deterministically from Java types and values, the caller should not have to describe that structure again.
+The architecture rule is semantic compression: when JUI can infer structure deterministically from Java types and values, the caller should not have to describe it again.
 
-## Legacy architecture
+## Legacy removal
 
-Older modules and documentation may refer to `com.jui.*`, a custom `HttpServer`, WebSocket-specific rendering or older fluent component APIs. Those belong to the legacy implementation and are not the architecture of the canonical `jui-core` described here.
+The former `jui-core-old` retained-mode implementation (`com.jui.*`, custom element tree, custom HTTP/WebSocket rendering and frontend/backend relation graph) has been removed. Useful capabilities were reimplemented on the canonical `UIContext` rerun architecture rather than copied forward.

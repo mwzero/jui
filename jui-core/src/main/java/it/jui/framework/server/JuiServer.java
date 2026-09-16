@@ -1,71 +1,67 @@
 package it.jui.framework.server;
 
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-
-import it.jui.cli.JuiCLI;
+import com.sun.net.httpserver.HttpServer;
 import it.jui.framework.app.JuiProvider;
+import it.jui.framework.auth.GoogleOAuthConfig;
+import it.jui.framework.auth.GoogleOAuthSupport;
 
-import java.net.URL;
-
-//jetty
-import org.eclipse.jetty.server.Server;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class JuiServer {
 
     private static final int DEFAULT_PORT = 8080;
 
-    Server server;
+    private final HttpServer server;
+    private final ISessionManager sessionManager;
+    private final ExecutorService executor;
+    private final CountDownLatch stopped = new CountDownLatch(1);
 
-    /**
-     * Starts a JUI server on the deployment-provided PORT when available, falling
-     * back to 8080 for local development.
-     */
-    public JuiServer(JuiProvider appProvider) throws Exception {
+    public JuiServer(JuiProvider appProvider) throws IOException {
         this(resolvePort(), appProvider);
     }
 
-    public JuiServer(int port, JuiProvider appProvider) throws Exception {
+    public JuiServer(int port, JuiProvider appProvider) throws IOException {
+        sessionManager = new InMemorySessionManager();
+        server = HttpServer.create(new InetSocketAddress(port), 0);
+        executor = Executors.newVirtualThreadPerTaskExecutor();
+        server.setExecutor(executor);
 
-        ISessionManager sessionManager = new InMemorySessionManager();
-
-        server = new Server(port);
-
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-
-        URL staticResources = JuiCLI.class.getResource("/static");
-        if (staticResources != null) {
-            String resourceBase = staticResources.toExternalForm();
-            if (!resourceBase.endsWith("/")) {
-                resourceBase += "/";
-            }
-            context.setResourceBase(resourceBase);
-        }
-        server.setHandler(context);
-
-        ServletHolder staticHolder = new ServletHolder("default", DefaultServlet.class);
-        staticHolder.setInitParameter("dirAllowed", "true");
-        context.addServlet(staticHolder, "/");
-
-        ServletHolder uiServletHolder = new ServletHolder(new UiServlet(sessionManager, appProvider));
-        context.addServlet(uiServletHolder, "/ui");
-
-        System.out.println("JUI server listening on port " + port);
+        server.createContext("/ui", new UiHandler(sessionManager, appProvider));
+        server.createContext("/", new StaticHandler());
     }
 
-    public void start() throws Exception {
+    /** Registers Google OAuth endpoints before the server is started. */
+    public JuiServer googleOAuth(GoogleOAuthConfig config) {
+        GoogleOAuthSupport.install(server, sessionManager, config);
+        return this;
+    }
+
+    /** Starts the server and blocks until {@link #stop()} is called. */
+    public void start() throws InterruptedException {
         server.start();
-        server.join();
+        System.out.println("JUI server listening on port " + server.getAddress().getPort());
+        try {
+            stopped.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            stop();
+            throw e;
+        }
+    }
+
+    public void stop() {
+        server.stop(0);
+        executor.shutdown();
+        stopped.countDown();
     }
 
     private static int resolvePort() {
         String configured = System.getenv("PORT");
-        if (configured == null || configured.isBlank()) {
-            return DEFAULT_PORT;
-        }
-
+        if (configured == null || configured.isBlank()) return DEFAULT_PORT;
         try {
             int port = Integer.parseInt(configured);
             if (port < 1 || port > 65535) {
