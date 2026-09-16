@@ -24,3 +24,6 @@ jobs:
 
       - name: Package examples
         run: mvn -B -pl examples/customer-app,examples/dashboard-app,examples/survey-app,examples/map-app,examples/media-app -am package -DskipTests
+
+      - name: Compile standalone playground
+        run: mvn -B -f jui-playground/pom.xml -DskipTests package
