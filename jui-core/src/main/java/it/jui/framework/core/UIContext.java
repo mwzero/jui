@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import it.jui.framework.apis.AuthElements;
+import it.jui.framework.apis.ChartElements;
 import it.jui.framework.apis.CrudElements;
 import it.jui.framework.apis.DataElements;
 import it.jui.framework.apis.FormElements;
+import it.jui.framework.apis.InputElements;
 import it.jui.framework.apis.LayoutElements;
 import it.jui.framework.apis.MapElements;
+import it.jui.framework.apis.MediaElements;
 import it.jui.framework.apis.NavigationElements;
 import it.jui.framework.apis.StatusElements;
 import it.jui.framework.apis.TextElements;
@@ -24,35 +28,24 @@ public class UIContext {
     private final ISessionManager sessionManager;
     private final AtomicInteger widgetCounter = new AtomicInteger(0);
 
-    @Delegate
-    private final TextElements textApis;
-
-    @Delegate
-    private final StatusElements statusApis;
-
-    @Delegate
-    private final LayoutElements layoutApis;
-
-    @Delegate
-    private final NavigationElements navigationApis;
-
-    @Delegate
-    private final DataElements dataApis;
-
-    @Delegate
-    private final FormElements formApis;
-
-    @Delegate
-    private final CrudElements crudApis;
-
-    @Delegate
-    private final MapElements mapApis;
+    @Delegate private final TextElements textApis;
+    @Delegate private final InputElements inputApis;
+    @Delegate private final StatusElements statusApis;
+    @Delegate private final LayoutElements layoutApis;
+    @Delegate private final NavigationElements navigationApis;
+    @Delegate private final DataElements dataApis;
+    @Delegate private final FormElements formApis;
+    @Delegate private final CrudElements crudApis;
+    @Delegate private final MapElements mapApis;
+    @Delegate private final MediaElements mediaApis;
+    @Delegate private final ChartElements chartApis;
+    @Delegate private final AuthElements authApis;
 
     public UIContext(String sessionId, ISessionManager sessionManager) {
         this.sessionId = sessionId;
         this.sessionManager = sessionManager;
-
         textApis = new TextElements(this);
+        inputApis = new InputElements(this);
         statusApis = new StatusElements(this);
         layoutApis = new LayoutElements(this);
         navigationApis = new NavigationElements(this);
@@ -60,6 +53,9 @@ public class UIContext {
         formApis = new FormElements(this);
         crudApis = new CrudElements(this);
         mapApis = new MapElements(this);
+        mediaApis = new MediaElements(this);
+        chartApis = new ChartElements(this);
+        authApis = new AuthElements(this);
     }
 
     void logSessionState() {
@@ -72,29 +68,31 @@ public class UIContext {
         return htmlOutput.toString();
     }
 
-    /**
-     * Returns a render-order based id. Prefer {@link #getNextWidgetId(String)} for
-     * interactive widgets so their state survives a re-render deterministically.
-     */
     public String getNextWidgetId() {
         return "widget-" + widgetCounter.getAndIncrement();
     }
 
-    /**
-     * Returns a deterministic widget id for a stable application-level key such as
-     * a label. The same key produces the same id on every render.
-     */
     public String getNextWidgetId(String key) {
-        if (key == null || key.isBlank()) {
-            return getNextWidgetId();
-        }
-
+        if (key == null || key.isBlank()) return getNextWidgetId();
         int positiveHash = key.hashCode() & 0x7FFFFFFF;
         return "widget-" + Integer.toString(positiveHash, 36);
     }
 
     public void addHtml(String html) {
         htmlOutput.append(html).append("\n");
+    }
+
+    /**
+     * Renders a nested UI fragment using this same context, then removes the
+     * fragment from the main stream so a composite component can wrap it.
+     */
+    public String capture(Runnable renderer) {
+        if (renderer == null) return "";
+        int start = htmlOutput.length();
+        renderer.run();
+        String fragment = htmlOutput.substring(start);
+        htmlOutput.setLength(start);
+        return fragment;
     }
 
     public void addHtmlDependency(String key, String html) {
@@ -115,29 +113,19 @@ public class UIContext {
         return (T) value;
     }
 
-    /**
-     * Framework state primitive used by composite components such as forms and CRUD.
-     */
-    public void setValue(String widgetId, Object value) {
-        if (value == null) {
-            removeValue(widgetId);
-        } else {
-            sessionManager.updateState(sessionId, widgetId, value);
-        }
+    public Object getRawValue(String widgetId) {
+        return sessionManager.getState(sessionId).get(widgetId);
     }
 
-    /**
-     * Removes one deterministic value from the current session state.
-     */
+    public void setValue(String widgetId, Object value) {
+        if (value == null) removeValue(widgetId);
+        else sessionManager.updateState(sessionId, widgetId, value);
+    }
+
     public void removeValue(String widgetId) {
         sessionManager.getState(sessionId).remove(widgetId);
     }
 
-    /**
-     * Consumes a boolean event from session state. This is intentionally different
-     * from {@link #getValue(String, Object)}: event state is removed immediately so
-     * actions such as buttons are true for exactly one render.
-     */
     public boolean consumeBoolean(String widgetId) {
         Object value = sessionManager.getState(sessionId).remove(widgetId);
         return Boolean.TRUE.equals(value);
