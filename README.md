@@ -33,6 +33,33 @@ public class HelloApp implements JuiApp {
 
 JUI listens on port `8080` locally. When the `PORT` environment variable is present, JUI uses it automatically for container/serverless deployments.
 
+## Interactive application
+
+Interactive widgets keep their state across rerenders, while button clicks use one-shot event semantics.
+
+```java
+import it.jui.framework.app.JuiApp;
+import it.jui.framework.core.UIContext;
+
+public class InteractiveApp implements JuiApp {
+
+    @Override
+    public void run(UIContext ui) {
+        ui.title("Customer Profile");
+
+        String name = ui.textInput("Name", "Guest");
+        int age = ui.slider("Age", 0, 100, 25);
+        boolean active = ui.checkbox("Active", true);
+
+        if (ui.button("Save")) {
+            ui.success("Saved: " + name + ", age " + age + ", active=" + active);
+        }
+    }
+}
+```
+
+Each user interaction updates session state and reruns the application, so application code stays sequential and entirely in Java.
+
 ## High-semantic-density APIs
 
 JUI infers common UI structure directly from Java types and values.
