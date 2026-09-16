@@ -2,17 +2,19 @@
 
 JUI is a lightweight Java framework for building interactive web applications without writing frontend code.
 
-The canonical implementation is `jui-core` under the `it.jui.framework` packages. New applications implement `JuiApp`, receive a `UIContext`, and describe their UI with compact Java calls.
+The canonical implementation is `jui-core` under `it.jui.framework`. Applications implement `JuiApp`, receive a `UIContext`, and describe their UI with compact Java calls.
 
 ## Key ideas
 
 - **Java-only application code** — no application HTML/CSS/JavaScript is required for normal use.
-- **Type-driven UI** — records, POJOs, maps and scalar values can drive tables and forms.
-- **High-semantic-density APIs** — `table`, `metric`, `form` and `crud` compress common application behavior into a few calls.
-- **Deterministic state** — interactive widgets use stable IDs across rerenders.
+- **Type-driven UI** — records, POJOs, maps and scalar values can drive tables, forms, charts and CRUD.
+- **High-semantic-density APIs** — `table`, `metric`, `form`, `crud`, layout and navigation APIs compress common application behavior.
+- **Deterministic state** — interactive widgets, maps and composite components use stable IDs across rerenders.
 - **Built-in HTTP runtime** — Jetty serves the browser shell and `/ui` rendering endpoint.
-- **Pluggable persistence boundary** — `CrudRepository<T, ID>` keeps CRUD UI independent of H2, PostgreSQL, REST services or other stores.
-- **LLM-first design** — APIs are intentionally compact and deterministic so small local code models need less context and generate fewer tokens.
+- **Pluggable persistence** — `CrudRepository<T, ID>` keeps CRUD independent of H2, PostgreSQL, REST or other stores.
+- **Optional data module** — `jui-data` provides CSV, JSON and JDBC `DataFrame` utilities without coupling data access to the UI runtime.
+- **Optional Google OAuth** — authentication integrates with the same session model without a global application singleton.
+- **LLM-first design** — compact deterministic APIs reduce generated code and context requirements for small local models.
 
 ## Small example
 
@@ -27,12 +29,12 @@ public void run(UIContext ui) {
 }
 ```
 
-See [Getting Started](getting-started.md) for build and run instructions and [Architecture](architecture.md) for the runtime model.
+See [Getting Started](getting-started.md) for build/run instructions and [Architecture](architecture.md) for the runtime model.
 
-## Canonical deployable example
+## Modules
 
-`examples/customer-app` is the current smoke test and deployment benchmark. It can be built as an executable JAR and is also the application packaged by the Vercel container configuration.
+- `jui-core` — canonical interactive UI framework.
+- `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
+- `examples/customer-app` — deployable smoke test and compact-generation benchmark.
 
-## Legacy modules
-
-`jui-core-old`, `com.jui.*`, and older playground examples are retained for historical/reference purposes. They are not the source of truth for new JUI applications.
+The former `jui-core-old` module has been removed after its useful capabilities were reimplemented on the canonical rerun architecture.
