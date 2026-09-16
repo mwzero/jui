@@ -1,133 +1,212 @@
-# Architecture
+# JUI Architecture
 
-<img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/logical-architecture.png" width="500px">
+JUI is a Java-first server-rendered UI framework. Application code implements `JuiApp` and is rerun to describe the current page whenever the browser initializes or sends a widget update.
 
-## Communication Flow
+## Runtime overview
 
-1.  **Frontend -> Static Resources (/js, /css):**
-    * The frontend requests JavaScript and CSS files from the `/js` and `/css` endpoints.
-
-2.  **Frontend -> Backend (POST /jui):**
-    * Once the `index.html` page is loaded, the frontend sends a POST request to the `/jui` endpoint with a data payload to initialize the JUI Web Application.
-
-3.  **JUI Rendering and Response:**
-    * The JUI renders all JUI HTML Elements added to the Web Application Context during development.
-    * The server returns all generated HTML and scripts to the frontend as response to a /jui post request. 
-
-4.  **Backend -> Frontend (WebSocket /ws/jui):**
-    * The frontend establishes a WebSocket connection to the `/ws/jui` endpoint.
-    * Every time a JUI Component changes its state, the backend sends messages to the frontend via the WebSocket connection.
-
-## Components
-
-- HTTP/HTTPS/WSS Server: manages communication between the Java backend and the HTML frontend. Supports HTTP/HTTPS and WebSocket for real-time updates.
-- User Session: manages user information ( used only if authentication module is configured)
-- Web Application Context: stores all JUI Compoments added during development phase.
-- JUI HTML Libraries: Collections of Java-based HTML tags and html-like templates
-- HTML Renderer: Converts Java-based HTML tags to pure bootstrap 5-based HTML/JS/CSS resources
-
-### JUI Simple Web Server
-
-**JUI Simple Web server** designed to provide a web user interface (JUI) with bidirectional communication between the frontend (HTML page) and the backend (Java application). Totally based on `com.sun.net.httpserver.HttpServer` and utilizes custom context handlers to manage different types of requests:
-
-1.  **`/jui` Context Handler (JUIHttpHandler):**
-    * A custom implementation of `HttpHandler` that handles POST requests to the `/jui` endpoint.
-    * **Functionality:**
-        * Receives payload data from the HTTP request body.
-        * Processes the data (e.g., JSON deserialization, data model updates).
-        * Sends an HTTP response to the frontend (e.g., 200 OK status code, response data).
-
-
-2.  **`/ws/jui` Context Handler (WebSocketHandler):**
-    * A custom handler that manages WebSocket connections to the `/ws/jui` endpoint.
-    * **Functionality:**
-        * Performs the WebSocket handshake.
-        * Manages bidirectional communication via WebSocket.
-        * Allows the backend to send real-time messages to the frontend.
-        * Handles WebSocket connection closures.
-    * **Implementation Considerations:**
-        * Use a custome WebSocket Library
-
-4.  **`/js` and `/css` Context Handler (FileHandler):**
-    * A custom handler that serves static files (JavaScript and CSS) from the file system.
-
-
->[!NOTE]
-   >
-   >Consider using a more performant web server (e.g., Jetty, Tomcat) for production environments.
-
-### index.html
-
-TBD
-
-### Web Application Context
-
-The "Web Application Context" serves as the core of the JUI application's state and component management. It acts as a centralized container for all JUI components created during the development phase. In technical terms, it's an instance of a Java class (often a `Map` or similar data structure) that maintains a reference to each active JUI component.
-
-* **Component Management:**
-    * During development, when a new JUI component is created (e.g., a button, table, form), it is added to the context.
-    * The context provides a mechanism to retrieve components based on a unique identifier, allowing the backend to interact with specific UI elements.
-* **Application State:**
-    * The context can also store application state, such as session data, configurations, or global variables.
-    * This allows JUI components to access and modify application state in a centralized manner.
-* **Lifecycle:**
-    * The context has a lifecycle that corresponds to the web application's lifecycle.
-    * When the application starts, the context is initialized.
-    * When the application stops, the context is destroyed.
-
-### JUI HTML Libraries
-The "JUI HTML Libraries" are collections of Java classes and templates that represent HTML elements and UI components. These libraries provide a high-level abstraction for creating web user interfaces, allowing developers to define the UI using Java code rather than directly writing HTML, JavaScript, and CSS.
-
-* **HTML Abstraction:**
-    * The libraries provide Java classes that correspond to standard HTML elements (e.g., `Button`, `Table`, `Div`).
-    * Developers can create instances of these classes and configure them using Java methods.
-* **Reusable Components:**
-    * The libraries include reusable components, such as forms, dialog boxes, and data grids.
-    * These components are designed to be easily customized and integrated into different parts of the application.
-* **HTML Templates:**
-    * The libraries may include HTML templates that define the structure and style of components.
-    * These templates can be customized to fit specific application needs.
-
-
-### HTML Renderer
-
-The "HTML Renderer" is the component responsible for converting JUI components into HTML, JavaScript, and CSS code that can be displayed in the browser. This component acts as a bridge between the backend and frontend, ensuring that the UI is displayed correctly. 
-
-* **Java-to-HTML Conversion:**
-    * The renderer takes instances of JUI HTML Libraries classes as input and converts them into corresponding HTML elements.
-    * This process includes generating HTML attributes, CSS styles, and JavaScript scripts.
-* **Bootstrap 5 Integration:**
-    * The renderer is designed to generate code compatible with Bootstrap 5, a popular CSS framework for creating responsive UIs.
-    * This ensures that the UI is consistent and well-structured.
-* **Event Handling:**
-    * The renderer also generates the JavaScript code needed to handle UI events, such as mouse clicks and user input.
-    * This allows JUI components to interact with the user and respond to their actions.
-
-# Events
-
-**Example**:
-
-JUI component send a WSS message containing the kind of changes and commands to execute. In this case a button send the command to disable the button.
-
-Jui Button: uses the following command to disable its state:
-
-```JavaScript
-    const button = document.getElementById("jui_btn_ctx_1_1");
-    button.disabled = true;
-	button.classList.add("disabled");
+```text
+Browser
+  │
+  │ GET static shell/resources
+  │ GET/POST /ui
+  ▼
+Jetty / JuiServer
+  │
+  ├── static resources
+  └── UiServlet
+        │
+        ├── session state
+        ├── JuiProvider -> JuiApp
+        └── new UIContext per render
+              │
+              ├── text / status / layout
+              ├── table / metric
+              ├── form / crud
+              └── map / navigation
+                    │
+                    ▼
+              generated HTML
 ```
 
-JUI fires the wss message to frontend:
+The browser is thin. JUI application semantics remain in Java.
 
-```Java
-    this.backEndEvents().onServerUpdate(this, "change", javascriptCommand);	
+## Server
+
+`JuiServer` embeds Jetty.
+
+- context path: `/`
+- static browser resources: served from the packaged `/static` resources
+- UI endpoint: `/ui`
+- default local port: `8080`
+- deployment port: value of the `PORT` environment variable when present
+
+A `JuiServer` is constructed with a `JuiProvider`, which supplies the `JuiApp` to execute for each render.
+
+## Render cycle
+
+`UiServlet` implements the current request/rerender loop.
+
+### Initial render
+
+A `GET /ui` request resolves a session ID, creates a fresh `UIContext`, executes:
+
+```java
+app.run(ui);
 ```
 
-The frontend receives the message and executes the JavaScript command. Each JUI HTML element is aware of its own HTML rendering and manages its changes accordingly.
+and returns a JSON response containing generated HTML, HTML dependencies and a `fullPage` flag.
 
-```JavaScript
-    ws.onmessage = function(event) {
-    const notification = JSON.parse(event.data);
-    eval(notification.command);
-};
+### Widget update
+
+Interactive browser widgets call the backend with `POST /ui` and a payload containing:
+
+```json
+{
+  "id": "widget-id",
+  "value": "new-value"
+}
 ```
+
+The servlet stores the value in the current session, creates a new `UIContext`, reruns the application and returns the new rendered output.
+
+This means JUI applications should be understood as deterministic render functions over application data plus session/widget state.
+
+## Session state
+
+`ISessionManager` abstracts widget/session storage. The current server uses `InMemorySessionManager`.
+
+Interactive widgets should use deterministic IDs. `UIContext.getNextWidgetId(String key)` derives an ID from a stable application-level key so the same widget maps to the same session value across rerenders.
+
+Normal values are retrieved through `getValue(...)`.
+
+Action events such as buttons use one-shot semantics through `consumeBoolean(...)`: the value is removed from session state when consumed, so an action is true for exactly the render triggered by that click.
+
+Composite components such as forms and CRUD use the same session state primitives rather than maintaining a separate state system.
+
+## UI API composition
+
+`UIContext` delegates to focused API classes including:
+
+- `TextElements`
+- `StatusElements`
+- `LayoutElements`
+- `NavigationElements`
+- `DataElements`
+- `FormElements`
+- `CrudElements`
+- `MapElements`
+
+The public experience remains a single compact `UIContext`:
+
+```java
+ui.title("Customers");
+ui.metric("Customers", customers.size());
+ui.crud(Customer.class, customers);
+```
+
+Higher-level APIs are intentionally composed from lower-level primitives rather than introducing a second application model.
+
+## Type-driven tables
+
+`table(List<T>)` infers a presentation deterministically:
+
+- Java records -> record component declaration order
+- bean-style POJOs -> public getter properties in stable order
+- maps -> stable sorted keys
+- scalar values -> one `Value` column
+
+Ordinary content is HTML-escaped.
+
+## Type-driven forms
+
+`form(Class<T>)` creates values and `form(T)` edits existing values.
+
+Records are the preferred model. JUI uses record components and the canonical constructor. Bean-style POJOs are supported when suitable public getter/setter pairs and a no-argument constructor are available.
+
+Current field inference includes strings, numeric values, booleans, `LocalDate` and enums.
+
+Keyed internal form overloads allow composite components such as CRUD to isolate form state.
+
+## CRUD
+
+The compact in-memory API is:
+
+```java
+ui.crud(Customer.class, customers);
+```
+
+It composes create, list, edit, delete and cancel behavior from the existing form, table and state primitives.
+
+For durable or externally managed data, JUI uses:
+
+```java
+CrudRepository<T, ID>
+```
+
+The repository owns identity and persistence:
+
+```java
+List<T> findAll();
+ID id(T value);
+T create(T value);
+T update(ID id, T value);
+void deleteById(ID id);
+Optional<T> findById(ID id);
+```
+
+JUI therefore does not need to know whether persistence is implemented with H2/JDBC, PostgreSQL, a REST API or another store.
+
+`InMemoryCrudRepository<T, ID>` provides the same repository shape for memory-backed applications with stable IDs.
+
+## Application data vs UI state
+
+JUI session state stores interactive widget values and transient UI mode such as CRUD create/edit selection.
+
+Business/application data should remain in application-owned collections or repositories. For example:
+
+```java
+private final CrudRepository<Customer, Long> customers;
+
+@Override
+public void run(UIContext ui) {
+    ui.crud(Customer.class, customers);
+}
+```
+
+This separation becomes especially important in stateless/container deployments.
+
+## Deployment
+
+The canonical example builds an executable shaded JAR. The repository also includes `Dockerfile.vercel` and `vercel.json` for deploying that HTTP server as a Vercel container.
+
+The runtime reads `$PORT`, so the same server code can run locally or behind a deployment platform.
+
+Container instances should be treated as stateless. Durable application data belongs in an external backing store exposed to JUI through `CrudRepository` or another application-level service.
+
+## LLM-first design
+
+JUI remains Java-first; there is no required application IR or textual DSL.
+
+The intended generation path is:
+
+```text
+Natural language
+      ↓
+     J0
+      ↓
+small local Code LLM
+      ↓
+compact JUI Java
+      ↓
+javac / Maven
+      ↓
+JUI runtime
+      ↓
+deploy
+```
+
+The central architecture rule is semantic compression: when JUI can infer structure deterministically from Java types and values, the caller should not have to describe that structure again.
+
+## Legacy architecture
+
+Older modules and documentation may refer to `com.jui.*`, a custom `HttpServer`, WebSocket-specific rendering or older fluent component APIs. Those belong to the legacy implementation and are not the architecture of the canonical `jui-core` described here.
