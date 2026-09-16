@@ -10,11 +10,11 @@ Browser
   │ GET static shell/resources
   │ GET/POST /ui
   ▼
-Jetty / JuiServer
+JDK HttpServer / JuiServer
   │
   ├── static browser runtime
   ├── optional auth routes
-  └── UiServlet
+  └── UiHandler
         │
         ├── session state
         ├── JuiProvider -> JuiApp
@@ -34,11 +34,12 @@ The browser is deliberately thin. Application semantics stay in Java.
 
 ## Server
 
-`JuiServer` embeds Jetty.
+`JuiServer` uses the JDK `com.sun.net.httpserver.HttpServer` from the `jdk.httpserver` module. JUI does not require Jetty, a Servlet container or a server framework dependency.
 
 - context path: `/`
-- static browser resources: packaged under `/static`
+- static browser shell: packaged under `/static`
 - UI endpoint: `/ui`
+- one virtual thread per HTTP exchange through `Executors.newVirtualThreadPerTaskExecutor()`
 - default local port: `8080`
 - deployment port: `PORT` environment variable when present
 - optional Google OAuth routes can be installed before `start()`
@@ -55,6 +56,8 @@ JuiServer server = new JuiServer(new JuiProvider(app))
         .googleOAuth(GoogleOAuthConfig.fromEnv());
 server.start();
 ```
+
+The HTTP layer is intentionally small. `HttpSupport` only provides query parsing and response/body helpers; it is not a replacement Servlet framework.
 
 ## Render cycle
 
@@ -88,7 +91,7 @@ The browser shell does four small jobs:
 
 The same transport supports scalar values, lists and structured JSON values. It is used by ordinary inputs as well as multi-select values, uploaded-file metadata/content and interactive `MapState` updates.
 
-The default file uploader sends base64 content through the normal `/ui` transport and applies a 5 MB browser-side limit. Large-file applications should provide a dedicated upload/storage path rather than storing binary data in JUI session state.
+The default file uploader sends base64 content through the normal `/ui` transport and applies a 5 MB browser-side limit. The JDK HTTP handler also bounds request bodies. Large-file applications should provide a dedicated upload/storage path rather than storing binary data in JUI session state.
 
 ## Session state
 
@@ -189,8 +192,9 @@ Authentication is session-scoped but separated from UI rendering.
 
 The built-in Google OAuth support:
 
+- registers JDK `HttpServer` contexts directly;
 - uses the standard authorization-code flow;
-- exchanges tokens server-side with `HttpClient`;
+- exchanges tokens server-side with the JDK `HttpClient`;
 - reads OpenID Connect user info;
 - stores a canonical `AuthUser` in JUI session state;
 - signs and expires the OAuth `state` value instead of relying on the old global application singleton.
