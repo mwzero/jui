@@ -1,19 +1,38 @@
-# Introduction
+# JUI
 
-*JUI* is a Java toolkit designed to build and share web applications in pure Java, without requiring frontend development experience.  
+JUI is a lightweight Java framework for building interactive web applications without writing frontend code.
 
-Inspired by streamlit, gradio and folium. 
+The canonical implementation is `jui-core` under the `it.jui.framework` packages. New applications implement `JuiApp`, receive a `UIContext`, and describe their UI with compact Java calls.
 
-It includes a simple HTTP/HTTPS/WSS server and a playground to try out its features.
+## Key ideas
 
-# Key Features:
-- Backend Development in Java: Build web applications using only Java.
-- Integrated Server: Includes a simple HTTP/HTTPS/WSS server to handle requests.
-- Playground: An interactive environment to test and experiment with the framework's features.
+- **Java-only application code** — no application HTML/CSS/JavaScript is required for normal use.
+- **Type-driven UI** — records, POJOs, maps and scalar values can drive tables and forms.
+- **High-semantic-density APIs** — `table`, `metric`, `form` and `crud` compress common application behavior into a few calls.
+- **Deterministic state** — interactive widgets use stable IDs across rerenders.
+- **Built-in HTTP runtime** — Jetty serves the browser shell and `/ui` rendering endpoint.
+- **Pluggable persistence boundary** — `CrudRepository<T, ID>` keeps CRUD UI independent of H2, PostgreSQL, REST services or other stores.
+- **LLM-first design** — APIs are intentionally compact and deterministic so small local code models need less context and generate fewer tokens.
 
-Please see the [getting started](getting-started.md).
+## Small example
 
-# Playground application
-a Spring Boot Application to execute JUI recipes directly from browser. It already includes many examples on how to uses JUI features.
+```java
+record Customer(String name, String email, int age, boolean active) {}
 
-<img src="https://raw.githubusercontent.com/mwzero/jui/main/assets/images/playground.png" width="500px">
+@Override
+public void run(UIContext ui) {
+    ui.title("Customer Manager");
+    ui.metric("Customers", customers.size());
+    ui.crud(Customer.class, customers);
+}
+```
+
+See [Getting Started](getting-started.md) for build and run instructions and [Architecture](architecture.md) for the runtime model.
+
+## Canonical deployable example
+
+`examples/customer-app` is the current smoke test and deployment benchmark. It can be built as an executable JAR and is also the application packaged by the Vercel container configuration.
+
+## Legacy modules
+
+`jui-core-old`, `com.jui.*`, and older playground examples are retained for historical/reference purposes. They are not the source of truth for new JUI applications.
