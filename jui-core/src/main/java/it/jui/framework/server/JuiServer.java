@@ -1,46 +1,40 @@
 package it.jui.framework.server;
 
+import java.net.URL;
+
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import it.jui.cli.JuiCLI;
 import it.jui.framework.app.JuiProvider;
-
-import java.net.URL;
-
-//jetty
-import org.eclipse.jetty.server.Server;
+import it.jui.framework.auth.GoogleOAuthConfig;
+import it.jui.framework.auth.GoogleOAuthSupport;
 
 public class JuiServer {
 
     private static final int DEFAULT_PORT = 8080;
 
-    Server server;
+    private final Server server;
+    private final ServletContextHandler context;
+    private final ISessionManager sessionManager;
 
-    /**
-     * Starts a JUI server on the deployment-provided PORT when available, falling
-     * back to 8080 for local development.
-     */
     public JuiServer(JuiProvider appProvider) throws Exception {
         this(resolvePort(), appProvider);
     }
 
     public JuiServer(int port, JuiProvider appProvider) throws Exception {
-
-        ISessionManager sessionManager = new InMemorySessionManager();
-
+        sessionManager = new InMemorySessionManager();
         server = new Server(port);
 
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
 
         URL staticResources = JuiCLI.class.getResource("/static");
         if (staticResources != null) {
             String resourceBase = staticResources.toExternalForm();
-            if (!resourceBase.endsWith("/")) {
-                resourceBase += "/";
-            }
+            if (!resourceBase.endsWith("/")) resourceBase += "/";
             context.setResourceBase(resourceBase);
         }
         server.setHandler(context);
@@ -49,10 +43,14 @@ public class JuiServer {
         staticHolder.setInitParameter("dirAllowed", "true");
         context.addServlet(staticHolder, "/");
 
-        ServletHolder uiServletHolder = new ServletHolder(new UiServlet(sessionManager, appProvider));
-        context.addServlet(uiServletHolder, "/ui");
-
+        context.addServlet(new ServletHolder(new UiServlet(sessionManager, appProvider)), "/ui");
         System.out.println("JUI server listening on port " + port);
+    }
+
+    /** Registers Google OAuth endpoints before the server is started. */
+    public JuiServer googleOAuth(GoogleOAuthConfig config) {
+        GoogleOAuthSupport.install(context, sessionManager, config);
+        return this;
     }
 
     public void start() throws Exception {
@@ -62,10 +60,7 @@ public class JuiServer {
 
     private static int resolvePort() {
         String configured = System.getenv("PORT");
-        if (configured == null || configured.isBlank()) {
-            return DEFAULT_PORT;
-        }
-
+        if (configured == null || configured.isBlank()) return DEFAULT_PORT;
         try {
             int port = Integer.parseInt(configured);
             if (port < 1 || port > 65535) {
