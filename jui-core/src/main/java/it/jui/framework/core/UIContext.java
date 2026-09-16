@@ -11,6 +11,7 @@ import it.jui.framework.apis.DataElements;
 import it.jui.framework.apis.FormElements;
 import it.jui.framework.apis.InputElements;
 import it.jui.framework.apis.LayoutElements;
+import it.jui.framework.apis.ListElements;
 import it.jui.framework.apis.MapElements;
 import it.jui.framework.apis.MediaElements;
 import it.jui.framework.apis.NavigationElements;
@@ -23,7 +24,6 @@ public class UIContext {
 
     private final StringBuilder htmlOutput = new StringBuilder();
     private final Map<String, String> htmlDependencies = new HashMap<>();
-
     private final String sessionId;
     private final ISessionManager sessionManager;
     private final AtomicInteger widgetCounter = new AtomicInteger(0);
@@ -33,6 +33,7 @@ public class UIContext {
     @Delegate private final StatusElements statusApis;
     @Delegate private final LayoutElements layoutApis;
     @Delegate private final NavigationElements navigationApis;
+    @Delegate private final ListElements listApis;
     @Delegate private final DataElements dataApis;
     @Delegate private final FormElements formApis;
     @Delegate private final CrudElements crudApis;
@@ -49,6 +50,7 @@ public class UIContext {
         statusApis = new StatusElements(this);
         layoutApis = new LayoutElements(this);
         navigationApis = new NavigationElements(this);
+        listApis = new ListElements(this);
         dataApis = new DataElements(this);
         formApis = new FormElements(this);
         crudApis = new CrudElements(this);
@@ -82,10 +84,6 @@ public class UIContext {
         htmlOutput.append(html).append("\n");
     }
 
-    /**
-     * Renders a nested UI fragment using this same context, then removes the
-     * fragment from the main stream so a composite component can wrap it.
-     */
     public String capture(Runnable renderer) {
         if (renderer == null) return "";
         int start = htmlOutput.length();
