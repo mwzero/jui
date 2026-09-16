@@ -4,8 +4,6 @@ JUI is a lightweight Java framework for building interactive web applications wi
 
 The canonical API lives under `it.jui.framework`. Applications stay Java-only: application code describes intent while JUI handles browser rendering, HTTP and session state.
 
-The design principle is:
-
 > Minimum tokens from user intent to running application.
 
 This makes JUI useful both for humans and for small local code models that should not need to generate HTML, CSS, JavaScript or framework boilerplate.
@@ -31,18 +29,14 @@ public class HelloApp implements JuiApp {
 }
 ```
 
-JUI listens on port `8080` locally. When the `PORT` environment variable is present, JUI uses it automatically for container/serverless deployments.
+JUI listens on port `8080` locally. When `PORT` is present, JUI uses it automatically for container deployments.
 
 ## Interactive application
 
-Interactive widgets keep their state across rerenders, while button clicks use one-shot event semantics.
+Interactive widgets keep state across rerenders, while button clicks use one-shot event semantics.
 
 ```java
-import it.jui.framework.app.JuiApp;
-import it.jui.framework.core.UIContext;
-
 public class InteractiveApp implements JuiApp {
-
     @Override
     public void run(UIContext ui) {
         ui.title("Customer Profile");
@@ -58,11 +52,9 @@ public class InteractiveApp implements JuiApp {
 }
 ```
 
-Each user interaction updates session state and reruns the application, so application code stays sequential and entirely in Java.
+Each interaction updates session state and reruns the application, so application code stays sequential and entirely in Java.
 
 ## High-semantic-density APIs
-
-JUI infers common UI structure directly from Java types and values.
 
 ```java
 record Customer(String name, String email, int age, boolean active) {}
@@ -70,74 +62,148 @@ record Customer(String name, String email, int age, boolean active) {}
 ui.metric("Customers", customers.size());
 ui.form(Customer.class).ifPresent(customers::add);
 ui.table("Customers", customers);
-```
-
-For complete create/list/edit/delete behavior:
-
-```java
 ui.crud(Customer.class, customers);
 ```
 
-The list overload is intended for small in-memory applications and prototypes.
-
-## Repository-backed CRUD
-
-Persistent applications can provide a repository without coupling JUI to a database technology:
+For persistent data, provide a repository:
 
 ```java
 CrudRepository<Customer, Long> repository = new H2CustomerRepository(dataSource);
 ui.crud(Customer.class, repository);
 ```
 
-`CrudRepository<T, ID>` exposes a deliberately small persistence boundary:
+`CrudRepository<T, ID>` owns identity and persistence while JUI owns interaction and rendering.
+
+## Layout and navigation
+
+Composite layout APIs keep ordinary JUI code inside Java lambdas:
 
 ```java
-List<T> findAll();
-ID id(T value);
-T create(T value);
-T update(ID id, T value);
-void deleteById(ID id);
-Optional<T> findById(ID id); // default implementation available
+ui.columns(
+    () -> ui.metric("Users", 42),
+    () -> ui.metric("Revenue", 125000, "+12%")
+);
+
+ui.expander("Advanced", () -> ui.text("More options"));
+ui.dialog("Details", () -> ui.table(customers));
+ui.popover("Help", () -> ui.markdown("**Tip:** use records."));
 ```
 
-JUI also provides `InMemoryCrudRepository<T, ID>`. User implementations can use H2, PostgreSQL, REST services or any other persistence mechanism.
+A sidebar can render the selected page directly:
+
+```java
+ui.sidebar("Application", List.of("Home", "Customers", "Settings"), "Home", page -> {
+    if (page.equals("Customers")) ui.crud(Customer.class, repository);
+    else ui.header(page);
+});
+```
+
+Tabs and compact dropdown-button navigation are also available.
+
+## Text, lists and media
+
+```java
+ui.markdown("# Report\n- Java only\n- Interactive");
+ui.code("record Customer(String name) {}", "java");
+ui.caption("Generated locally");
+ui.divider();
+ui.bullets(List.of("one", "two"));
+
+ui.image("/image.png", "Preview");
+ui.audio("/sound.mp3");
+ui.video("/movie.mp4");
+```
+
+Normal content is escaped. Raw HTML must be explicit with `ui.html(...)`.
+
+## Inputs and uploads
+
+Along with text, textarea, slider, boolean checkbox, select and date inputs, JUI provides:
+
+```java
+String size = ui.radio("Size", List.of("S", "M", "L"), "M");
+List<String> tags = ui.multiCheckbox("Tags", List.of("Java", "AI", "Web"), List.of("Java"));
+String color = ui.colorPicker("Color", "#4f46e5");
+
+ui.fileUploader("Document").ifPresent(file -> {
+    byte[] content = file.bytes();
+});
+```
+
+Browser-backed uploads are intentionally limited to 5 MB by the default runtime.
+
+## Charts and maps
+
+```java
+record Month(String name, int revenue, int cost) {}
+
+ui.lineChart("Revenue", months, "name", "revenue", "cost");
+ui.barChart("Revenue", months, "name", "revenue");
+```
+
+Charts use ApexCharts in the browser. Maps use Leaflet and are interactive:
+
+```java
+MapState state = ui.map("Naples", 40.8518, 14.2681, 12);
+```
+
+Moving or zooming the map updates `MapState` through the normal JUI rerun/session mechanism.
+
+## Google authentication
+
+Google OAuth is optional and installed on the server explicitly:
+
+```java
+JuiServer server = new JuiServer(new JuiProvider(new MyApp()))
+        .googleOAuth(GoogleOAuthConfig.fromEnv());
+server.start();
+```
+
+Environment variables:
+
+```text
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+GOOGLE_CALLBACK_URL
+```
+
+Application code can then use:
+
+```java
+if (ui.authenticated()) {
+    ui.text("Hello " + ui.authUser().orElseThrow().name());
+    ui.logoutButton("Logout");
+} else {
+    ui.googleLoginButton("Login with Google");
+}
+```
+
+The OAuth `state` value is signed and time-limited; authentication no longer depends on the legacy global `JuiApp` singleton.
+
+## jui-data
+
+Data loading is separated from the UI runtime in the `jui-data` module:
+
+```java
+DataFrame csv = DataFrames.readCsv("customers.csv");
+DataFrame json = DataFrames.readJson(jsonString);
+DataFrame db = DataFrames.readSql(connection, "select * from customer");
+
+ui.table(csv.select("name", "email").limit(100).toMaps());
+```
+
+`DataFrame` supports `select`, `limit`, row/column access and conversion to maps. CSV, JSON and JDBC readers replace the former `com.st` prototype without coupling them to `jui-core`.
 
 ## Forms
 
-Forms are inferred from Java records or bean-style POJOs.
-
-Supported field mappings currently include:
-
-- `String` -> text input
-- numeric primitives/wrappers -> number input
-- `boolean` / `Boolean` -> checkbox
-- `LocalDate` -> date input
-- `enum` -> select
+Forms are inferred from Java records or bean-style POJOs. Current mappings include strings, numeric primitives/wrappers, booleans, `LocalDate` and enums.
 
 ```java
-ui.form(Customer.class).ifPresent(customer -> repository.create(customer));
+ui.form(Customer.class).ifPresent(repository::create);
 ui.form(existingCustomer).ifPresent(updated -> repository.update(id, updated));
 ```
 
-Records are the preferred model because their field order and constructor are deterministic.
-
-## Tables and metrics
-
-```java
-ui.table(customers);
-ui.table("Customers", customers);
-ui.metric("Revenue", 125000);
-ui.metric("Revenue", 125000, "+12%");
-```
-
-`table(List<T>)` supports records, bean-style POJOs, maps and scalar values. Content is HTML-escaped by default.
-
-Raw HTML must be explicit:
-
-```java
-ui.text("<b>escaped text</b>");
-ui.html("<b>trusted raw HTML</b>");
-```
+Records are the preferred model because field order and construction are deterministic.
 
 ## Canonical example
 
@@ -147,13 +213,12 @@ ui.html("<b>trusted raw HTML</b>");
 @Override
 public void run(UIContext ui) {
     ui.title("Customer Manager");
-    ui.text("A compact JUI app generated from Java types.");
     ui.metric("Customers", customers.size());
     ui.crud(Customer.class, customers);
 }
 ```
 
-Build and run it from the repository root:
+Build and run:
 
 ```bash
 mvn -B -pl examples/customer-app -am package
@@ -162,54 +227,33 @@ java -jar examples/customer-app/target/customer-app-0.0.1-SNAPSHOT.jar
 
 Then open `http://localhost:8080`.
 
-The example is intentionally in-memory and is not durable across process/container restarts.
-
 ## CLI
-
-Create a source file from the canonical template:
 
 ```bash
 java -jar jui-core.jar init MyApp.java
-```
-
-Run it:
-
-```bash
 java -jar jui-core.jar run MyApp.java
-```
-
-`watch` currently follows the same server startup path:
-
-```bash
 java -jar jui-core.jar watch MyApp.java
 ```
 
 ## Build and CI
 
-JUI currently targets Java 25.
+JUI targets Java 25.
 
 ```bash
 mvn test
 ```
 
-GitHub Actions runs focused tests for `jui-core` and the canonical customer application and also verifies its executable package.
-
-## Vercel deployment
-
-The repository contains `Dockerfile.vercel` and `vercel.json`. The container builds `examples/customer-app` and starts the JUI server on Vercel's `PORT`.
-
-The deployed example is stateless. Durable application data should live behind a `CrudRepository` backed by an external database or service.
+CI tests `jui-core`, `jui-data` and the canonical customer application and verifies its executable package.
 
 ## Modules
 
-- `jui-core` — canonical framework and current API.
+- `jui-core` — canonical interactive UI framework.
+- `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
 - `examples/customer-app` — compact deployable example and integration target.
-- `jui-core-old` — legacy implementation kept for historical/reference purposes.
-- other playground/legacy modules may still contain older APIs and are not the canonical API source.
+
+The former `jui-core-old` module has been removed after its useful features were reimplemented on the canonical rerun architecture.
 
 ## LLM-first direction
-
-The intended generation path is:
 
 ```text
 Natural language
