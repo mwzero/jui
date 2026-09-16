@@ -27,7 +27,6 @@
   <modules>
     <module>jui-core</module>
     <module>jui-data</module>
-    <module>jui-core-old</module>
     <module>examples/customer-app</module>
   </modules>
 
@@ -106,14 +105,8 @@
   </repositories>
 
   <distributionManagement>
-    <snapshotRepository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/mwzero/jui</url>
-    </snapshotRepository>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/mwzero/jui</url>
-    </repository>
+    <snapshotRepository><id>github</id><url>https://maven.pkg.github.com/mwzero/jui</url></snapshotRepository>
+    <repository><id>github</id><url>https://maven.pkg.github.com/mwzero/jui</url></repository>
   </distributionManagement>
 
   <build>
@@ -133,11 +126,7 @@
             <source>${maven.compiler.source}</source>
             <target>${maven.compiler.target}</target>
             <annotationProcessorPaths>
-              <path>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.42</version>
-              </path>
+              <path><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.42</version></path>
             </annotationProcessorPaths>
           </configuration>
         </plugin>
@@ -147,10 +136,7 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.5.4</version>
-        <configuration>
-          <forkCount>1</forkCount>
-          <reuseForks>true</reuseForks>
-        </configuration>
+        <configuration><forkCount>1</forkCount><reuseForks>true</reuseForks></configuration>
       </plugin>
     </plugins>
   </build>
