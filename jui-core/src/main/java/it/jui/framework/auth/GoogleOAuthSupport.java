@@ -1,5 +1,14 @@
 package it.jui.framework.auth;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import it.jui.framework.server.HttpSupport;
+import it.jui.framework.server.ISessionManager;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -11,20 +20,6 @@ import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.Base64;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import it.jui.framework.server.ISessionManager;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 public final class GoogleOAuthSupport {
 
     private static final long STATE_MAX_AGE_SECONDS = 600;
@@ -34,56 +29,68 @@ public final class GoogleOAuthSupport {
 
     private GoogleOAuthSupport() {}
 
-    public static void install(ServletContextHandler context, ISessionManager sessions, GoogleOAuthConfig config) {
-        context.addServlet(new ServletHolder(new HttpServlet() {
-            @Override
-            protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                String sessionId = req.getParameter("sessionId");
-                if (sessionId == null || sessionId.isBlank()) {
-                    resp.sendError(400, "Missing sessionId");
-                    return;
-                }
-
-                String state = createState(sessionId, config.clientSecret());
-                String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
-                        + "?client_id=" + enc(config.clientId())
-                        + "&redirect_uri=" + enc(config.callbackUrl())
-                        + "&response_type=code"
-                        + "&scope=" + enc("openid profile email")
-                        + "&state=" + enc(state);
-                resp.sendRedirect(authUrl);
+    public static void install(HttpServer server, ISessionManager sessions, GoogleOAuthConfig config) {
+        server.createContext("/auth/google/login", exchange -> {
+            if (!exactPath(exchange, "/auth/google/login")) return;
+            if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
+                HttpSupport.methodNotAllowed(exchange, "GET");
+                return;
             }
-        }), "/auth/google/login");
 
-        context.addServlet(new ServletHolder(new HttpServlet() {
-            @Override
-            protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-                String code = req.getParameter("code");
-                String state = req.getParameter("state");
-                if (code == null || state == null) {
-                    resp.sendError(400, "Missing OAuth callback parameters");
-                    return;
-                }
-
-                String sessionId = verifyState(state, config.clientSecret());
-                if (sessionId == null) {
-                    resp.sendError(400, "Invalid or expired OAuth state");
-                    return;
-                }
-
-                try {
-                    String accessToken = exchangeCode(code, config);
-                    AuthUser user = fetchUser(accessToken);
-                    sessions.updateState(sessionId, AuthUser.SESSION_KEY, user);
-                    resp.sendRedirect("/");
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    resp.sendError(500, "OAuth request interrupted");
-                } catch (RuntimeException e) {
-                    resp.sendError(500, "Google authentication failed");
-                }
+            String sessionId = HttpSupport.queryParam(exchange, "sessionId");
+            if (sessionId == null || sessionId.isBlank()) {
+                HttpSupport.text(exchange, 400, "Missing sessionId");
+                return;
             }
-        }), config.callbackPath());
+
+            String state = createState(sessionId, config.clientSecret());
+            String authUrl = "https://accounts.google.com/o/oauth2/v2/auth"
+                    + "?client_id=" + enc(config.clientId())
+                    + "&redirect_uri=" + enc(config.callbackUrl())
+                    + "&response_type=code"
+                    + "&scope=" + enc("openid profile email")
+                    + "&state=" + enc(state);
+            HttpSupport.redirect(exchange, authUrl);
+        });
+
+        server.createContext(config.callbackPath(), exchange -> {
+            if (!exactPath(exchange, config.callbackPath())) return;
+            if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
+                HttpSupport.methodNotAllowed(exchange, "GET");
+                return;
+            }
+
+            String code = HttpSupport.queryParam(exchange, "code");
+            String state = HttpSupport.queryParam(exchange, "state");
+            if (code == null || state == null) {
+                HttpSupport.text(exchange, 400, "Missing OAuth callback parameters");
+                return;
+            }
+
+            String sessionId = verifyState(state, config.clientSecret());
+            if (sessionId == null) {
+                HttpSupport.text(exchange, 400, "Invalid or expired OAuth state");
+                return;
+            }
+
+            try {
+                String accessToken = exchangeCode(code, config);
+                AuthUser user = fetchUser(accessToken);
+                sessions.updateState(sessionId, AuthUser.SESSION_KEY, user);
+                HttpSupport.redirect(exchange, "/");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                HttpSupport.text(exchange, 500, "OAuth request interrupted");
+            } catch (RuntimeException e) {
+                HttpSupport.text(exchange, 500, "Google authentication failed");
+            }
+        });
+    }
+
+    private static boolean exactPath(HttpExchange exchange, String expected) throws IOException {
+        if (expected.equals(exchange.getRequestURI().getPath())) return true;
+        HttpSupport.text(exchange, 404, "Not found");
+        return false;
     }
 
     private static String exchangeCode(String code, GoogleOAuthConfig config) throws IOException, InterruptedException {
