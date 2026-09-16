@@ -1,15 +1,17 @@
+# jui-core
 
-#Few useful links:
-- https://getbootstrap.com/docs/5.0/forms/form-control/
-- https://apexcharts.com/docs/chart-types/line-chart/
-- https://twitter.com/andrejusb/status/1578099977036779520
-- https://docs.streamlit.io/develop/api-reference/charts
-- https://www.gradio.app/
-- https://python-visualization.github.io/folium/latest/user_guide/ui_elements/layer_control.html
-- https://cloud.maptiler.com/auth/widget?next=https://cloud.maptiler.com/maps/basic-v2/
+`jui-core` is the canonical JUI runtime and Java UI API.
 
-#HtmlX and AlpineJs
-- https://hamy.xyz/labs/2024-01_htmx-vs-alpine
-- https://htmx.org/reference/#api
-- https://alpinejs.dev/start-here
-- https://martinfowler.com/articles/tdd-html-templates.html
+Applications implement `it.jui.framework.app.JuiApp` and render through `UIContext`. The runtime uses Jetty plus a thin browser shell; interactions update session state and rerun the Java application.
+
+Core capabilities include:
+
+- text, Markdown, code and status elements
+- interactive inputs and small file uploads
+- layout, tabs, sidebar and dialogs
+- type-driven tables and forms
+- CRUD with pluggable `CrudRepository<T, ID>`
+- charts, media and interactive Leaflet maps
+- optional Google OAuth
+
+See the repository root `README.md` and `docs/` for the current API and architecture.
