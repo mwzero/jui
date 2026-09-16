@@ -1,159 +1,53 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
             "type": "java",
-            "name": "JuiCLITest",
+            "name": "JUI CLI",
             "request": "launch",
-            "mainClass": "it.jui.cli.JuiCLITest",
+            "mainClass": "it.jui.cli.JuiCLI",
             "projectName": "jui-core"
         },
         {
             "type": "java",
-            "name": "MapTestCLI",
+            "name": "Customer Example",
             "request": "launch",
-            "mainClass": "it.jui.cli.MapTestCLI",
-            "projectName": "jui-core"
+            "mainClass": "it.jui.examples.customer.CustomerApp",
+            "projectName": "customer-app"
         },
         {
             "type": "java",
-            "name": "ChartElements",
+            "name": "Dashboard Example",
             "request": "launch",
-            "mainClass": "com.jui.apis.ChartElements",
-            "projectName": "jui-core"
+            "mainClass": "it.jui.examples.dashboard.DashboardApp",
+            "projectName": "dashboard-app"
         },
         {
             "type": "java",
-            "name": "JuiDataFrameRecipe",
+            "name": "Survey Example",
             "request": "launch",
-            "mainClass": "com.jui.st.JuiDataFrameRecipe",
-            "projectName": "jui-core",
-            "env": {
-                "USE_PROXY": "true",
-                "PROXY_HOST": "ipv4.93.57.67.206.hybrid-web.global.blackspider.com",
-                "PROXY_PORT": "8006"
-            }
+            "mainClass": "it.jui.examples.survey.SurveyApp",
+            "projectName": "survey-app"
         },
         {
             "type": "java",
-            "name": "DataViewTest",
+            "name": "Map Example",
             "request": "launch",
-            "mainClass": "com.jui.apis.DataViewTest",
-            "projectName": "jui-core"
+            "mainClass": "it.jui.examples.map.MapApp",
+            "projectName": "map-app"
         },
         {
             "type": "java",
-            "name": "LayoutSideBar",
+            "name": "Media Example",
             "request": "launch",
-            "mainClass": "com.jui.apis.LayoutSideBar",
-            "projectName": "jui-core"
-        },
-        {
-            "type": "java",
-            "name": "DashboardApp",
-            "request": "launch",
-            "mainClass": "com.jui.apps.DashboardApp",
-            "projectName": "jui-apps-dashboard"
-        },
-        {
-            "type": "java",
-            "name": "BackFrontEndEventsTest",
-            "request": "launch",
-            "mainClass": "com.jui.apis.BackFrontEndEventsTest",
-            "projectName": "jui-core"
-        },
-        {
-            "type": "java",
-            "name": "ProgressBarTest",
-            "request": "launch",
-            "mainClass": "com.jui.apis.ProgressBarTest",
-            "projectName": "jui-core"
-        },
-        {
-            "type": "java",
-            "name": "StatusElementstTest",
-            "request": "launch",
-            "mainClass": "com.jui.apis.StatusElementstTest",
-            "projectName": "jui-core"
+            "mainClass": "it.jui.examples.media.MediaApp",
+            "projectName": "media-app"
         },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "AllYouCanEat",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.AllYouCanEat",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "CsvRecipe",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.CsvRecipe",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "DbTableRecipe",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.DbTableRecipe",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "InputExample",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.InputExample",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "JuiAnnotations",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.JuiAnnotations",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "MapZoomerRecipe",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.MapZoomerRecipe",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "SideBarRecipe",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.SideBarRecipe",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "TableRecipe",
-            "request": "launch",
-            "mainClass": "com.jui.recipes.TableRecipe",
-            "projectName": "jui-recipes"
-        },
-        {
-            "type": "java",
-            "name": "CheckSum",
-            "request": "launch",
-            "mainClass": "com.jui.labs.CheckSum",
-            "projectName": "jui-sandbox"
-        },
-        {
-            "type": "java",
-            "name": "ScriptEngineLabs",
-            "request": "launch",
-            "mainClass": "com.jui.labs.ScriptEngineLabs",
-            "projectName": "jui-sandbox"
         }
     ]
 }

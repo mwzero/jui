@@ -20,9 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jui.playground.config.WebSocketConfig;
+import com.jui.playground.exec.JavaCodeExecutor;
 import com.jui.playground.model.ExampleFile;
-
-import com.jui.toolkits.JavaCodeExecutor;
 
 import jakarta.annotation.PostConstruct;
 
@@ -30,56 +29,38 @@ import jakarta.annotation.PostConstruct;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://127.0.0.1:8080")
 public class CodeExecutionController {
-	
-	@Autowired
-	private WebSocketConfig webSocketConfig;
-	
-	JavaCodeExecutor codeExecutor;
-	
-	private static final String EXAMPLES_DIR = "examples" + File.separator;
-	
-	@PostConstruct
-	public void init() {
-		
-		codeExecutor = JavaCodeExecutor.builder()
-    			.listener(webSocketConfig)
-    			.cp(new String[] {"libs\\jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar"})
-    			//.rootFolder(";")
-    			.build();
-		
-        // Initialization logic here
-        System.out.println("MyController has been initialized");
-        
+
+    @Autowired
+    private WebSocketConfig webSocketConfig;
+
+    private JavaCodeExecutor codeExecutor;
+
+    private static final String EXAMPLES_DIR = "examples" + File.separator;
+
+    @PostConstruct
+    public void init() {
+        String coreJar = Path.of("libs", "jui-core-0.0.1-SNAPSHOT-jar-with-dependencies.jar").toString();
+        codeExecutor = new JavaCodeExecutor(webSocketConfig, new String[] { coreJar }, null);
     }
 
-	@PostMapping("/compile")
-	public ResponseEntity<String> compileCode(@RequestBody Map<String, String> requestBody) {
-	    String fileName = requestBody.get("fileName");
-
-	    try {
-	        //String output = 
-	    	codeExecutor.compileAndRunJavaCode(EXAMPLES_DIR + fileName);
-	        return ResponseEntity.ok("");
-	    } catch (IOException e) {
-	    	
-	        // Restituisci un errore 500 con il messaggio dell'eccezione
-	        return ResponseEntity.status(500).body(e.getMessage());
-	    }
-	}
-
-    
-    
+    @PostMapping("/compile")
+    public ResponseEntity<String> compileCode(@RequestBody Map<String, String> requestBody) {
+        String fileName = requestBody.get("fileName");
+        try {
+            codeExecutor.compileAndRunJavaCode(EXAMPLES_DIR + fileName);
+            return ResponseEntity.ok("");
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/examples")
     public List<ExampleFile> getExamples() {
-    	
-    	List<ExampleFile> examples = new ArrayList<ExampleFile>();
-    	
+        List<ExampleFile> examples = new ArrayList<>();
         File folder = new File(EXAMPLES_DIR);
         File[] files = folder.listFiles();
-        
-        if  ( files == null) return examples; 
-        
+        if (files == null) return examples;
+
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".java")) {
                 examples.add(new ExampleFile(file.getName(), file.getName()));
@@ -92,23 +73,17 @@ public class CodeExecutionController {
     public ResponseEntity<String> getExampleCode(@PathVariable String fileName) {
         try {
             Path filePath = Paths.get(EXAMPLES_DIR + fileName);
-            String code = Files.readString(filePath);
-            return ResponseEntity.ok(code);
+            return ResponseEntity.ok(Files.readString(filePath));
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error loading file.");
         }
     }
 
- // Endpoint per salvare il codice con un nome specificato
     @PostMapping("/save")
     public ResponseEntity<Map<String, String>> saveCode(@RequestBody Map<String, String> requestBody) {
         String code = requestBody.get("code");
-        String fileName = requestBody.get("fileName"); // Recupera il nome del file dal body della richiesta
-
-        // Se non viene specificato un nome, usa un nome di default
-        if (fileName == null || fileName.isEmpty()) {
-            fileName = "CustomCode.java";
-        }
+        String fileName = requestBody.get("fileName");
+        if (fileName == null || fileName.isEmpty()) fileName = "CustomCode.java";
 
         try {
             Path path = Paths.get(EXAMPLES_DIR + fileName);
@@ -118,7 +93,4 @@ public class CodeExecutionController {
             return ResponseEntity.status(500).body(Map.of("message", "Errore nel salvataggio del file."));
         }
     }
-
-
 }
-    
