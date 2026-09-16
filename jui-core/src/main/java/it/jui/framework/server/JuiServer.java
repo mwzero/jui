@@ -1,61 +1,62 @@
 package it.jui.framework.server;
 
-import java.net.URL;
-
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.DefaultServlet;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-
-import it.jui.cli.JuiCLI;
+import com.sun.net.httpserver.HttpServer;
 import it.jui.framework.app.JuiProvider;
 import it.jui.framework.auth.GoogleOAuthConfig;
 import it.jui.framework.auth.GoogleOAuthSupport;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class JuiServer {
 
     private static final int DEFAULT_PORT = 8080;
 
-    private final Server server;
-    private final ServletContextHandler context;
+    private final HttpServer server;
     private final ISessionManager sessionManager;
+    private final ExecutorService executor;
+    private final CountDownLatch stopped = new CountDownLatch(1);
 
-    public JuiServer(JuiProvider appProvider) throws Exception {
+    public JuiServer(JuiProvider appProvider) throws IOException {
         this(resolvePort(), appProvider);
     }
 
-    public JuiServer(int port, JuiProvider appProvider) throws Exception {
+    public JuiServer(int port, JuiProvider appProvider) throws IOException {
         sessionManager = new InMemorySessionManager();
-        server = new Server(port);
+        server = HttpServer.create(new InetSocketAddress(port), 0);
+        executor = Executors.newVirtualThreadPerTaskExecutor();
+        server.setExecutor(executor);
 
-        context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-
-        URL staticResources = JuiCLI.class.getResource("/static");
-        if (staticResources != null) {
-            String resourceBase = staticResources.toExternalForm();
-            if (!resourceBase.endsWith("/")) resourceBase += "/";
-            context.setResourceBase(resourceBase);
-        }
-        server.setHandler(context);
-
-        ServletHolder staticHolder = new ServletHolder("default", DefaultServlet.class);
-        staticHolder.setInitParameter("dirAllowed", "true");
-        context.addServlet(staticHolder, "/");
-
-        context.addServlet(new ServletHolder(new UiServlet(sessionManager, appProvider)), "/ui");
-        System.out.println("JUI server listening on port " + port);
+        server.createContext("/ui", new UiHandler(sessionManager, appProvider));
+        server.createContext("/", new StaticHandler());
     }
 
     /** Registers Google OAuth endpoints before the server is started. */
     public JuiServer googleOAuth(GoogleOAuthConfig config) {
-        GoogleOAuthSupport.install(context, sessionManager, config);
+        GoogleOAuthSupport.install(server, sessionManager, config);
         return this;
     }
 
-    public void start() throws Exception {
+    /** Starts the server and blocks until {@link #stop()} is called. */
+    public void start() throws InterruptedException {
         server.start();
-        server.join();
+        System.out.println("JUI server listening on port " + server.getAddress().getPort());
+        try {
+            stopped.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            stop();
+            throw e;
+        }
+    }
+
+    public void stop() {
+        server.stop(0);
+        executor.shutdown();
+        stopped.countDown();
     }
 
     private static int resolvePort() {
