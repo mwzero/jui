@@ -19,8 +19,8 @@ jobs:
           java-version: '25'
           cache: maven
 
-      - name: Test canonical modules and customer app
-        run: mvn -B -pl jui-core,jui-data,examples/customer-app -am test
+      - name: Test canonical modules and examples
+        run: mvn -B -pl jui-core,jui-data,examples/customer-app,examples/dashboard-app,examples/survey-app,examples/map-app,examples/media-app -am test
 
-      - name: Package customer app
-        run: mvn -B -pl examples/customer-app -am package -DskipTests
+      - name: Package examples
+        run: mvn -B -pl examples/customer-app,examples/dashboard-app,examples/survey-app,examples/map-app,examples/media-app -am package -DskipTests
