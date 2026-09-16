@@ -11,6 +11,41 @@ import it.jui.framework.server.InMemorySessionManager;
 class LayoutElementsTest {
 
     @Test
+    void compositeLayoutsCaptureNestedContentAndEscapeLabels() {
+        UIContext ui = ui();
+
+        ui.container(() -> ui.text("Container body"));
+        ui.columns(() -> ui.text("Column A"), () -> ui.text("Column B"));
+        ui.expander("<More>", () -> ui.text("Expanded body"));
+        ui.popover("<Help>", () -> ui.text("Popover body"));
+        ui.dialog("<Details>", () -> ui.text("Dialog body"));
+        ui.card("<Card>", "<Body>");
+
+        String html = ui.getHtml();
+        assertTrue(html.contains("Container body"));
+        assertTrue(html.contains("md:grid-cols-2"));
+        assertTrue(html.contains("Column A"));
+        assertTrue(html.contains("Column B"));
+        assertTrue(html.contains("Expanded body"));
+        assertTrue(html.contains("Popover body"));
+        assertTrue(html.contains("Dialog body"));
+        assertTrue(html.contains("<dialog"));
+        assertTrue(html.contains("&lt;More&gt;"));
+        assertTrue(html.contains("&lt;Help&gt;"));
+        assertTrue(html.contains("&lt;Details&gt;"));
+        assertTrue(html.contains("&lt;Card&gt;"));
+        assertTrue(html.contains("&lt;Body&gt;"));
+        assertFalse(html.contains("<Card>"));
+    }
+
+    @Test
+    void emptyColumnsRenderNothing() {
+        UIContext ui = ui();
+        ui.columns();
+        assertTrue(ui.getHtml().isEmpty());
+    }
+
+    @Test
     void metricRendersLabelAndNumericValue() {
         UIContext ui = ui();
 
