@@ -9,6 +9,7 @@ Small standalone applications that demonstrate one area of the canonical JUI API
 | `jui-app-survey` | interactive inputs, progress and one-shot buttons |
 | `jui-app-map` | interactive Leaflet map and `MapState` |
 | `jui-app-media` | Markdown, lists, layout and browser media |
+| `jui-playground` | edit, compile and preview JUI applications locally |
 
 Each project is a normal Maven module and packages as an executable shaded JAR.
 

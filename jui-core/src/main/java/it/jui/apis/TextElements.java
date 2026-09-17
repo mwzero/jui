@@ -215,13 +215,21 @@ public class TextElements extends BaseElements {
     }
 
     public String textarea(String label, String def) {
+        return textarea(label, def, 4, false);
+    }
+
+    public String codeEditor(String label, String def) {
+        return textarea(label, def, 24, true);
+    }
+
+    private String textarea(String label, String def, int rows, boolean code) {
         String id = ctx.getNextWidgetId(label);
         String val = ctx.getValue(id, def);
         ctx.addHtml(String.format(
             "<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300'>%s</label>" +
-            "<textarea onchange=\"sendUpdate('%s', this.value)\" rows='4' " +
-            "class='mt-1 block w-full border border-gray-300 dark:border-gray-600 p-2 rounded-md bg-white dark:bg-gray-700 dark:text-white'>%s</textarea></div>",
-            escapeHtml(label), id, escapeHtml(val)));
+            "<textarea onchange=\"sendUpdate('%s', this.value)\" rows='%d' %s" +
+            "class='mt-1 block w-full border border-gray-300 dark:border-gray-600 p-2 rounded-md bg-white dark:bg-gray-700 dark:text-white %s'>%s</textarea></div>",
+            escapeHtml(label), id, rows, code ? "spellcheck='false' " : "", code ? "font-mono text-sm" : "", escapeHtml(val)));
         return val;
     }
 

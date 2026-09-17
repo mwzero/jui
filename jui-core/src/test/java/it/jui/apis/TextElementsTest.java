@@ -89,6 +89,18 @@ class TextElementsTest {
         assertFalse(new UIContext("s1", sessions).button("Save"));
     }
 
+    @Test
+    void codeEditorUsesAStatefulMonospaceTextarea() {
+        UIContext ui = ui();
+
+        assertEquals("class Example {}", ui.codeEditor("Source", "class Example {}"));
+
+        String html = ui.getHtml();
+        assertTrue(html.contains("rows='24'"));
+        assertTrue(html.contains("spellcheck='false'"));
+        assertTrue(html.contains("font-mono"));
+    }
+
     private UIContext ui() {
         return new UIContext("s1", new InMemorySessionManager());
     }
