@@ -11,10 +11,9 @@ This makes JUI useful both for humans and for small local code models that shoul
 ## Minimal application
 
 ```java
+import it.jui.framework.Jui;
 import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
 import it.jui.framework.core.UIContext;
-import it.jui.framework.server.JuiServer;
 
 public class HelloApp implements JuiApp {
     @Override
@@ -24,7 +23,7 @@ public class HelloApp implements JuiApp {
     }
 
     public static void main(String[] args) throws Exception {
-        new JuiServer(new JuiProvider(new HelloApp())).start();
+        Jui.run(new HelloApp());
     }
 }
 ```
