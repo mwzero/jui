@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "app.jui-playground",
+  "name": "JUI Playground",
+  "intent": "Browse, edit and preview small JUI applications",
+  "archetype": "developer-tool",
+  "entrypoint": "it.jui.playground.PlaygroundApp",
+  "capabilities": ["text.heading", "text.plain", "input.select", "input.code", "input.text", "input.radio", "input.multi-choice", "layout.columns", "layout.metric", "layout.divider", "event.button", "status.feedback", "status.progress"],
+  "userIntents": ["try JUI code", "preview a JUI application", "prova JUI", "esegui un esempio JUI"]
+}

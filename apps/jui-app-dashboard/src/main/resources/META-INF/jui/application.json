@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "app.analytics-dashboard",
+  "name": "Analytics Dashboard",
+  "intent": "Explore business indicators through navigation, metrics, charts and tables",
+  "archetype": "analytics-dashboard",
+  "entrypoint": "it.jui.apps.dashboard.DashboardApp",
+  "capabilities": ["text.heading", "navigation.sidebar", "layout.columns", "layout.metric", "chart.line", "chart.bar", "data.table", "status.feedback"],
+  "userIntents": ["create a business dashboard", "show sales indicators", "crea una dashboard", "cruscotto vendite"]
+}

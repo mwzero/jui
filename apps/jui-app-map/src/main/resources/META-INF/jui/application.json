@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "app.geographic-explorer",
+  "name": "Geographic Explorer",
+  "intent": "Explore a geographic area through an interactive map viewport",
+  "archetype": "map-application",
+  "entrypoint": "it.jui.apps.map.MapApp",
+  "capabilities": ["text.heading", "text.markdown", "map.interactive", "layout.columns", "layout.metric"],
+  "userIntents": ["create an interactive map", "explore a location", "crea una mappa interattiva", "visualizza una località"]
+}

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "app.customer-management",
+  "name": "Customer Management",
+  "intent": "Manage a typed collection of customers through metrics, forms, tables and CRUD operations",
+  "archetype": "management-application",
+  "entrypoint": "it.jui.apps.customer.CustomerApp",
+  "capabilities": ["text.heading", "text.plain", "layout.metric", "data.crud"],
+  "userIntents": ["create a customer management application", "manage customer records", "crea una gestione clienti", "anagrafica clienti"]
+}

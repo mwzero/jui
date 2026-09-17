@@ -8,6 +8,8 @@ The canonical API lives under `it.jui`. Applications stay Java-only: application
 
 This makes JUI useful both for humans and for small local code models that should not need to generate HTML, CSS, JavaScript or framework boilerplate.
 
+JUI also packages a machine-readable semantic catalog. It maps user intents to high-level capabilities, the `ui.*` methods that implement them and complete application archetypes. Retrieval pipelines can therefore give a local model only the small API subset required for the current request. See [`docs/semantic-catalog.md`](docs/semantic-catalog.md).
+
 ## Minimal application
 
 ```java

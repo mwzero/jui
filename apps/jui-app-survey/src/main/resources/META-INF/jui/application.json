@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "app.structured-survey",
+  "name": "Structured Survey",
+  "intent": "Collect structured answers through typed interactive inputs and submit the result",
+  "archetype": "data-collection-form",
+  "entrypoint": "it.jui.apps.survey.SurveyApp",
+  "capabilities": ["text.heading", "text.plain", "input.radio", "input.multi-choice", "input.select", "input.date", "input.color", "status.progress", "event.button", "status.feedback"],
+  "userIntents": ["create a questionnaire", "collect survey responses", "crea un questionario", "raccogli risposte"]
+}

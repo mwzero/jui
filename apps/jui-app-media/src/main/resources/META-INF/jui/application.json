@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "app.media-showcase",
+  "name": "Media Showcase",
+  "intent": "Present formatted text, lists, images, audio and video in a structured page",
+  "archetype": "content-application",
+  "entrypoint": "it.jui.apps.media.MediaApp",
+  "capabilities": ["text.heading", "text.plain", "text.markdown", "list.bullets", "layout.disclosure", "media.image", "media.audio", "media.video"],
+  "userIntents": ["create a multimedia page", "show media content", "crea una pagina multimediale", "presenta contenuti media"]
+}
