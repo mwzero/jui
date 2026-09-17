@@ -1,5 +1,5 @@
-import it.jui.framework.app.JuiApp;
-import it.jui.framework.core.UIContext;
+import it.jui.JuiApp;
+import it.jui.UIContext;
 
 public class {{CLASS_NAME}} implements JuiApp {
 

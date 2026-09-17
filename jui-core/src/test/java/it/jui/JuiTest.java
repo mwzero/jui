@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import it.jui.cli.JuiCLI;
-import it.jui.framework.app.JuiProvider;
-import it.jui.framework.server.JuiServer;
+import it.jui.app.JuiProvider;
+import it.jui.server.JuiServer;
 
 /**
  * Manual server demos. These tests intentionally start a blocking HTTP server and

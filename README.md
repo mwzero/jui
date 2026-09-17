@@ -2,7 +2,7 @@
 
 JUI is a lightweight Java framework for building interactive web applications with a very small application surface.
 
-The canonical API lives under `it.jui.framework`. Applications stay Java-only: application code describes intent while JUI handles browser rendering, HTTP and session state.
+The canonical API lives under `it.jui`. Applications stay Java-only: application code describes intent while JUI handles browser rendering, HTTP and session state.
 
 > Minimum tokens from user intent to running application.
 
@@ -11,9 +11,9 @@ This makes JUI useful both for humans and for small local code models that shoul
 ## Minimal application
 
 ```java
-import it.jui.framework.Jui;
-import it.jui.framework.app.JuiApp;
-import it.jui.framework.core.UIContext;
+import it.jui.Jui;
+import it.jui.JuiApp;
+import it.jui.UIContext;
 
 public class HelloApp implements JuiApp {
     @Override
@@ -206,21 +206,21 @@ Records are the preferred model because field order and construction are determi
 
 ## Examples
 
-`examples/` contains standalone applications that double as documentation and compile-time smoke tests:
+`apps/` contains standalone applications that double as documentation and compile-time smoke tests:
 
 | Project | Focus |
 | --- | --- |
-| `customer-app` | type-driven CRUD, tables and metrics |
-| `dashboard-app` | sidebar, metrics, charts and tables |
-| `survey-app` | interactive inputs, progress and buttons |
-| `map-app` | interactive Leaflet map and `MapState` |
-| `media-app` | Markdown, lists, layout and browser media |
+| `jui-app-customer` | type-driven CRUD, tables and metrics |
+| `jui-app-dashboard` | sidebar, metrics, charts and tables |
+| `jui-app-survey` | interactive inputs, progress and buttons |
+| `jui-app-map` | interactive Leaflet map and `MapState` |
+| `jui-app-media` | Markdown, lists, layout and browser media |
 
 For example:
 
 ```bash
-mvn -B -pl examples/dashboard-app -am package
-java -jar examples/dashboard-app/target/dashboard-app-0.0.1-SNAPSHOT.jar
+mvn -B -pl apps/jui-app-dashboard -am package
+java -jar apps/jui-app-dashboard/target/jui-app-dashboard-0.0.1-SNAPSHOT.jar
 ```
 
 Then open `http://localhost:8080`.
@@ -247,7 +247,7 @@ CI runs focused JUnit tests for the canonical APIs, tests `jui-data`, compiles e
 
 - `jui-core` — canonical interactive UI framework.
 - `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
-- `examples/*` — small standalone applications covering the canonical API surface.
+- `apps/jui-app-*` — small standalone applications covering the canonical API surface.
 - `jui-playground` — standalone playground, no longer dependent on `jui-toolkits`.
 
 The obsolete `jui-core-old`, `jui-toolkits`, `jui-apps-dashboard` and root `sandbox` workspace have been removed rather than kept as parallel framework implementations.

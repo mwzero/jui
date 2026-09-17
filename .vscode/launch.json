@@ -12,36 +12,36 @@
             "type": "java",
             "name": "Customer Example",
             "request": "launch",
-            "mainClass": "it.jui.examples.customer.CustomerApp",
-            "projectName": "customer-app"
+            "mainClass": "it.jui.apps.customer.CustomerApp",
+            "projectName": "jui-app-customer"
         },
         {
             "type": "java",
             "name": "Dashboard Example",
             "request": "launch",
-            "mainClass": "it.jui.examples.dashboard.DashboardApp",
-            "projectName": "dashboard-app"
+            "mainClass": "it.jui.apps.dashboard.DashboardApp",
+            "projectName": "jui-app-dashboard"
         },
         {
             "type": "java",
             "name": "Survey Example",
             "request": "launch",
-            "mainClass": "it.jui.examples.survey.SurveyApp",
-            "projectName": "survey-app"
+            "mainClass": "it.jui.apps.survey.SurveyApp",
+            "projectName": "jui-app-survey"
         },
         {
             "type": "java",
             "name": "Map Example",
             "request": "launch",
-            "mainClass": "it.jui.examples.map.MapApp",
-            "projectName": "map-app"
+            "mainClass": "it.jui.apps.map.MapApp",
+            "projectName": "jui-app-map"
         },
         {
             "type": "java",
             "name": "Media Example",
             "request": "launch",
-            "mainClass": "it.jui.examples.media.MediaApp",
-            "projectName": "media-app"
+            "mainClass": "it.jui.apps.media.MediaApp",
+            "projectName": "jui-app-media"
         },
         {
             "type": "java",

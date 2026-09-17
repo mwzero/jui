@@ -1,7 +1,7 @@
 package it.jui.cli;
 
-import it.jui.framework.app.JuiProvider;
-import it.jui.framework.server.JuiServer;
+import it.jui.app.JuiProvider;
+import it.jui.server.JuiServer;
 
 import java.io.BufferedReader;
 import java.io.File;

@@ -2,7 +2,7 @@
 
 JUI is a lightweight Java framework for building interactive web applications without writing frontend code.
 
-The canonical implementation is `jui-core` under `it.jui.framework`. Applications implement `JuiApp`, receive a `UIContext`, and describe their UI with compact Java calls.
+The canonical implementation is `jui-core` under `it.jui`. Applications implement `JuiApp`, receive a `UIContext`, and describe their UI with compact Java calls.
 
 ## Key ideas
 
@@ -35,6 +35,6 @@ See [Getting Started](getting-started.md) for build/run instructions and [Archit
 
 - `jui-core` — canonical interactive UI framework.
 - `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
-- `examples/customer-app` — deployable smoke test and compact-generation benchmark.
+- `apps/jui-app-customer` — deployable smoke test and compact-generation benchmark.
 
 The former `jui-core-old` module has been removed after its useful capabilities were reimplemented on the canonical rerun architecture.
