@@ -2,11 +2,13 @@ FROM maven:3.9-eclipse-temurin-25 AS build
 
 WORKDIR /src
 COPY . .
-RUN mvn -B -pl apps/jui-app-customer -am package -DskipTests
+RUN mvn -B -pl apps/jui-playground -am package -DskipTests
 
-FROM eclipse-temurin:25
+FROM eclipse-temurin:25-jre
 
 WORKDIR /app
-COPY --from=build /src/apps/jui-app-customer/target/jui-app-customer-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY --from=build /src/apps/jui-playground/target/jui-playground-0.0.1-SNAPSHOT.jar /app/app.jar
+
+ENV JUI_PLAYGROUND_EXECUTION_ENABLED=false
 
 CMD ["java", "-jar", "/app/app.jar"]
