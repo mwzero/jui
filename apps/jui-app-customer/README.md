@@ -33,8 +33,4 @@ Set `PORT` to override the local port:
 PORT=9090 java -jar apps/jui-app-customer/target/jui-app-customer-0.0.1-SNAPSHOT.jar
 ```
 
-## Deploy on Vercel
-
-The repository root contains `Dockerfile.vercel`. Import this GitHub repository as a Vercel project and deploy the repository root. Vercel builds the customer application and starts its JUI/Jetty server on the platform-provided `PORT`.
-
 The customer list is in-memory only. It is suitable for demonstrating JUI but is not durable across container restarts or scale-out. A persistent example should use an external database.
