@@ -27,3 +27,6 @@ jobs:
 
       - name: Test and package playground
         run: mvn -B -pl apps/jui-playground -am package
+
+      - name: Build Vercel playground container
+        run: docker build -f Dockerfile.vercel -t jui-playground-vercel .

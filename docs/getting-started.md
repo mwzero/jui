@@ -231,7 +231,7 @@ java -jar jui-core.jar watch MyApp.java
 
 ## Deployment
 
-`JuiServer` reads `PORT`, so the same application can run locally or in a container. The repository includes a Vercel container setup for `apps/jui-app-customer`.
+`JuiServer` reads `PORT`, so the same application can run locally or in a container. The repository's Vercel container runs `apps/jui-playground` in safe cloud demo mode. Dynamic compilation is disabled and the runtime image contains a JRE rather than a JDK.
 
 Container instances should be considered stateless. Use an external database/service behind `CrudRepository` for durable business data.
 
