@@ -1,6 +1,6 @@
 # Getting Started with JUI
 
-JUI's canonical API is the Java-only `it.jui.framework` API in `jui-core`.
+JUI's canonical API is the Java-only `it.jui` API in `jui-core`.
 
 ## Requirements
 
@@ -28,9 +28,9 @@ Add `jui-data` only when CSV/JSON/JDBC DataFrame utilities are needed.
 ## Your first application
 
 ```java
-import it.jui.framework.Jui;
-import it.jui.framework.app.JuiApp;
-import it.jui.framework.core.UIContext;
+import it.jui.Jui;
+import it.jui.JuiApp;
+import it.jui.UIContext;
 
 public class HelloApp implements JuiApp {
     @Override
@@ -217,8 +217,8 @@ if (ui.authenticated()) {
 ## Canonical example
 
 ```bash
-mvn -B -pl examples/customer-app -am package
-java -jar examples/customer-app/target/customer-app-0.0.1-SNAPSHOT.jar
+mvn -B -pl apps/jui-app-customer -am package
+java -jar apps/jui-app-customer/target/jui-app-customer-0.0.1-SNAPSHOT.jar
 ```
 
 ## CLI
@@ -231,7 +231,7 @@ java -jar jui-core.jar watch MyApp.java
 
 ## Deployment
 
-`JuiServer` reads `PORT`, so the same application can run locally or in a container. The repository includes a Vercel container setup for `examples/customer-app`.
+`JuiServer` reads `PORT`, so the same application can run locally or in a container. The repository includes a Vercel container setup for `apps/jui-app-customer`.
 
 Container instances should be considered stateless. Use an external database/service behind `CrudRepository` for durable business data.
 

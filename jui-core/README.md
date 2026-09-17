@@ -2,7 +2,7 @@
 
 `jui-core` is the canonical JUI runtime and Java UI API.
 
-Applications implement `it.jui.framework.app.JuiApp` and render through `UIContext`. The runtime uses Jetty plus a thin browser shell; interactions update session state and rerun the Java application.
+Applications implement `it.jui.JuiApp` and render through `UIContext`. The runtime uses Jetty plus a thin browser shell; interactions update session state and rerun the Java application.
 
 Core capabilities include:
 

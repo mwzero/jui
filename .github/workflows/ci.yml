@@ -20,10 +20,10 @@ jobs:
           cache: maven
 
       - name: Test canonical modules and examples
-        run: mvn -B -pl jui-core,jui-data,examples/customer-app,examples/dashboard-app,examples/survey-app,examples/map-app,examples/media-app -am test
+        run: mvn -B -pl jui-core,jui-data,apps/jui-app-customer,apps/jui-app-dashboard,apps/jui-app-survey,apps/jui-app-map,apps/jui-app-media -am test
 
       - name: Package examples
-        run: mvn -B -pl examples/customer-app,examples/dashboard-app,examples/survey-app,examples/map-app,examples/media-app -am package -DskipTests
+        run: mvn -B -pl apps/jui-app-customer,apps/jui-app-dashboard,apps/jui-app-survey,apps/jui-app-map,apps/jui-app-media -am package -DskipTests
 
       - name: Compile standalone playground
         run: mvn -B -f jui-playground/pom.xml -DskipTests package

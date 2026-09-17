@@ -26,11 +26,11 @@
   <modules>
     <module>jui-core</module>
     <module>jui-data</module>
-    <module>examples/customer-app</module>
-    <module>examples/dashboard-app</module>
-    <module>examples/survey-app</module>
-    <module>examples/map-app</module>
-    <module>examples/media-app</module>
+    <module>apps/jui-app-customer</module>
+    <module>apps/jui-app-dashboard</module>
+    <module>apps/jui-app-survey</module>
+    <module>apps/jui-app-map</module>
+    <module>apps/jui-app-media</module>
   </modules>
 
   <dependencyManagement>
