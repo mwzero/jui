@@ -248,7 +248,7 @@ CI runs focused JUnit tests for the canonical APIs, tests `jui-data`, compiles e
 - `jui-core` — canonical interactive UI framework.
 - `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
 - `apps/jui-app-*` — small standalone applications covering the canonical API surface.
-- `jui-playground` — standalone playground, no longer dependent on `jui-toolkits`.
+- `apps/jui-playground` — local JUI application for editing, compiling and previewing JUI code.
 
 The obsolete `jui-core-old`, `jui-toolkits`, `jui-apps-dashboard` and root `sandbox` workspace have been removed rather than kept as parallel framework implementations.
 

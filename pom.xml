@@ -31,6 +31,7 @@
     <module>apps/jui-app-survey</module>
     <module>apps/jui-app-map</module>
     <module>apps/jui-app-media</module>
+    <module>apps/jui-playground</module>
   </modules>
 
   <dependencyManagement>
