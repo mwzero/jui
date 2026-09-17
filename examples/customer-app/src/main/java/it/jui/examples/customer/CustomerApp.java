@@ -3,10 +3,9 @@ package it.jui.examples.customer;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import it.jui.framework.Jui;
 import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
 import it.jui.framework.core.UIContext;
-import it.jui.framework.server.JuiServer;
 
 /**
  * Canonical JUI example used as a deployment smoke test and LLM-generation benchmark.
@@ -27,7 +26,7 @@ public class CustomerApp implements JuiApp {
     }
 
     public static void main(String[] args) throws Exception {
-        new JuiServer(new JuiProvider(new CustomerApp())).start();
+        Jui.run(new CustomerApp());
     }
 
     public record Customer(String name, String email, int age, boolean active) {}
