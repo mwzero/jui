@@ -81,7 +81,8 @@ class SemanticCatalogTest {
         Path repository = findRepositoryRoot();
         List<Path> profiles;
         try (var paths = Files.walk(repository.resolve("apps"))) {
-            profiles = paths.filter(path -> path.endsWith("META-INF/jui/application.json")).sorted().toList();
+            Path manifestPath = Path.of("src/main/resources/META-INF/jui/application.json");
+            profiles = paths.filter(path -> path.endsWith(manifestPath)).sorted().toList();
         }
 
         assertEquals(6, profiles.size(), "Every application must provide a semantic profile");
