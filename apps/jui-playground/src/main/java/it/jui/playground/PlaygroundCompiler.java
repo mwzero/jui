@@ -45,8 +45,9 @@ final class PlaygroundCompiler {
             List<String> options = List.of("-classpath", System.getProperty("java.class.path"), "-d", output.toString());
             boolean success = Boolean.TRUE.equals(compiler.getTask(null, manager, diagnostics, options, null, units).call());
             if (!success) {
+                String message = formatDiagnostics(diagnostics);
                 deleteWorkspace(workspace);
-                throw new IOException(formatDiagnostics(diagnostics));
+                throw new IOException(message);
             }
         }
 
