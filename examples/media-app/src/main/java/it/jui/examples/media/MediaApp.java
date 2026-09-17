@@ -2,10 +2,9 @@ package it.jui.examples.media;
 
 import java.util.List;
 
+import it.jui.framework.Jui;
 import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
 import it.jui.framework.core.UIContext;
-import it.jui.framework.server.JuiServer;
 
 public class MediaApp implements JuiApp {
 
@@ -28,6 +27,6 @@ public class MediaApp implements JuiApp {
     }
 
     public static void main(String[] args) throws Exception {
-        new JuiServer(new JuiProvider(new MediaApp())).start();
+        Jui.run(new MediaApp());
     }
 }

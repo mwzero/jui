@@ -2,10 +2,9 @@ package it.jui.examples.survey;
 
 import java.util.List;
 
+import it.jui.framework.Jui;
 import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
 import it.jui.framework.core.UIContext;
-import it.jui.framework.server.JuiServer;
 
 public class SurveyApp implements JuiApp {
 
@@ -34,6 +33,6 @@ public class SurveyApp implements JuiApp {
     }
 
     public static void main(String[] args) throws Exception {
-        new JuiServer(new JuiProvider(new SurveyApp())).start();
+        Jui.run(new SurveyApp());
     }
 }

@@ -1,10 +1,9 @@
 package it.jui.examples.map;
 
+import it.jui.framework.Jui;
 import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
 import it.jui.framework.core.UIContext;
 import it.jui.framework.map.MapState;
-import it.jui.framework.server.JuiServer;
 
 public class MapApp implements JuiApp {
 
@@ -21,6 +20,6 @@ public class MapApp implements JuiApp {
     }
 
     public static void main(String[] args) throws Exception {
-        new JuiServer(new JuiProvider(new MapApp())).start();
+        Jui.run(new MapApp());
     }
 }

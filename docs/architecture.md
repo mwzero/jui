@@ -44,12 +44,13 @@ The browser is deliberately thin. Application semantics stay in Java.
 - deployment port: `PORT` environment variable when present
 - optional Google OAuth routes can be installed before `start()`
 
+The default bootstrap hides the provider and server infrastructure:
+
 ```java
-JuiServer server = new JuiServer(new JuiProvider(app));
-server.start();
+Jui.run(app);
 ```
 
-Optional Google authentication is installed explicitly:
+`JuiServer` and `JuiProvider` remain available when infrastructure must be configured explicitly, such as for optional Google authentication:
 
 ```java
 JuiServer server = new JuiServer(new JuiProvider(app))
