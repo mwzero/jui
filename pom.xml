@@ -27,91 +27,39 @@
     <module>jui-core</module>
     <module>jui-data</module>
     <module>examples/customer-app</module>
+    <module>examples/dashboard-app</module>
+    <module>examples/survey-app</module>
+    <module>examples/map-app</module>
+    <module>examples/media-app</module>
   </modules>
 
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>com.jui</groupId>
-        <artifactId>jui-core</artifactId>
-        <version>${jui.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.jui</groupId>
-        <artifactId>jui-data</artifactId>
-        <version>${jui.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.jui</groupId>
-        <artifactId>jui-toolkits</artifactId>
-        <version>${jui.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>${gson.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.42</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-csv</artifactId>
-        <version>1.9.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.10.0</version>
-      </dependency>
+      <dependency><groupId>com.jui</groupId><artifactId>jui-core</artifactId><version>${jui.version}</version></dependency>
+      <dependency><groupId>com.jui</groupId><artifactId>jui-data</artifactId><version>${jui.version}</version></dependency>
+      <dependency><groupId>com.google.code.gson</groupId><artifactId>gson</artifactId><version>${gson.version}</version></dependency>
+      <dependency><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.42</version></dependency>
+      <dependency><groupId>org.apache.commons</groupId><artifactId>commons-csv</artifactId><version>1.9.0</version></dependency>
+      <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter-engine</artifactId><version>5.10.0</version></dependency>
     </dependencies>
   </dependencyManagement>
 
   <repositories>
-    <repository>
-      <id>github</id>
-      <url>https://maven.pkg.github.com/mwzero/jui</url>
-      <releases><enabled>true</enabled></releases>
-      <snapshots><enabled>true</enabled></snapshots>
-    </repository>
+    <repository><id>github</id><url>https://maven.pkg.github.com/mwzero/jui</url><releases><enabled>true</enabled></releases><snapshots><enabled>true</enabled></snapshots></repository>
   </repositories>
-
   <distributionManagement>
     <snapshotRepository><id>github</id><url>https://maven.pkg.github.com/mwzero/jui</url></snapshotRepository>
     <repository><id>github</id><url>https://maven.pkg.github.com/mwzero/jui</url></repository>
   </distributionManagement>
 
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.4</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.14.1</version>
-          <configuration>
-            <proc>full</proc>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
-            <annotationProcessorPaths>
-              <path><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.42</version></path>
-            </annotationProcessorPaths>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.4</version>
-        <configuration><forkCount>1</forkCount><reuseForks>true</reuseForks></configuration>
-      </plugin>
-    </plugins>
+    <pluginManagement><plugins>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.5.4</version></plugin>
+      <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.14.1</version><configuration>
+        <proc>full</proc><source>${maven.compiler.source}</source><target>${maven.compiler.target}</target>
+        <annotationProcessorPaths><path><groupId>org.projectlombok</groupId><artifactId>lombok</artifactId><version>1.18.42</version></path></annotationProcessorPaths>
+      </configuration></plugin>
+    </plugins></pluginManagement>
+    <plugins><plugin><artifactId>maven-surefire-plugin</artifactId><version>3.5.4</version><configuration><forkCount>1</forkCount><reuseForks>true</reuseForks></configuration></plugin></plugins>
   </build>
 </project>

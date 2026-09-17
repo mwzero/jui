@@ -205,24 +205,23 @@ ui.form(existingCustomer).ifPresent(updated -> repository.update(id, updated));
 
 Records are the preferred model because field order and construction are deterministic.
 
-## Canonical example
+## Examples
 
-`examples/customer-app` is the deployment smoke test and compact-generation benchmark:
+`examples/` contains standalone applications that double as documentation and compile-time smoke tests:
 
-```java
-@Override
-public void run(UIContext ui) {
-    ui.title("Customer Manager");
-    ui.metric("Customers", customers.size());
-    ui.crud(Customer.class, customers);
-}
-```
+| Project | Focus |
+| --- | --- |
+| `customer-app` | type-driven CRUD, tables and metrics |
+| `dashboard-app` | sidebar, metrics, charts and tables |
+| `survey-app` | interactive inputs, progress and buttons |
+| `map-app` | interactive Leaflet map and `MapState` |
+| `media-app` | Markdown, lists, layout and browser media |
 
-Build and run:
+For example:
 
 ```bash
-mvn -B -pl examples/customer-app -am package
-java -jar examples/customer-app/target/customer-app-0.0.1-SNAPSHOT.jar
+mvn -B -pl examples/dashboard-app -am package
+java -jar examples/dashboard-app/target/dashboard-app-0.0.1-SNAPSHOT.jar
 ```
 
 Then open `http://localhost:8080`.
@@ -243,15 +242,16 @@ JUI targets Java 25.
 mvn test
 ```
 
-CI tests `jui-core`, `jui-data` and the canonical customer application and verifies its executable package.
+CI runs focused JUnit tests for the canonical APIs, tests `jui-data`, compiles every example project and verifies their executable packages.
 
 ## Modules
 
 - `jui-core` — canonical interactive UI framework.
 - `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
-- `examples/customer-app` — compact deployable example and integration target.
+- `examples/*` — small standalone applications covering the canonical API surface.
+- `jui-playground` — standalone playground, no longer dependent on `jui-toolkits`.
 
-The former `jui-core-old` module has been removed after its useful features were reimplemented on the canonical rerun architecture.
+The obsolete `jui-core-old`, `jui-toolkits`, `jui-apps-dashboard` and root `sandbox` workspace have been removed rather than kept as parallel framework implementations.
 
 ## LLM-first direction
 
@@ -271,7 +271,7 @@ JUI runtime
 deploy
 ```
 
-JUI remains Java-first. If information can be inferred deterministically from Java types or values, application code — and therefore an LLM — should not have to generate it again.
+JUI remains Java-first. If information can be inferred deterministically from Java types and values, application code — and therefore an LLM — should not have to generate it again.
 
 ## License
 
