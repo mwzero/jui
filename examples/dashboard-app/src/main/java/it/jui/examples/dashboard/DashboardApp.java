@@ -2,10 +2,9 @@ package it.jui.examples.dashboard;
 
 import java.util.List;
 
+import it.jui.framework.Jui;
 import it.jui.framework.app.JuiApp;
-import it.jui.framework.app.JuiProvider;
 import it.jui.framework.core.UIContext;
-import it.jui.framework.server.JuiServer;
 
 public class DashboardApp implements JuiApp {
 
@@ -41,7 +40,7 @@ public class DashboardApp implements JuiApp {
     }
 
     public static void main(String[] args) throws Exception {
-        new JuiServer(new JuiProvider(new DashboardApp())).start();
+        Jui.run(new DashboardApp());
     }
 
     public record Sale(String month, int revenue, int orders) {}
