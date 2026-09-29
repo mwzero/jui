@@ -39,3 +39,4 @@ swa/.$jui.drawio.bkp
 assets/.$jui.drawio.bkp
 *.bkp
 .DS_Store
+/apps/jui-app-customer/target
