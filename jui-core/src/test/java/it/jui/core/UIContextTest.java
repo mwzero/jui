@@ -27,7 +27,7 @@ class UIContextTest {
         firstRender.textInput("Name", "Guest");
 
         String widgetId = firstRender.getNextWidgetId("Name");
-        sessions.updateState("s1", widgetId, "Maurizio");
+        new UIContext("s1", sessions).setWidgetValue(widgetId, "Maurizio");
 
         UIContext secondRender = new UIContext("s1", sessions);
         assertEquals("Maurizio", secondRender.textInput("Name", "Guest"));
@@ -41,7 +41,7 @@ class UIContextTest {
 
         assertFalse(initialRender.button("Save"));
 
-        sessions.updateState("s1", widgetId, true);
+        new UIContext("s1", sessions).setWidgetValue(widgetId, true);
 
         UIContext clickedRender = new UIContext("s1", sessions);
         assertTrue(clickedRender.button("Save"));

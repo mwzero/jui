@@ -214,6 +214,14 @@ if (ui.authenticated()) {
 }
 ```
 
+### Runnable authentication example
+
+Build and run `apps/jui-app-auth` using its [configuration guide](../apps/jui-app-auth/README.md). For local use, register `http://localhost:8080/auth/google/callback` in Google and set it as `GOOGLE_CALLBACK_URL`, alongside `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+
+The callback must use HTTPS outside loopback. The server sets the session cookie to HttpOnly/SameSite=Lax, adds Secure for an HTTPS callback, and rotates the session at login/logout. Authentication is shared across tabs; widget and internal application state are separate for each tab. Sessions expire after 30 minutes idle or 8 hours total.
+
+`ui.setValue(...)` changes internal state only. Setting `__jui_auth_user` no longer authenticates a user. Custom components and clients must follow the [updated protocol](architecture.md#custom-components-and-protocol-migration).
+
 ## Canonical example
 
 ```bash

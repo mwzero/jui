@@ -29,7 +29,7 @@ class ListElementsTest {
     void dropdownButtonReadsSessionSelection() {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
-        sessions.updateState("s1", probe.getNextWidgetId("dropdown:Export"), "JSON");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("dropdown:Export"), "JSON");
 
         UIContext ui = new UIContext("s1", sessions);
         assertEquals("JSON", ui.dropdownButton("Export", List.of("CSV", "JSON")));

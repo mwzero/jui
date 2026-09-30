@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 
 /**
  * High-semantic-density form API. JUI infers fields from Java types so callers
@@ -60,9 +61,9 @@ public class FormElements extends BaseElements {
     public void clearForm(String key, Class<?> type) {
         String formKey = formKey(key, type);
         for (FieldSpec field : fieldsFor(type, null)) {
-            ctx.removeValue(ctx.getNextWidgetId(formKey + ":" + field.name()));
+            ctx.removeWidgetValue(ctx.getNextWidgetId(formKey + ":" + field.name()));
         }
-        ctx.removeValue(ctx.getNextWidgetId(formKey + ":submit"));
+        ctx.removeWidgetValue(ctx.getNextWidgetId(formKey + ":submit"));
     }
 
     private String formKey(String key, Class<?> type) {
@@ -77,7 +78,8 @@ public class FormElements extends BaseElements {
         for (FieldSpec field : fields) renderField(formKey, field);
 
         String submitId = ctx.getNextWidgetId(formKey + ":submit");
-        boolean submitted = ctx.consumeBoolean(submitId);
+        ctx.registerWidget(submitId, WidgetSpec.action());
+        boolean submitted = ctx.consumeWidgetBoolean(submitId);
         ctx.addHtml(String.format(
                 "<button type='button' onclick=\"sendUpdate('%s', true)\" " +
                 "class='mt-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-md transition' data-jui='form-submit'>Save</button>",
@@ -156,9 +158,14 @@ public class FormElements extends BaseElements {
 
     private void renderField(String formKey, FieldSpec field) {
         String id = ctx.getNextWidgetId(formKey + ":" + field.name());
-        Object value = ctx.getValue(id, normalizeDefault(field.type(), field.defaultValue()));
+        Object value = ctx.getWidgetValue(id, normalizeDefault(field.type(), field.defaultValue()));
         String label = humanize(field.name());
         Class<?> type = wrap(field.type());
+        WidgetSpec spec = type == Boolean.class ? WidgetSpec.bool()
+                : type == LocalDate.class ? WidgetSpec.date()
+                : type.isEnum() ? WidgetSpec.choice(Arrays.stream(type.getEnumConstants()).map(String::valueOf).toList())
+                : WidgetSpec.text();
+        ctx.registerWidget(id, spec);
 
         if (type == Boolean.class) {
             boolean checked = asBoolean(value);
@@ -227,7 +234,7 @@ public class FormElements extends BaseElements {
 
     private Object convertedState(String formKey, FieldSpec field) {
         String id = ctx.getNextWidgetId(formKey + ":" + field.name());
-        Object raw = ctx.getValue(id, normalizeDefault(field.type(), field.defaultValue()));
+        Object raw = ctx.getWidgetValue(id, normalizeDefault(field.type(), field.defaultValue()));
         return convert(raw, field.type(), field.name());
     }
 

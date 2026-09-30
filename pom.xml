@@ -32,6 +32,7 @@
     <module>apps/jui-app-map</module>
     <module>apps/jui-app-media</module>
     <module>apps/jui-playground</module>
+    <module>apps/jui-app-auth</module>
   </modules>
 
   <dependencyManagement>

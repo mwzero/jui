@@ -9,6 +9,7 @@ Small standalone applications that demonstrate one area of the canonical JUI API
 | `jui-app-survey` | interactive inputs, progress and one-shot buttons |
 | `jui-app-map` | interactive Leaflet map and `MapState` |
 | `jui-app-media` | Markdown, lists, layout and browser media |
+| `jui-app-auth` | [Google login, protected profile and notes, logout](jui-app-auth/README.md) |
 | `jui-playground` | edit, compile and preview JUI applications locally |
 
 Each project is a normal Maven module and packages as an executable shaded JAR.
@@ -21,3 +22,5 @@ java -jar apps/jui-app-dashboard/target/jui-app-dashboard-0.0.1-SNAPSHOT.jar
 ```
 
 Replace `jui-app-dashboard` with any other example name. JUI listens on `http://localhost:8080` by default.
+
+The authentication example additionally requires the three Google OAuth environment variables documented in its README. Other examples run without Google credentials.

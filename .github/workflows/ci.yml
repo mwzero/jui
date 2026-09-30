@@ -19,11 +19,19 @@ jobs:
           java-version: '25'
           cache: maven
 
+      - name: Set up Node for browser transport tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Test browser transport
+        run: node --test jui-core/src/test/js/browser-runtime.test.cjs
+
       - name: Test canonical modules and examples
-        run: mvn -B -pl jui-core,jui-data,apps/jui-app-customer,apps/jui-app-dashboard,apps/jui-app-survey,apps/jui-app-map,apps/jui-app-media -am test
+        run: mvn -B -pl jui-core,jui-data,apps/jui-app-customer,apps/jui-app-dashboard,apps/jui-app-survey,apps/jui-app-map,apps/jui-app-media,apps/jui-app-auth -am test
 
       - name: Package examples
-        run: mvn -B -pl apps/jui-app-customer,apps/jui-app-dashboard,apps/jui-app-survey,apps/jui-app-map,apps/jui-app-media -am package -DskipTests
+        run: mvn -B -pl apps/jui-app-customer,apps/jui-app-dashboard,apps/jui-app-survey,apps/jui-app-map,apps/jui-app-media,apps/jui-app-auth -am package -DskipTests
 
       - name: Test and package playground
         run: mvn -B -pl apps/jui-playground -am package

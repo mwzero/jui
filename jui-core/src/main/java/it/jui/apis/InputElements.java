@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 import it.jui.input.UploadedFile;
 
 public class InputElements extends BaseElements {
@@ -18,8 +19,9 @@ public class InputElements extends BaseElements {
     public String radio(String label, List<String> options, String defaultOption) {
         if (options == null || options.isEmpty()) return "";
         String id = ctx.getNextWidgetId("radio:" + label);
+        ctx.registerWidget(id, WidgetSpec.choice(options));
         String initial = defaultOption != null ? defaultOption : options.get(0);
-        String selected = ctx.getValue(id, initial);
+        String selected = ctx.getWidgetValue(id, initial);
 
         StringBuilder html = new StringBuilder("<fieldset class='mb-4'><legend class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>")
                 .append(escapeHtml(label)).append("</legend><div class='space-y-2'>");
@@ -39,12 +41,13 @@ public class InputElements extends BaseElements {
 
     public List<String> multiCheckbox(String label, List<String> options, List<String> defaults) {
         String id = ctx.getNextWidgetId("multi-checkbox:" + label);
-        Object raw = ctx.getRawValue(id);
+        ctx.registerWidget(id, WidgetSpec.multiple(options == null ? List.of() : options));
+        Object raw = ctx.getRawWidgetValue(id);
         List<String> selected = raw instanceof List<?> list
                 ? list.stream().map(String::valueOf).toList()
                 : defaults == null ? List.of() : List.copyOf(defaults);
 
-        if (raw == null) ctx.setValue(id, new ArrayList<>(selected));
+        if (raw == null) ctx.setWidgetValue(id, new ArrayList<>(selected));
 
         StringBuilder html = new StringBuilder("<fieldset class='mb-4'><legend class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>")
                 .append(escapeHtml(label)).append("</legend><div class='space-y-2'>");
@@ -67,7 +70,8 @@ public class InputElements extends BaseElements {
     public String select(String label, List<String> options, String defaultOption) {
         if (options == null || options.isEmpty()) return "";
         String id = ctx.getNextWidgetId("select:" + label);
-        String selected = ctx.getValue(id, defaultOption != null ? defaultOption : options.get(0));
+        ctx.registerWidget(id, WidgetSpec.choice(options));
+        String selected = ctx.getWidgetValue(id, defaultOption != null ? defaultOption : options.get(0));
         StringBuilder opts = new StringBuilder();
         for (String option : options) {
             String safe = escapeHtml(option);
@@ -84,7 +88,8 @@ public class InputElements extends BaseElements {
 
     public String colorPicker(String label, String defaultColor) {
         String id = ctx.getNextWidgetId("color:" + label);
-        String selected = ctx.getValue(id, defaultColor == null ? "#4f46e5" : defaultColor);
+        ctx.registerWidget(id, WidgetSpec.color());
+        String selected = ctx.getWidgetValue(id, defaultColor == null ? "#4f46e5" : defaultColor);
         ctx.addHtml("<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>"
                 + escapeHtml(label) + "</label><div class='flex items-center gap-3'>"
                 + "<input type='color' value='" + escapeHtml(selected) + "' onchange=\"sendUpdate('" + id + "', this.value)\" "
@@ -95,7 +100,8 @@ public class InputElements extends BaseElements {
 
     public String dateInput(String label, String defaultValue) {
         String id = ctx.getNextWidgetId("date:" + label);
-        String value = ctx.getValue(id, defaultValue == null ? "" : defaultValue);
+        ctx.registerWidget(id, WidgetSpec.date());
+        String value = ctx.getWidgetValue(id, defaultValue == null ? "" : defaultValue);
         ctx.addHtml("<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300'>"
                 + escapeHtml(label) + "</label><input type='date' value='" + escapeHtml(value)
                 + "' onchange=\"sendUpdate('" + id + "', this.value)\" class='mt-1 block w-full border border-gray-300 dark:border-gray-600 p-2 rounded-md bg-white dark:bg-gray-700 dark:text-white'/></div>");
@@ -104,7 +110,8 @@ public class InputElements extends BaseElements {
 
     public Optional<UploadedFile> fileUploader(String label) {
         String id = ctx.getNextWidgetId("file:" + label);
-        Object raw = ctx.getRawValue(id);
+        ctx.registerWidget(id, WidgetSpec.upload());
+        Object raw = ctx.getRawWidgetValue(id);
         UploadedFile file = toUploadedFile(raw);
 
         ctx.addHtml("<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>"

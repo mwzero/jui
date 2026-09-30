@@ -18,6 +18,7 @@ public class JuiServer {
     private final HttpServer server;
     private final ISessionManager sessionManager;
     private final ExecutorService executor;
+    private final SessionCookies cookies = new SessionCookies();
     private final CountDownLatch stopped = new CountDownLatch(1);
 
     public JuiServer(JuiProvider appProvider) throws IOException {
@@ -30,18 +31,19 @@ public class JuiServer {
         executor = Executors.newVirtualThreadPerTaskExecutor();
         server.setExecutor(executor);
 
-        server.createContext("/ui", new UiHandler(sessionManager, appProvider));
+        server.createContext("/ui", new UiHandler(sessionManager, appProvider, cookies));
         server.createContext("/", new StaticHandler());
     }
 
     /** Registers Google OAuth endpoints before the server is started. */
     public JuiServer googleOAuth(GoogleOAuthConfig config) {
-        GoogleOAuthSupport.install(server, sessionManager, config);
+        GoogleOAuthSupport.install(server, sessionManager, config, cookies);
         return this;
     }
 
     /** Starts the server and blocks until {@link #stop()} is called. */
     public void start() throws InterruptedException {
+        sessionManager.startCleanup();
         server.start();
         System.out.println("JUI server listening on port " + server.getAddress().getPort());
         try {
@@ -56,6 +58,7 @@ public class JuiServer {
     public void stop() {
         server.stop(0);
         executor.shutdown();
+        sessionManager.close();
         stopped.countDown();
     }
 

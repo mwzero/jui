@@ -18,14 +18,21 @@ import it.jui.apis.NavigationElements;
 import it.jui.apis.StatusElements;
 import it.jui.apis.TextElements;
 import it.jui.server.ISessionManager;
+import it.jui.server.SessionState;
+import it.jui.server.ViewState;
+import it.jui.auth.AuthUser;
+import it.jui.input.WidgetSpec;
+import java.util.Optional;
 import lombok.experimental.Delegate;
 
 public class UIContext {
 
     private final StringBuilder htmlOutput = new StringBuilder();
     private final Map<String, String> htmlDependencies = new HashMap<>();
-    private final String sessionId;
-    private final ISessionManager sessionManager;
+    private final SessionState session;
+    private final ViewState view;
+    private final Map<String, WidgetSpec> renderedWidgets = new HashMap<>();
+    private String logoutWidgetId;
     private final AtomicInteger widgetCounter = new AtomicInteger(0);
 
     @Delegate private final TextElements textApis;
@@ -43,8 +50,17 @@ public class UIContext {
     @Delegate private final AuthElements authApis;
 
     public UIContext(String sessionId, ISessionManager sessionManager) {
-        this.sessionId = sessionId;
-        this.sessionManager = sessionManager;
+        this(sessionManager.getOrCreateSession(sessionId), ISessionManager.UI_DEFAULT_VIEW);
+    }
+
+    public UIContext(SessionState session, String viewId) {
+        this(session, viewId, null);
+    }
+
+    public UIContext(SessionState session, String viewId, String logoutWidgetId) {
+        this.session = session;
+        this.view = session.view(viewId);
+        this.logoutWidgetId = logoutWidgetId;
         textApis = new TextElements(this);
         inputApis = new InputElements(this);
         statusApis = new StatusElements(this);
@@ -58,12 +74,6 @@ public class UIContext {
         mediaApis = new MediaElements(this);
         chartApis = new ChartElements(this);
         authApis = new AuthElements(this);
-    }
-
-    void logSessionState() {
-        System.out.println("Session State: " + sessionManager.getState(sessionId));
-        System.out.println("Session Id: " + sessionId);
-        System.out.println("sessionManager: " + sessionManager);
     }
 
     public String getHtml() {
@@ -103,29 +113,66 @@ public class UIContext {
 
     @SuppressWarnings("unchecked")
     public <T> T getValue(String widgetId, T defaultValue) {
-        Object value = sessionManager.getState(sessionId).get(widgetId);
+        Object value = view.internalValues().get(widgetId);
         if (value == null && defaultValue != null) {
-            sessionManager.updateState(sessionId, widgetId, defaultValue);
+            view.internalValues().put(widgetId, defaultValue);
             return defaultValue;
         }
         return (T) value;
     }
 
     public Object getRawValue(String widgetId) {
-        return sessionManager.getState(sessionId).get(widgetId);
+        return view.internalValues().get(widgetId);
     }
 
     public void setValue(String widgetId, Object value) {
         if (value == null) removeValue(widgetId);
-        else sessionManager.updateState(sessionId, widgetId, value);
+        else view.internalValues().put(widgetId, value);
     }
 
     public void removeValue(String widgetId) {
-        sessionManager.getState(sessionId).remove(widgetId);
+        view.internalValues().remove(widgetId);
     }
 
     public boolean consumeBoolean(String widgetId) {
-        Object value = sessionManager.getState(sessionId).remove(widgetId);
+        Object value = view.internalValues().remove(widgetId);
         return Boolean.TRUE.equals(value);
+    }
+
+    /** Register only inputs actually emitted by this render, never internal state keys. */
+    public void registerWidget(String id, WidgetSpec spec) {
+        if (id == null || id.isBlank() || id.startsWith("__jui_"))
+            throw new IllegalArgumentException("Invalid widget id");
+        renderedWidgets.put(id, java.util.Objects.requireNonNull(spec));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getWidgetValue(String id, T defaultValue) {
+        Object value = view.widgetValues().get(id);
+        if (value == null && defaultValue != null) {
+            view.widgetValues().put(id, defaultValue);
+            return defaultValue;
+        }
+        return (T) value;
+    }
+
+    public Object getRawWidgetValue(String id) { return view.widgetValues().get(id); }
+    public void setWidgetValue(String id, Object value) {
+        if (value == null) removeWidgetValue(id);
+        else view.widgetValues().put(id, value);
+    }
+    public void removeWidgetValue(String id) { view.widgetValues().remove(id); }
+    public boolean consumeWidgetBoolean(String id) {
+        return Boolean.TRUE.equals(view.widgetValues().remove(id));
+    }
+    public Optional<AuthUser> authenticatedUser() { return session.user(); }
+    public boolean consumeLogout(String id) {
+        if (!id.equals(logoutWidgetId)) return false;
+        logoutWidgetId = null;
+        return true;
+    }
+    /** Publish the complete allowlist atomically, or revoke it on render failure. */
+    public void completeRender(boolean successful) {
+        view.rendered(successful ? renderedWidgets : Map.of());
     }
 }

@@ -31,7 +31,7 @@ class MapElementsTest {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
         String id = probe.getNextWidgetId("map:Naples");
-        sessions.updateState("s1", id, Map.of(
+        new UIContext("s1", sessions).setWidgetValue(id, Map.of(
                 "latitude", 41.0,
                 "longitude", 15.0,
                 "zoom", 9L));

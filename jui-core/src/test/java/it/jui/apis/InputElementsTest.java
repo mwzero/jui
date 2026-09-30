@@ -18,10 +18,10 @@ class InputElementsTest {
     void radioSelectColorAndDateReadCurrentSessionValues() {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
-        sessions.updateState("s1", probe.getNextWidgetId("radio:Size"), "L");
-        sessions.updateState("s1", probe.getNextWidgetId("select:Country"), "Italy");
-        sessions.updateState("s1", probe.getNextWidgetId("color:Accent"), "#112233");
-        sessions.updateState("s1", probe.getNextWidgetId("date:Start"), "2026-09-16");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("radio:Size"), "L");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("select:Country"), "Italy");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("color:Accent"), "#112233");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("date:Start"), "2026-09-16");
 
         UIContext ui = new UIContext("s1", sessions);
         assertEquals("L", ui.radio("Size", List.of("S", "M", "L"), "M"));
@@ -40,7 +40,7 @@ class InputElementsTest {
 
         UIContext probe = new UIContext("s1", sessions);
         String id = probe.getNextWidgetId("multi-checkbox:Tags");
-        sessions.updateState("s1", id, List.of("AI"));
+        new UIContext("s1", sessions).setWidgetValue(id, List.of("AI"));
 
         assertEquals(List.of("AI"), new UIContext("s1", sessions)
                 .multiCheckbox("Tags", List.of("Java", "AI"), List.of("Java")));
@@ -58,7 +58,7 @@ class InputElementsTest {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
         String id = probe.getNextWidgetId("file:Document");
-        sessions.updateState("s1", id, Map.of(
+        new UIContext("s1", sessions).setWidgetValue(id, Map.of(
                 "name", "hello.txt",
                 "contentType", "text/plain",
                 "size", 5L,

@@ -10,10 +10,10 @@ The canonical implementation is `jui-core` under `it.jui`. Applications implemen
 - **Type-driven UI** — records, POJOs, maps and scalar values can drive tables, forms, charts and CRUD.
 - **High-semantic-density APIs** — `table`, `metric`, `form`, `crud`, layout and navigation APIs compress common application behavior.
 - **Deterministic state** — interactive widgets, maps and composite components use stable IDs across rerenders.
-- **Built-in HTTP runtime** — Jetty serves the browser shell and `/ui` rendering endpoint.
+- **Built-in HTTP runtime** — the JDK HttpServer serves the browser shell and `/ui` rendering endpoint.
 - **Pluggable persistence** — `CrudRepository<T, ID>` keeps CRUD independent of H2, PostgreSQL, REST or other stores.
 - **Optional data module** — `jui-data` provides CSV, JSON and JDBC `DataFrame` utilities without coupling data access to the UI runtime.
-- **Optional Google OAuth** — authentication integrates with the same session model without a global application singleton.
+- **Optional Google OAuth** — authentication uses a server-issued HttpOnly cookie, separate typed identity and validated widget updates.
 - **LLM-first design** — compact deterministic APIs reduce generated code and context requirements for small local models.
 
 ## Small example
@@ -36,5 +36,6 @@ See [Getting Started](getting-started.md) for build/run instructions and [Archit
 - `jui-core` — canonical interactive UI framework.
 - `jui-data` — optional CSV/JSON/JDBC DataFrame utilities.
 - `apps/jui-app-customer` — deployable smoke test and compact-generation benchmark.
+- `apps/jui-app-auth` — Google login, protected profile and per-tab notes, and logout.
 
 The former `jui-core-old` module has been removed after its useful capabilities were reimplemented on the canonical rerun architecture.

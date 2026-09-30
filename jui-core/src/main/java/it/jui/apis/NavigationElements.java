@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 
 public class NavigationElements extends BaseElements {
 
@@ -15,8 +16,9 @@ public class NavigationElements extends BaseElements {
         if (options == null || options.isEmpty()) return "";
 
         String id = ctx.getNextWidgetId("tabs:" + label);
+        ctx.registerWidget(id, WidgetSpec.choice(options));
         String initial = defaultOption != null ? defaultOption : options.get(0);
-        String active = ctx.getValue(id, initial);
+        String active = ctx.getWidgetValue(id, initial);
 
         StringBuilder sb = new StringBuilder();
         for (String opt : options) {
@@ -50,8 +52,9 @@ public class NavigationElements extends BaseElements {
     public String sidebar(String title, List<String> items, String defaultItem, Consumer<String> content) {
         if (items == null || items.isEmpty()) return "";
         String id = ctx.getNextWidgetId("sidebar:" + title);
+        ctx.registerWidget(id, WidgetSpec.choice(items));
         String initial = defaultItem != null ? defaultItem : items.get(0);
-        String active = ctx.getValue(id, initial);
+        String active = ctx.getWidgetValue(id, initial);
 
         StringBuilder nav = new StringBuilder();
         for (String item : items) {

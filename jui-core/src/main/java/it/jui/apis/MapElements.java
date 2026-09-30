@@ -3,6 +3,7 @@ package it.jui.apis;
 import java.util.Map;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 import it.jui.map.MapState;
 
 public class MapElements extends BaseElements {
@@ -17,7 +18,8 @@ public class MapElements extends BaseElements {
      */
     public MapState map(String title, double latitude, double longitude, int zoom) {
         String widgetId = ctx.getNextWidgetId("map:" + title);
-        MapState state = readState(ctx.getRawValue(widgetId), new MapState(latitude, longitude, zoom));
+        ctx.registerWidget(widgetId, WidgetSpec.map());
+        MapState state = readState(ctx.getRawWidgetValue(widgetId), new MapState(latitude, longitude, zoom));
         String domId = widgetId + "-map";
 
         ctx.addHtmlDependency("leaflet-css", "<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" crossorigin=\"\"/>");
@@ -30,7 +32,7 @@ public class MapElements extends BaseElements {
             "<div class='w-full h-64' id='%s'></div>" +
             "<script>(function(){if(!window.L)return;var m=L.map('%s').setView([%s,%s],%d);" +
             "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(m);" +
-            "m.on('moveend zoomend',function(){var c=m.getCenter();sendUpdate('%s',{latitude:c.lat,longitude:c.lng,zoom:m.getZoom()});});})();</script></div>",
+            "m.on('moveend zoomend',function(){var c=m.getCenter().wrap();sendUpdate('%s',{latitude:c.lat,longitude:c.lng,zoom:m.getZoom()});});})();</script></div>",
             escapeHtml(title), domId, domId,
             Double.toString(state.latitude()), Double.toString(state.longitude()), state.zoom(), widgetId));
         return state;

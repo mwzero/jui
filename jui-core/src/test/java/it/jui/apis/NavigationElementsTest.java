@@ -20,7 +20,7 @@ class NavigationElementsTest {
 
         UIContext probe = new UIContext("s1", sessions);
         String id = probe.getNextWidgetId("tabs:Main");
-        sessions.updateState("s1", id, "Settings");
+        new UIContext("s1", sessions).setWidgetValue(id, "Settings");
 
         UIContext ui = new UIContext("s1", sessions);
         assertEquals("Settings", ui.tabs("Main", List.of("Home", "Settings"), "Home"));
@@ -31,7 +31,7 @@ class NavigationElementsTest {
     void sidebarRendersContentForCurrentSelection() {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
-        sessions.updateState("s1", probe.getNextWidgetId("sidebar:Application"), "Customers");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("sidebar:Application"), "Customers");
 
         UIContext ui = new UIContext("s1", sessions);
         String selected = ui.sidebar("Application", List.of("Home", "Customers"), "Home",

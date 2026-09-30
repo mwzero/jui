@@ -1,10 +1,10 @@
 package it.jui.apis;
 
-import java.util.Map;
 import java.util.Optional;
 
 import it.jui.auth.AuthUser;
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 
 public class AuthElements extends BaseElements {
 
@@ -13,13 +13,7 @@ public class AuthElements extends BaseElements {
     }
 
     public Optional<AuthUser> authUser() {
-        Object raw = ctx.getRawValue(AuthUser.SESSION_KEY);
-        if (raw instanceof AuthUser user) return Optional.of(user);
-        if (raw instanceof Map<?, ?> map) {
-            return Optional.of(new AuthUser(
-                    value(map, "id"), value(map, "email"), value(map, "name"), value(map, "picture")));
-        }
-        return Optional.empty();
+        return ctx.authenticatedUser();
     }
 
     public boolean authenticated() {
@@ -35,16 +29,12 @@ public class AuthElements extends BaseElements {
 
     public boolean logoutButton(String label) {
         String id = ctx.getNextWidgetId("auth:logout:" + label);
-        boolean clicked = ctx.consumeBoolean(id);
-        if (clicked) ctx.removeValue(AuthUser.SESSION_KEY);
+        ctx.registerWidget(id, WidgetSpec.logout());
+        boolean clicked = ctx.consumeLogout(id);
         ctx.addHtml("<button type='button' onclick=\"sendUpdate('" + id + "', true)\" "
                 + "class='px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-200'>"
                 + escapeHtml(label == null || label.isBlank() ? "Logout" : label) + "</button>");
         return clicked;
     }
 
-    private String value(Map<?, ?> map, String key) {
-        Object value = map.get(key);
-        return value == null ? null : String.valueOf(value);
-    }
 }

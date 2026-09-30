@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 
 public class TextElements extends BaseElements {
 
@@ -146,7 +147,8 @@ public class TextElements extends BaseElements {
 
     public String textInput(String label, String def) {
         String id = ctx.getNextWidgetId(label);
-        String val = ctx.getValue(id, def);
+        ctx.registerWidget(id, WidgetSpec.text());
+        String val = ctx.getWidgetValue(id, def);
         ctx.addHtml(String.format(
             "<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300'>%s</label>" +
             "<input type='text' value='%s' onchange=\"sendUpdate('%s', this.value)\" " +
@@ -157,7 +159,8 @@ public class TextElements extends BaseElements {
 
     public int slider(String label, long min, long max, long def) {
         String id = ctx.getNextWidgetId(label);
-        long val = ctx.getValue(id, def);
+        ctx.registerWidget(id, WidgetSpec.integer(min, max));
+        long val = ctx.getWidgetValue(id, def);
         ctx.addHtml(String.format(
             "<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300'>%s: <span id='%s-val'>%d</span></label>" +
             "<input type='range' min='%d' max='%d' value='%d' oninput=\"document.getElementById('%s-val').innerText=this.value\" onchange=\"sendUpdate('%s', parseInt(this.value))\" " +
@@ -168,7 +171,8 @@ public class TextElements extends BaseElements {
 
     public boolean button(String label) {
         String id = ctx.getNextWidgetId(label);
-        boolean clicked = ctx.consumeBoolean(id);
+        ctx.registerWidget(id, WidgetSpec.action());
+        boolean clicked = ctx.consumeWidgetBoolean(id);
         ctx.addHtml(String.format(
             "<div class='mb-4'><button onclick=\"sendUpdate('%s', true)\" " +
             "class='w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white rounded-md transition'>%s</button></div>",
@@ -178,7 +182,8 @@ public class TextElements extends BaseElements {
 
     public boolean checkbox(String label, boolean def) {
         String id = ctx.getNextWidgetId(label);
-        boolean val = ctx.getValue(id, def);
+        ctx.registerWidget(id, WidgetSpec.bool());
+        boolean val = ctx.getWidgetValue(id, def);
         ctx.addHtml(String.format(
             "<div class='mb-4 flex items-center'><input type='checkbox' %s onclick=\"sendUpdate('%s', this.checked)\" " +
             "class='h-4 w-4 text-indigo-600 border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded'><label class='ml-2 text-sm text-gray-900 dark:text-gray-300'>%s</label></div>",
@@ -188,7 +193,8 @@ public class TextElements extends BaseElements {
 
     public String selectBox(String label, List<String> opts, String def) {
         String id = ctx.getNextWidgetId(label);
-        String val = ctx.getValue(id, def);
+        ctx.registerWidget(id, WidgetSpec.choice(opts));
+        String val = ctx.getWidgetValue(id, def);
         StringBuilder sb = new StringBuilder();
         for (String option : opts) {
             String safeOption = escapeHtml(option);
@@ -205,7 +211,8 @@ public class TextElements extends BaseElements {
 
     public String datePicker(String label, String def) {
         String id = ctx.getNextWidgetId(label);
-        String val = ctx.getValue(id, def);
+        ctx.registerWidget(id, WidgetSpec.date());
+        String val = ctx.getWidgetValue(id, def);
         ctx.addHtml(String.format(
             "<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300'>%s</label>" +
             "<input type='date' value='%s' onchange=\"sendUpdate('%s', this.value)\" " +
@@ -224,7 +231,8 @@ public class TextElements extends BaseElements {
 
     private String textarea(String label, String def, int rows, boolean code) {
         String id = ctx.getNextWidgetId(label);
-        String val = ctx.getValue(id, def);
+        ctx.registerWidget(id, WidgetSpec.text());
+        String val = ctx.getWidgetValue(id, def);
         ctx.addHtml(String.format(
             "<div class='mb-4'><label class='block text-sm font-medium text-gray-700 dark:text-gray-300'>%s</label>" +
             "<textarea onchange=\"sendUpdate('%s', this.value)\" rows='%d' %s" +
@@ -237,7 +245,7 @@ public class TextElements extends BaseElements {
     @Deprecated
     public String fileUpload(String label) {
         String id = ctx.getNextWidgetId("legacy-file:" + label);
-        Object raw = ctx.getRawValue(id);
+        Object raw = ctx.getRawWidgetValue(id);
         String val = raw == null ? "Nessun file" : String.valueOf(raw);
         ctx.addHtml("<p class='text-sm text-gray-500'>Use fileUploader(\"" + escapeHtml(label) + "\") for real uploads.</p>");
         return val;

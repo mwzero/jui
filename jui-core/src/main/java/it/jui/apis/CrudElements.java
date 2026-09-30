@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 import it.jui.data.CrudRepository;
 
 /**
@@ -234,7 +235,9 @@ public class CrudElements extends BaseElements {
             ID id = repository.id(item);
             String token = identityToken(id);
             String editId = ctx.getNextWidgetId(crudKey + ":edit:" + token);
+            ctx.registerWidget(editId, WidgetSpec.action());
             String deleteId = ctx.getNextWidgetId(crudKey + ":delete:" + token);
+            ctx.registerWidget(deleteId, WidgetSpec.action());
             html.append(String.format(
                     "<div class='flex items-center gap-2 text-sm'><span class='text-gray-500 dark:text-gray-400'>Row %d</span>" +
                     "<button type='button' onclick=\"sendUpdate('%s', true)\" class='px-3 py-1 border rounded-md dark:border-gray-600' data-jui='crud-edit'>Edit</button>" +
@@ -252,11 +255,12 @@ public class CrudElements extends BaseElements {
     }
 
     private boolean consume(String key) {
-        return ctx.consumeBoolean(ctx.getNextWidgetId(key));
+        return ctx.consumeWidgetBoolean(ctx.getNextWidgetId(key));
     }
 
     private void renderNew(String crudKey, Class<?> type) {
         String id = ctx.getNextWidgetId(crudKey + ":new");
+        ctx.registerWidget(id, WidgetSpec.action());
         ctx.addHtml(String.format(
                 "<div class='mb-4'><button type='button' onclick=\"sendUpdate('%s', true)\" " +
                 "class='px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition' data-jui='crud-new'>+ New %s</button></div>",
@@ -268,7 +272,9 @@ public class CrudElements extends BaseElements {
         StringBuilder html = new StringBuilder("<div class='mb-6 space-y-2' data-jui='crud-actions'>");
         for (int i = 0; i < size; i++) {
             String editId = ctx.getNextWidgetId(crudKey + ":edit:" + i);
+            ctx.registerWidget(editId, WidgetSpec.action());
             String deleteId = ctx.getNextWidgetId(crudKey + ":delete:" + i);
+            ctx.registerWidget(deleteId, WidgetSpec.action());
             html.append(String.format(
                     "<div class='flex items-center gap-2 text-sm'><span class='text-gray-500 dark:text-gray-400'>Row %d</span>" +
                     "<button type='button' onclick=\"sendUpdate('%s', true)\" class='px-3 py-1 border rounded-md dark:border-gray-600' data-jui='crud-edit'>Edit</button>" +
@@ -281,6 +287,7 @@ public class CrudElements extends BaseElements {
 
     private void renderCancel(String crudKey) {
         String id = ctx.getNextWidgetId(crudKey + ":cancel");
+        ctx.registerWidget(id, WidgetSpec.action());
         ctx.addHtml(String.format(
                 "<div class='mb-4'><button type='button' onclick=\"sendUpdate('%s', true)\" class='px-4 py-2 border rounded-md dark:border-gray-600' data-jui='crud-cancel'>Cancel</button></div>",
                 id));

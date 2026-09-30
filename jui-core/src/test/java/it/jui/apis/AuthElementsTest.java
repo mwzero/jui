@@ -15,7 +15,7 @@ import it.jui.server.InMemorySessionManager;
 class AuthElementsTest {
 
     @Test
-    void authenticationIsAbsentByDefaultAndCanBeReadFromStructuredState() {
+    void authenticationIgnoresLegacyMapsAndUsesTrustedIdentity() {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext empty = new UIContext("s1", sessions);
         assertFalse(empty.authenticated());
@@ -28,6 +28,10 @@ class AuthElementsTest {
                 "picture", "https://example.com/ada.png"));
 
         UIContext authenticated = new UIContext("s1", sessions);
+        assertFalse(authenticated.authenticated());
+        sessions.updateState("s1", AuthUser.SESSION_KEY, new AuthUser("forged", null, null, null));
+        assertFalse(authenticated.authenticated());
+        sessions.getOrCreateSession("s1").authenticate(new AuthUser("42", "ada@example.com", "Ada", null));
         assertTrue(authenticated.authenticated());
         assertEquals("Ada", authenticated.authUser().orElseThrow().name());
     }
@@ -41,17 +45,16 @@ class AuthElementsTest {
     }
 
     @Test
-    void logoutConsumesClickAndRemovesAuthenticatedUser() {
+    void logoutReportsTheServerProcessedEventOnce() {
         InMemorySessionManager sessions = new InMemorySessionManager();
-        sessions.updateState("s1", AuthUser.SESSION_KEY,
-                new AuthUser("1", "a@example.com", "Ada", null));
-        UIContext probe = new UIContext("s1", sessions);
-        String id = probe.getNextWidgetId("auth:logout:Logout");
-        sessions.updateState("s1", id, true);
-
-        UIContext ui = new UIContext("s1", sessions);
+        var oldSession = sessions.createSession();
+        oldSession.authenticate(new AuthUser("1", "a@example.com", "Ada", null));
+        String id = new UIContext(oldSession, "tab").getNextWidgetId("auth:logout:Logout");
+        var anonymous = sessions.rotateSession(oldSession, null);
+        UIContext ui = new UIContext(anonymous, "tab", id);
         assertTrue(ui.logoutButton("Logout"));
+        assertFalse(ui.logoutButton("Logout"));
         assertFalse(ui.authenticated());
-        assertFalse(new UIContext("s1", sessions).logoutButton("Logout"));
+        assertTrue(sessions.findSession(oldSession.id()).isEmpty());
     }
 }

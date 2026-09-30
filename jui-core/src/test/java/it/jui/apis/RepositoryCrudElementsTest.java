@@ -42,7 +42,7 @@ class RepositoryCrudElementsTest {
 
         String crudKey = "crud:repo:" + Customer.class.getName();
         String token = token(10L);
-        sessions.updateState("s1", ui.getNextWidgetId(crudKey + ":delete:" + token), true);
+        new UIContext("s1", sessions).setWidgetValue(ui.getNextWidgetId(crudKey + ":delete:" + token), true);
 
         ui.crud(Customer.class, repository);
 

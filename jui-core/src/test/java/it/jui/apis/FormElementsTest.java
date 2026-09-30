@@ -52,12 +52,12 @@ class FormElementsTest {
         UIContext seed = new UIContext("s1", sessions);
 
         String prefix = "form:" + Customer.class.getName();
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":name"), "Maurizio");
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":age"), 52L);
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":active"), true);
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":since"), "2026-09-11");
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":role"), "ADMIN");
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":submit"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":name"), "Maurizio");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":age"), 52L);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":active"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":since"), "2026-09-11");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":role"), "ADMIN");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":submit"), true);
 
         UIContext submitRender = new UIContext("s1", sessions);
         Optional<Customer> result = submitRender.form(Customer.class);
@@ -94,9 +94,9 @@ class FormElementsTest {
         UIContext seed = new UIContext("s1", sessions);
         String prefix = "form:" + CustomerBean.class.getName();
 
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":age"), 40L);
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":name"), "Luca");
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":submit"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":age"), 40L);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":name"), "Luca");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":submit"), true);
 
         UIContext ui = new UIContext("s1", sessions);
         Optional<CustomerBean> result = ui.form(CustomerBean.class);
@@ -112,8 +112,8 @@ class FormElementsTest {
         UIContext seed = new UIContext("s1", sessions);
         String prefix = "form:" + Customer.class.getName();
 
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":age"), "not-a-number");
-        sessions.updateState("s1", seed.getNextWidgetId(prefix + ":submit"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":age"), "not-a-number");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(prefix + ":submit"), true);
 
         UIContext ui = new UIContext("s1", sessions);
         Optional<Customer> result = ui.form(Customer.class);

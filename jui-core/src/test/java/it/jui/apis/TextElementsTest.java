@@ -55,12 +55,12 @@ class TextElementsTest {
     void statefulTextInputsReadSessionValues() {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
-        sessions.updateState("s1", probe.getNextWidgetId("Name"), "Ada");
-        sessions.updateState("s1", probe.getNextWidgetId("Age"), 37L);
-        sessions.updateState("s1", probe.getNextWidgetId("Active"), false);
-        sessions.updateState("s1", probe.getNextWidgetId("Country"), "Italy");
-        sessions.updateState("s1", probe.getNextWidgetId("Start"), "2026-09-16");
-        sessions.updateState("s1", probe.getNextWidgetId("Notes"), "Hello <world>");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("Name"), "Ada");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("Age"), 37L);
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("Active"), false);
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("Country"), "Italy");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("Start"), "2026-09-16");
+        new UIContext("s1", sessions).setWidgetValue(probe.getNextWidgetId("Notes"), "Hello <world>");
 
         UIContext ui = new UIContext("s1", sessions);
         assertEquals("Ada", ui.textInput("Name", "Guest"));
@@ -83,7 +83,7 @@ class TextElementsTest {
         InMemorySessionManager sessions = new InMemorySessionManager();
         UIContext probe = new UIContext("s1", sessions);
         String buttonId = probe.getNextWidgetId("Save");
-        sessions.updateState("s1", buttonId, true);
+        new UIContext("s1", sessions).setWidgetValue(buttonId, true);
 
         assertTrue(new UIContext("s1", sessions).button("Save"));
         assertFalse(new UIContext("s1", sessions).button("Save"));

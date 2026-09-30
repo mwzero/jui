@@ -32,7 +32,7 @@ JUI listens on port `8080` locally. When `PORT` is present, JUI uses it automati
 
 ## Interactive application
 
-Interactive widgets keep state across rerenders, while button clicks use one-shot event semantics.
+Interactive widgets keep per-tab state across rerenders, while button clicks use one-shot event semantics. Authentication is shared by tabs through a server-issued cookie.
 
 ```java
 public class InteractiveApp implements JuiApp {
@@ -177,7 +177,9 @@ if (ui.authenticated()) {
 }
 ```
 
-The OAuth `state` value is signed and time-limited; authentication no longer depends on the legacy global `JuiApp` singleton.
+Identity is stored separately from widget and application values. The server issues an HttpOnly session cookie, validates CSRF tokens and only accepts updates to inputs registered by the latest render. OAuth `state` is random, bound to that cookie, single-use and valid for 10 minutes. Login/logout rotate the session and clear prior UI state.
+
+See [the runnable Google authentication example](apps/jui-app-auth/README.md) for credentials, callback configuration and startup commands. Public deployments require HTTPS; HTTP callbacks are accepted only on loopback. Sessions expire after 30 minutes idle or 8 hours total.
 
 ## jui-data
 
@@ -215,6 +217,7 @@ Records are the preferred model because field order and construction are determi
 | `jui-app-survey` | interactive inputs, progress and buttons |
 | `jui-app-map` | interactive Leaflet map and `MapState` |
 | `jui-app-media` | Markdown, lists, layout and browser media |
+| `jui-app-auth` | Google login, protected profile and per-tab notes, logout |
 
 For example:
 

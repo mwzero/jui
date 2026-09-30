@@ -3,6 +3,7 @@ package it.jui.apis;
 import java.util.List;
 
 import it.jui.UIContext;
+import it.jui.input.WidgetSpec;
 
 public class ListElements extends BaseElements {
 
@@ -25,7 +26,8 @@ public class ListElements extends BaseElements {
     public String dropdownButton(String label, List<String> items) {
         if (items == null || items.isEmpty()) return "";
         String id = ctx.getNextWidgetId("dropdown:" + label);
-        String selected = ctx.getValue(id, items.get(0));
+        ctx.registerWidget(id, WidgetSpec.choice(items));
+        String selected = ctx.getWidgetValue(id, items.get(0));
         StringBuilder options = new StringBuilder();
         for (String item : items) {
             options.append("<button type='button' onclick=\"sendUpdate('").append(id).append("','")

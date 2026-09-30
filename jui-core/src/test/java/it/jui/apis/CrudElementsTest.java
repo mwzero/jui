@@ -36,16 +36,16 @@ class CrudElementsTest {
         String crudKey = "crud:" + Customer.class.getName();
 
         UIContext clickNew = new UIContext("s1", sessions);
-        sessions.updateState("s1", clickNew.getNextWidgetId(crudKey + ":new"), true);
+        new UIContext("s1", sessions).setWidgetValue(clickNew.getNextWidgetId(crudKey + ":new"), true);
         clickNew.crud(Customer.class, customers);
         assertTrue(clickNew.getHtml().contains("New Customer"));
 
         String formKey = "form:" + crudKey + ":create:" + Customer.class.getName();
         UIContext seed = new UIContext("s1", sessions);
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":name"), "Grace");
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":age"), "40");
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":active"), true);
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":submit"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":name"), "Grace");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":age"), "40");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":active"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":submit"), true);
 
         UIContext save = new UIContext("s1", sessions);
         save.crud(Customer.class, customers);
@@ -62,16 +62,16 @@ class CrudElementsTest {
         String crudKey = "crud:" + Customer.class.getName();
 
         UIContext clickEdit = new UIContext("s1", sessions);
-        sessions.updateState("s1", clickEdit.getNextWidgetId(crudKey + ":edit:0"), true);
+        new UIContext("s1", sessions).setWidgetValue(clickEdit.getNextWidgetId(crudKey + ":edit:0"), true);
         clickEdit.crud(Customer.class, customers);
         assertTrue(clickEdit.getHtml().contains("Edit Customer"));
 
         String formKey = "form:" + crudKey + ":edit:0:" + Customer.class.getName();
         UIContext seed = new UIContext("s1", sessions);
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":name"), "Ada Updated");
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":age"), "37");
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":active"), false);
-        sessions.updateState("s1", seed.getNextWidgetId(formKey + ":submit"), true);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":name"), "Ada Updated");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":age"), "37");
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":active"), false);
+        new UIContext("s1", sessions).setWidgetValue(seed.getNextWidgetId(formKey + ":submit"), true);
 
         UIContext save = new UIContext("s1", sessions);
         save.crud(Customer.class, customers);
@@ -89,7 +89,7 @@ class CrudElementsTest {
         String crudKey = "crud:" + Customer.class.getName();
 
         UIContext ui = new UIContext("s1", sessions);
-        sessions.updateState("s1", ui.getNextWidgetId(crudKey + ":delete:0"), true);
+        new UIContext("s1", sessions).setWidgetValue(ui.getNextWidgetId(crudKey + ":delete:0"), true);
         ui.crud(Customer.class, customers);
 
         assertEquals(List.of(new Customer("Alan", 41, true)), customers);
@@ -102,11 +102,11 @@ class CrudElementsTest {
         String crudKey = "crud:" + Customer.class.getName();
 
         UIContext clickNew = new UIContext("s1", sessions);
-        sessions.updateState("s1", clickNew.getNextWidgetId(crudKey + ":new"), true);
+        new UIContext("s1", sessions).setWidgetValue(clickNew.getNextWidgetId(crudKey + ":new"), true);
         clickNew.crud(Customer.class, customers);
 
         UIContext cancel = new UIContext("s1", sessions);
-        sessions.updateState("s1", cancel.getNextWidgetId(crudKey + ":cancel"), true);
+        new UIContext("s1", sessions).setWidgetValue(cancel.getNextWidgetId(crudKey + ":cancel"), true);
         cancel.crud(Customer.class, customers);
 
         assertTrue(customers.isEmpty());
